@@ -7,6 +7,7 @@ import Unit from './pages/Unit';
 import { Error } from './pages/Error';
 import { Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { Subletter } from './pages/Subletter';
 
 function App() {
   return (<>
@@ -15,6 +16,7 @@ function App() {
       <Route exact path='/' component={Home} />
       <Route exact path='/houses/' component={Houses} />
       <Route exact path='/houses/:slug' component={Unit} />
+      <Route exact path='/sublet' component={Subletter} />
       <Route component={Error} />
     </Switch>
   </>);
