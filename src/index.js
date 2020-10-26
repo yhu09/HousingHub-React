@@ -4,11 +4,14 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from "react-router-dom";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {HouseProvider} from './context'
 
 ReactDOM.render(
+  <HouseProvider>
   <Router>
     <App />
-  </Router>,
+  </Router>
+  </HouseProvider>,
   document.getElementById('root')
 );
 

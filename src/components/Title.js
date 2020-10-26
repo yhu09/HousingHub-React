@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
 
-export const Title = ({ title }) => {
-    return (
-        <div className = "section-title">
-            <h4>{title} </h4>
-            <div/>
-        </div>
-    );
-}
+const Title = ({ title }) => {
+  return (
+    <div className="section-title">
+      <h4>{title}</h4>
+      <div />
+    </div>
+  );
+};
 
+export default Title;
