@@ -4,13 +4,13 @@
   box-sizing: border-box;
 }
 :root {
-  --primaryColor: #ADD8E6;
+  --primaryColor: #add8e6;
   --mainWhite: #fff;
   --offWhite: #f7f7f7;
   --mainBlack: #222;
   --mainGrey: #ececec;
   --darkGrey: #cfcfcf;
-  --mainTransition:    all 0.3s linear;
+  --mainTransition: all 0.3s linear;
   --mainSpacing: 3px;
   --lightShadow: 2px 5px 3px 0px rgba(0, 0, 0, 0.5);
   --darkShadow: 4px 10px 5px 0px rgba(0, 0, 0, 0.5);
@@ -109,7 +109,7 @@ h6 {
 }
 .nav-icon {
   font-size: 1.5rem;
-  border:none;
+  border: none;
   color: var(--primaryColor);
 }
 .nav-links {
@@ -516,4 +516,7 @@ h6 {
     max-width: 1170px;
   }
 }
+
+/* Sob's Code */
+
 /* end of rooms fitler*/
