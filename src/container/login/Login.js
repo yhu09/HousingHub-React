@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { useAuth } from "../../utility/auth";
 import "./Login.css";
 
 var CryptoJS = require("crypto-js");
 
-export const Login = () => {
+export const Login = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const { setAuthTokens } = useAuth();
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -29,9 +32,22 @@ export const Login = () => {
     console.log("password: " + password);
     console.log("encrypted password; " + encryptPass);
 
-    fetch("http://localhost:3002/users/login?email=" + email)
-      .then(response => response.json())
-      .then(data => console.log(data));
+    fetch(
+      "http://localhost:3002/users/login?email=" +
+        email +
+        "&password=" +
+        password
+    )
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setAuthTokens("example-token");
+        setLoggedIn(true);
+      });
+
     event.preventDefault();
   }
 

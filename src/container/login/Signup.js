@@ -36,27 +36,62 @@ export const Signup = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    setIsLoading(true);
+    // setIsLoading(true);
 
-    setNewUser("test");
+    // setNewUser("test");
 
-    const requestOptions = {
+    var genderBool;
+    if ("male" === gender) {
+      genderBool = true;
+    } else {
+      genderBool = false;
+    }
+
+    var requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
         gradYear: gradYear,
-        gender: gender,
+        gender: genderBool,
         email: email,
         pswd: password
       })
     };
-    fetch("http://localhost:3002/users", requestOptions)
+    await fetch("http://localhost:3002/users", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 
-    setIsLoading(false);
+    requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        role: "student"
+      })
+    };
+    await fetch("http://localhost:3002/user/addRole", requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
+    requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        role: "student"
+      })
+    };
+    await fetch("http://localhost:3002/user/addRight", requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
   }
 
   async function handleConfirmationSubmit(event) {
@@ -123,11 +158,17 @@ export const Signup = () => {
         <FormGroup controlId="gender" bsSize="large">
           <FormLabel>Gender</FormLabel>
           <FormControl
+            as="select"
             autoFocus
-            type="gender"
+            type="year"
             value={gender}
             onChange={e => setGender(e.target.value)}
-          />
+            custom
+          >
+            <option value="null">Choose...</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+          </FormControl>
         </FormGroup>
         <FormGroup controlId="email" bsSize="large">
           <FormLabel>Email</FormLabel>
