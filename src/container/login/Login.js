@@ -8,11 +8,24 @@ var CryptoJS = require("crypto-js");
 export const Login = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [logInResult, setLogInResult] = useState(false);
   const { setAuthTokens } = useAuth();
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
+  }
+
+  function DisplayLogInResult() {
+    if (logInResult) {
+      if (loggedIn) {
+        return <div>Log in Successful</div>;
+      } else {
+        return <div>Credentials incorrect. Log in failed.</div>;
+      }
+    } else {
+      return <div></div>;
+    }
   }
 
   function handleSubmit(event) {
@@ -39,13 +52,17 @@ export const Login = props => {
         password
     )
       .then(response => {
-        console.log(response);
         return response.json();
       })
       .then(data => {
-        console.log(data);
-        setAuthTokens("example-token");
-        setLoggedIn(true);
+        if (data.length !== 0) {
+          setAuthTokens(data);
+          setLoggedIn(true);
+        } else {
+          setAuthTokens(null);
+          setLoggedIn(false);
+        }
+        setLogInResult(true);
       });
 
     event.preventDefault();
@@ -75,6 +92,7 @@ export const Login = props => {
           Login
         </Button>
       </form>
+      <DisplayLogInResult />
     </div>
   );
 };

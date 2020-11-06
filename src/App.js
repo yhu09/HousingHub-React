@@ -3,7 +3,6 @@ import "./App.css";
 import "./pages/Home";
 import { Home } from "./pages/Home";
 import { Houses } from "./pages/Houses";
-import Unit from "./pages/Unit";
 import { Error } from "./pages/Error";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
