@@ -29,7 +29,7 @@ export default [
       capacity: 1,
       pets: false,
       breakfast: false,
-      featured: false,
+      featured: true,
       description:
         "Street art edison bulb gluten-free, tofu try-hard lumbersexual brooklyn tattooed pickled chambray. Actually humblebrag next level, deep v art party wolf tofu direct trade readymade sustainable hell of banjo. Organic authentic subway tile cliche palo santo, street art XOXO dreamcatcher retro sriracha portland air plant kitsch stumptown. Austin small batch squid gastropub. Pabst pug tumblr gochujang offal retro cloud bread bushwick semiotics before they sold out sartorial literally mlkshk. Vaporware hashtag vice, sartorial before they sold out pok pok health goth trust fund cray.",
       extras: [
@@ -143,7 +143,7 @@ export default [
       capacity: 1,
       pets: true,
       breakfast: false,
-      featured: false,
+      featured: true,
       description:
         "Street art edison bulb gluten-free, tofu try-hard lumbersexual brooklyn tattooed pickled chambray. Actually humblebrag next level, deep v art party wolf tofu direct trade readymade sustainable hell of banjo. Organic authentic subway tile cliche palo santo, street art XOXO dreamcatcher retro sriracha portland air plant kitsch stumptown. Austin small batch squid gastropub. Pabst pug tumblr gochujang offal retro cloud bread bushwick semiotics before they sold out sartorial literally mlkshk. Vaporware hashtag vice, sartorial before they sold out pok pok health goth trust fund cray.",
       extras: [
@@ -648,8 +648,8 @@ export default [
       id: "12"
     },
     fields: {
-      name: "family deluxe",
-      slug: "family-deluxe",
+      name: "173 College Ave",
+      slug: "173-College-Ave",
       type: "family",
       price: 500,
       size: 700,
@@ -705,8 +705,8 @@ export default [
       id: "13"
     },
     fields: {
-      name: "presidential",
-      slug: "presidential-room",
+      name: "199 Boston Ave",
+      slug: "199-Boston- Ave",
       type: "presidential",
       price: 600,
       size: 1000,

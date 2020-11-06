@@ -13,7 +13,7 @@ class HouseProvider extends Component {
 
     componentDidMount() {
         let houses = this.formatData(items);
-        let featuredHouses =  houses.filter(house => house.featured === true);
+        let featuredHouses = houses.filter(house => house.featured === true);
         this.setState({
             houses, featuredHouses, sortedHouses: houses, loading: false
         });
@@ -26,20 +26,38 @@ class HouseProvider extends Component {
             let id = item.sys.id
             let images = item.fields.images.map(image => image.fields.file.url);
 
-            let house = {...item.fields, images, id}
+            let house = { ...item.fields, images, id }
             return house
         });
         return tempItems
     }
 
+    getHouse = (slug) => {
+        let tempHouses = [...this.state.houses];
+        const house = tempHouses.find((house) => house.slug === slug);
+        return house;
+    }
+
     render() {
-        return (<HouseContext.Provider value = {{...this.state}}>
-            {this.props.children}
-        </HouseContext.Provider>
+        return (
+            <HouseContext.Provider value={{
+                ...this.state,
+                getHouse: this.getHouse
+            }}>
+                {this.props.children}
+            </HouseContext.Provider>
         );
     }
 }
 
 const HouseConsumer = HouseContext.Consumer;
 
-export {HouseProvider, HouseConsumer, HouseContext}
+export function withHouseConsumer(Component) {
+    return function ConsumerWrapper(props) {
+        return <HouseConsumer>
+            {value => <Component {...props} context={value}/>}
+        </HouseConsumer>
+    }
+}
+
+export { HouseProvider, HouseConsumer, HouseContext }

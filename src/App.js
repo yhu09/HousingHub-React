@@ -12,6 +12,7 @@ import { Login } from "./container/login/Login";
 import { Signup } from "./container/login/Signup";
 import { AuthContext } from "./utility/auth";
 import PrivateRoute from "./PrivateRoute";
+import SingleHouse from "./pages/SingleHouse";
 
 function App() {
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
@@ -32,8 +33,8 @@ function App() {
             <Route exact path="/login/" component={Login} />
             <Route exact path="/signup/" component={Signup} />
             <PrivateRoute exact path="/houses/" component={Houses} />
-            <PrivateRoute exact path="/houses/:slug" component={Unit} />
-            <PrivateRoute path="/sublet" component={Subletter} />
+            <PrivateRoute exact path="/houses/:slug" component={SingleHouse} />
+            <PrivateRoute exact path="/sublet" component={Subletter} />
             <Route component={Error} />
           </Switch>
         </BrowserRouter>

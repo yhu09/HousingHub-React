@@ -8,7 +8,7 @@ export const Error = () => {
         <div>
             <Hero hero="defaultHero">
                 <Banner title = "404" subtitle = "Request Not Found">
-                    <Link to = "/" className = "btn-primary">Home</Link>
+                    <Link to = "/" className = "btn-primary"> Home </Link>
                 </Banner>
             </Hero>
         </div>
