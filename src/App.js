@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import { Subletter } from "./pages/Subletter";
 import { Login } from "./container/login/Login";
 import { Signup } from "./container/login/Signup";
+import { HouseForm } from "./container/house/HouseForm";
 import { AuthContext } from "./utility/auth";
 import PrivateRoute from "./PrivateRoute";
 import SingleHouse from "./pages/SingleHouse";
@@ -31,6 +32,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/login/" component={Login} />
             <Route exact path="/signup/" component={Signup} />
+            <Route exact path="/houseform/" component={HouseForm} />
             <PrivateRoute exact path="/houses/" component={Houses} />
             <PrivateRoute exact path="/houses/:slug" component={SingleHouse} />
             <PrivateRoute exact path="/sublet" component={Subletter} />
