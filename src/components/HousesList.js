@@ -1,9 +1,20 @@
 import React from 'react'
-
-export default function HousesList() {
-    return (
+import House from './House';
+export default function HousesList({houses}) {
+    if (houses.length === 0) {
+        return (
         <div>
-            hello from houseslist
-        </div>
-    )
+        <h3>No houses matched with search 
+        parameters</h3>
+        </div>)
+    }
+    return (
+        <section className = "roomslist"> 
+            <div className = "roomslist-center">
+                {houses.map(item => {
+                    return <House key={item.id} house={item} />;
+                })}
+            </div>
+        </section>
+    );
 }
