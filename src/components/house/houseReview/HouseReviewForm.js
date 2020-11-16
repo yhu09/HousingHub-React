@@ -1,6 +1,6 @@
 import React, { Component, useState, useContext } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
-import { HouseContext } from "../../context";
+import { HouseContext } from "../../../context";
 import "./HouseReviewForm.css";
 
 const FunctionalHouseReivewForm = props => {

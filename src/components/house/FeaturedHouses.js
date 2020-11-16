@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { HouseContext } from '../context'
-import Loading from './Loading'
-import House from "./House"
-import Title from "./Title"
+import { HouseContext } from '../../context'
+import Loading from '../commonHeaders/Loading'
+import House from "../house/House"
+import Title from "../commonHeaders/Title"
 
 export default class FeaturedHouses extends Component {
     static contextType = HouseContext;

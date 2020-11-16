@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
-import { HouseContext } from '../context'
-import Title from '../components/Title';
+import { HouseContext } from '../../context'
+import Title from '../commonHeaders/Title';
 
 const getUnique = (items, value) => {
     return [...new Set(items.map(item => item[value]))]

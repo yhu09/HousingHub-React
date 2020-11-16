@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import defaulIMG from "../images/house-2.png";
+import defaulIMG from "../../images/house-2.png";
 import PropTypes from "prop-types";
 export default function House({ house }) {
   const { name, slug, images, price } = house;

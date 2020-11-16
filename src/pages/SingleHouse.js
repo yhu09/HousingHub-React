@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import defaultBcg from "../images/house-8.jpeg";
-import Hero from "../components/Hero";
-import Banner from "../components/Banner";
+import Hero from "../components/commonHeaders/Hero";
+import Banner from "../components/commonHeaders/Banner";
 import { Link } from "react-router-dom";
 import { HouseContext } from "../context";
-import StyledHero from "../components/StyledHero";
-import HouseReviewForm from "../components/HouseReview/HouseReviewForm";
+import StyledHero from "../components/commonHeaders/StyledHero";
+import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 
 export default class SingleHouse extends Component {
   constructor(props) {

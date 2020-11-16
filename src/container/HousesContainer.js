@@ -1,8 +1,8 @@
 import React from 'react'
-import HousesFilter from '../components/HousesFilter'
-import HousesList from '../components/HousesList'
+import HousesFilter from '../components/house/HousesFilter'
+import HousesList from '../components/house/HousesList'
 import { withHouseConsumer } from '../context'
-import Loading from './Loading'
+import Loading from '../components/commonHeaders/Loading'
 
 function HousesContainer({ context }) {
     const { loading, sortedHouses, houses } = context;

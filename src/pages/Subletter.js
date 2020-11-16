@@ -1,6 +1,6 @@
 import React from "react";
-import Banner from "../components/Banner";
-import Hero from "../components/Hero";
+import Banner from "../components/commonHeaders/Banner";
+import Hero from "../components/commonHeaders/Hero";
 
 export const Subletter = () => {
   return (

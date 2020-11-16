@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { useAuth } from "../utility/auth";
+import { useAuth } from "../../utility/auth";
 import { Button } from "react-bootstrap";
 
 const LogoutFunctional = () => {

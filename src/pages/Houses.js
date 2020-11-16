@@ -1,8 +1,8 @@
 import React from "react";
-import Hero from "../components/Hero";
-import Banner from "../components/Banner";
+import Hero from "../components/commonHeaders/Hero";
+import Banner from "../components/commonHeaders/Banner";
 import { Link } from "react-router-dom";
-import HousesContainer from "../components/HousesContainer";
+import HousesContainer from "../container/HousesContainer";
 
 export const Houses = () => {
   return (

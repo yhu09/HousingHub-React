@@ -1,9 +1,9 @@
 import React from "react";
-import Hero from "../components/Hero";
-import Banner from "../components/Banner";
+import Hero from "../components/commonHeaders/Hero";
+import Banner from "../components/commonHeaders/Banner";
 import { Link } from "react-router-dom";
-import Services from "../components/Services";
-import FeaturedHouses from "../components/FeaturedHouses";
+import Services from "../components/commonHeaders/Services";
+import FeaturedHouses from "../components/house/FeaturedHouses";
 
 export const Home = () => {
   return (
