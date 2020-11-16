@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
@@ -9,11 +9,15 @@ export const HouseForm = () => {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [ZIP, setZIP] = useState("");
-  const [numUnits, setNumUnits] = useState(0);
+  const [unitLevel, setUnitLevel] = useState("lower");
   const [laundry, setLaundry] = useState(false);
   const [basement, setBasement] = useState(false);
   const [yard, setYard] = useState(false);
   const [parking, setParking] = useState(false);
+  const [porch, setPorch] = useState(false);
+  const [bedrooms, setBedrooms] = useState(1);
+  const [bathrooms, setBathrooms] = useState(1);
+  const [rent, setRent] = useState(875);
 
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
@@ -40,25 +44,28 @@ export const HouseForm = () => {
         stateName: state,
         city: city,
         ZIP: ZIP,
-        numUnits: numUnits,
+        unitLevel: unitLevel,
         laundry: laundry,
         basement: basement,
         yard: yard,
-        parking: parking
+        parking: parking,
+        porch: porch,
+        bedrooms: bedrooms,
+        bathrooms: bathrooms,
+        rent: rent
       })
     };
     await fetch("http://localhost:3002/houses", requestOptions)
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => {
+        if (data.status === "success") {
+          setNewHouse(true);
+        }
+      });
+    console.log("House form submitted");
   }
 
-  async function handleConfirmationSubmit(event) {
-    event.preventDefault();
-
-    setIsLoading(true);
-  }
-
-  function renderConfirmationForm() {
+  function renderNewHouseStatus() {
     return <div>Successful</div>;
   }
 
@@ -76,7 +83,7 @@ export const HouseForm = () => {
             />
           </Form.Group>
 
-          <Form.Group controlId="formGridAddress1">
+          <Form.Group controlId="formGridAddress">
             <Form.Label>Address</Form.Label>
             <Form.Control
               placeholder="123 Boston Ave"
@@ -118,17 +125,25 @@ export const HouseForm = () => {
             </Form.Group>
           </Form.Row>
 
-          <Form.Group as={Col} controlId="formGridNumUnits">
-            <Form.Label>Number of Units</Form.Label>
+          <Form.Group as={Col} controlId="formGridRent">
+            <Form.Label>Rent</Form.Label>
+            <Form.Control
+              placeholder="875"
+              onChange={e => setRent(e.target.value)}
+              value={rent}
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridUnitLevel">
+            <Form.Label>Unit Level</Form.Label>
             <Form.Control
               as="select"
-              defaultValue="1"
-              onChange={e => setNumUnits(e.target.value)}
-              value={numUnits}
+              defaultValue="lower"
+              onChange={e => setUnitLevel(e.target.value)}
+              value={unitLevel}
             >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+              <option>lower</option>
+              <option>upper</option>
             </Form.Control>
           </Form.Group>
 
@@ -184,6 +199,52 @@ export const HouseForm = () => {
             </Form.Control>
           </Form.Group>
 
+          <Form.Group as={Col} controlId="formGridPorch">
+            <Form.Label>Porch</Form.Label>
+            <Form.Control
+              as="select"
+              defaultValue="false"
+              onChange={e => setPorch(e.target.value)}
+              value={porch}
+            >
+              <option>true</option>
+              <option>false</option>
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridBedrooms">
+            <Form.Label>Bedrooms</Form.Label>
+            <Form.Control
+              as="select"
+              defaultValue="1"
+              onChange={e => setBedrooms(e.target.value)}
+              value={bedrooms}
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridBathrooms">
+            <Form.Label>Bathrooms</Form.Label>
+            <Form.Control
+              as="select"
+              defaultValue="1"
+              onChange={e => setBathrooms(e.target.value)}
+              value={bathrooms}
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </Form.Control>
+          </Form.Group>
+
           <Button block bsSize="large" disabled={!validateForm()} type="submit">
             Submit
           </Button>
@@ -194,7 +255,7 @@ export const HouseForm = () => {
 
   return (
     <div className="HouseForm">
-      {newHouse === null ? renderForm() : renderConfirmationForm()}
+      {newHouse === null ? renderForm() : renderNewHouseStatus()}
     </div>
   );
 };
