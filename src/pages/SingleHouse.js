@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { HouseContext } from "../context";
 import StyledHero from "../components/commonHeaders/StyledHero";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
+import HouseReviewList from "../components/house/houseReview/HouseReviewList";
 
 export default class SingleHouse extends Component {
   constructor(props) {
@@ -13,8 +14,18 @@ export default class SingleHouse extends Component {
     console.log(this.props);
     this.state = {
       slug: this.props.match.params.slug,
+      reviews: null,
       defaultBcg
     };
+  }
+
+  async componentDidMount() {
+    await fetch("http://localhost:3002/houseReview")
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ reviews: data });
+      });
   }
 
   static contextType = HouseContext;
@@ -87,6 +98,7 @@ export default class SingleHouse extends Component {
             })}
           </ul>
         </section>
+        <HouseReviewList houseReviews={this.state.reviews} />
         <HouseReviewForm />
       </>
     );

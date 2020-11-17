@@ -17,8 +17,7 @@ class HouseProvider extends Component {
     minSize: 0,
     maxSize: 0,
     breakfast: false,
-    pets: false,
-    email: ""
+    pets: false
   };
 
   componentDidMount() {
@@ -50,10 +49,6 @@ class HouseProvider extends Component {
     });
     return tempItems;
   }
-
-  logIn = email => {
-    this.setState({ email });
-  };
 
   getHouse = slug => {
     let tempHouses = [...this.state.houses];
@@ -108,8 +103,7 @@ class HouseProvider extends Component {
         value={{
           ...this.state,
           getHouse: this.getHouse,
-          handleChange: this.handleChange,
-          logIn: this.logIn
+          handleChange: this.handleChange
         }}
       >
         {this.props.children}

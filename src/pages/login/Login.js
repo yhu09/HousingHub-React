@@ -1,13 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { useAuth } from "../../utility/auth";
-import { HouseContext } from "../../context";
 import "./Login.css";
 
 var CryptoJS = require("crypto-js");
 
 export const Login = props => {
-  const context = useContext(HouseContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -60,8 +58,6 @@ export const Login = props => {
         if (data.length !== 0) {
           setAuthTokens(data);
           setLoggedIn(true);
-          console.log(context);
-          context.logIn(email);
         } else {
           setAuthTokens(null);
           setLoggedIn(false);

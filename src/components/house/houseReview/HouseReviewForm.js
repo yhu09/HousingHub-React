@@ -1,6 +1,5 @@
-import React, { Component, useState, useContext } from "react";
+import React, { Component, useState } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
-import { HouseContext } from "../../../context";
 import "./HouseReviewForm.css";
 
 const FunctionalHouseReivewForm = props => {
@@ -11,7 +10,6 @@ const FunctionalHouseReivewForm = props => {
   const [gasBill, setGasBill] = useState(0);
   const [waterBill, setWaterBill] = useState(0);
 
-  const context = useContext(HouseContext);
   function validateForm() {
     return true;
   }
@@ -19,15 +17,23 @@ const FunctionalHouseReivewForm = props => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({})
-    // };
-    // await fetch("http://localhost:3002/houses", requestOptions)
-    //   .then(response => response.json())
-    //   .then(data => {});
-    console.log(context.email);
+    // Need to create cookie to store email
+    var requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        stars: stars,
+        review: review,
+        rent: rent,
+        elecBill: elecBill,
+        gasBill: gasBill,
+        waterBill: waterBill
+      })
+    };
+    await fetch("http://localhost:3002/houseReview", requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
     console.log("House Review Form submitted");
   }
 
