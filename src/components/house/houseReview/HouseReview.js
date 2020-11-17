@@ -9,7 +9,7 @@ export default function HouseReview({ houseReview }) {
     gasbill,
     waterbill,
     review,
-    email
+    author
   } = houseReview;
 
   return (
@@ -22,7 +22,7 @@ export default function HouseReview({ houseReview }) {
         <p>Electric Bill: {elecbill} </p>
         <p>Gas Bill: {gasbill} </p>
         <p>Water Bill: {waterbill} </p>
-        <p>Reviewer: {email}</p>
+        <p>Reviewer: {author}</p>
       </article>
     </div>
   );

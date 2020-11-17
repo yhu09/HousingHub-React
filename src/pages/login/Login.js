@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { useAuth } from "../../utility/auth";
 import "./Login.css";
+import cookie from "react-cookies";
 
 var CryptoJS = require("crypto-js");
 
@@ -58,6 +59,7 @@ export const Login = props => {
         if (data.length !== 0) {
           setAuthTokens(data);
           setLoggedIn(true);
+          cookie.save("email", email, { path: "/" });
         } else {
           setAuthTokens(null);
           setLoggedIn(false);

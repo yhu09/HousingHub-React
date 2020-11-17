@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseReviewForm.css";
+import cookie from "react-cookies";
 
 const FunctionalHouseReivewForm = props => {
   const [stars, setStars] = useState(0);
@@ -17,6 +18,9 @@ const FunctionalHouseReivewForm = props => {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    let email = cookie.load("email");
+    console.log(cookie.load("email"));
+
     // Need to create cookie to store email
     var requestOptions = {
       method: "POST",
@@ -27,7 +31,8 @@ const FunctionalHouseReivewForm = props => {
         rent: rent,
         elecBill: elecBill,
         gasBill: gasBill,
-        waterBill: waterBill
+        waterBill: waterBill,
+        author: email
       })
     };
     await fetch("http://localhost:3002/houseReview", requestOptions)
