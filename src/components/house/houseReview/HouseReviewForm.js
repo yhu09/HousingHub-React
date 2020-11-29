@@ -19,13 +19,11 @@ const FunctionalHouseReivewForm = props => {
     event.preventDefault();
 
     let email = cookie.load("email");
-    console.log(cookie.load("email"));
-
-    // Need to create cookie to store email
     var requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        house: props.houseAddress,
         stars: stars,
         review: review,
         rent: rent,
@@ -123,6 +121,6 @@ const FunctionalHouseReivewForm = props => {
 
 export default class HouseReviewForm extends Component {
   render() {
-    return <FunctionalHouseReivewForm />;
+    return <FunctionalHouseReivewForm houseAddress={this.props.houseAddress} />;
   }
 }

@@ -20,7 +20,11 @@ export default class SingleHouse extends Component {
   }
 
   async componentDidMount() {
-    await fetch("http://localhost:3002/houseReview")
+    let address = this.state.slug;
+    console.log(address);
+    await fetch(
+      "http://localhost:3002/houseReview/houseAddress/?houseAddress=" + address
+    )
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -99,7 +103,7 @@ export default class SingleHouse extends Component {
           </ul>
         </section>
         <HouseReviewList houseReviews={this.state.reviews} />
-        <HouseReviewForm />
+        <HouseReviewForm houseAddress={this.state.slug} />
       </>
     );
   }
