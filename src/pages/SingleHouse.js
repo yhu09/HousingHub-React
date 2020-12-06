@@ -20,10 +20,8 @@ export default class SingleHouse extends Component {
   }
 
   async componentDidMount() {
-    let address = this.state.slug;
-    console.log(address);
     await fetch(
-      "http://localhost:3002/houseReview/houseAddress/?houseAddress=" + address
+      "http://localhost:3002/houseReview/houseAddress/?houseSlug=" + this.state.slug
     )
       .then(response => response.json())
       .then(data => {
@@ -35,10 +33,10 @@ export default class SingleHouse extends Component {
   static contextType = HouseContext;
   render() {
     const { getHouse } = this.context;
-    const { getHouseTest } = this.context;
+    console.log("here");
+    console.log(this.state.slug);
     const house = getHouse(this.state.slug);
-    const houseTest = getHouseTest(this.state.slug);
-    console.log(houseTest);
+    console.log(house);
     if (!house) {
       return (
         <div className="error">
@@ -53,60 +51,85 @@ export default class SingleHouse extends Component {
     }
 
     const {
-      name,
-      description,
-      capacity,
-      size,
-      price,
-      extras,
-      breakfast,
-      pets,
-      images
+      averageElecBill,
+      averageGasBill,
+      averageWaterBill,
+      basement,
+      bathrooms,
+      bedrooms,
+      city,
+      currresidentsemail,
+      houseaddress,
+      houseid,
+      landlordemail,
+      laundry,
+      leaseend,
+      leasestart,
+      parking,
+      porch,
+      rent,
+      statename,
+      unit,
+      yard,
+      slug,
+      zip
     } = house;
-    const [mainImg, ...defaultImg] = images;
+    // const [mainImg, ...defaultImg] = images;
     return (
       <>
-        <StyledHero img={mainImg}>
+        {/* <StyledHero img={mainImg}>
           <Banner title={`${name}`}>
+            <Link to="/houses" className="btn-primary">
+              Back to Houses
+            </Link>
+          </Banner>
+        </StyledHero> */}
+        <StyledHero>
+          <Banner title={`${houseaddress}`}>
             <Link to="/houses" className="btn-primary">
               Back to Houses
             </Link>
           </Banner>
         </StyledHero>
         <section className="single-room">
-          <div className="single-room-images">
+          {/* <div className="single-room-images">
             {defaultImg.map((item, index) => {
               return <img key={index} src={item} alt={name} />;
             })}
-          </div>
+          </div> */}
           <div className="single-room-info">
             <article className="desc">
-              <h3>details</h3>
-              <p> {description}</p>
+              <h3>Full Address</h3>
+              <p> {houseaddress}, {city}, {statename} {zip} </p>
+              <br></br>
+              <h3>Contact Info</h3>
+              <p> Landlord Email: {landlordemail} </p>
+              <p> Residents Emails: {currresidentsemail} </p>
             </article>
             <article className="info">
               <h3>info</h3>
-              <h6>price: ${price}</h6>
-              <h6>size: {size} SQFT</h6>
-              <h6>
-                max capacity :{" "}
-                {capacity > 1 ? `${capacity} people` : `${capacity} person`}
-              </h6>
-              <h6>{pets ? "pets allowed" : "no pets allowed"}</h6>
-              <h6>{breakfast && "freebreake included"}</h6>
+              <h6>rent: ${rent}</h6>
+              <h6>bedrooms: {bedrooms}</h6>
+              <h6>bathrooms: {bathrooms}</h6>
+              <h6>{basement ? "Basement" : "No basement"}</h6>
+              <h6>{laundry ? "Laundry" : "No laundry"}</h6>
+              <h6>{parking ? "Parking space" : "No parking space"}</h6>
+              <h6>{porch ? "Porch" : "No porch"}</h6>
+              <h6>{yard ? "Yard" : "No yard"}</h6>
+              <h6>Floor: {unit}</h6>        
             </article>
           </div>
         </section>
-        <section className="room-extras">
+        {/* <section className="room-extras">
           <h6>extras</h6>
           <ul className="extras">
             {extras.map((item, index) => {
               return <li key={index}>-{item}</li>;
             })}
           </ul>
-        </section>
+        </section> */}
         <HouseReviewList houseReviews={this.state.reviews} />
-        <HouseReviewForm houseAddress={this.state.slug} />
+        <HouseReviewForm houseAddress={this.state.slug.split("-").join(" ")} />
       </>
     );
   }

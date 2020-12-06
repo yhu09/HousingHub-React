@@ -64,14 +64,8 @@ class HouseProvider extends Component {
   }
 
   getHouse = slug => {
-    let tempHouses = [...this.state.houses];
-    const house = tempHouses.find(house => house.slug === slug);
-    return house;
-  };
-
-  getHouseTest = slug => {
     let tempHouses = [...this.state.housesTest];
-    const house = tempHouses.find(house => house.houseaddress === slug);
+    const house = tempHouses.find(house => house.slug === slug);
     return house;
   }
 
@@ -122,7 +116,6 @@ class HouseProvider extends Component {
         value={{
           ...this.state,
           getHouse: this.getHouse,
-          getHouseTest: this.getHouseTest,
           handleChange: this.handleChange
         }}
       >
