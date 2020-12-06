@@ -17,10 +17,22 @@ class HouseProvider extends Component {
     minSize: 0,
     maxSize: 0,
     breakfast: false,
-    pets: false
+    pets: false,
+
+    housesTest: []
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    
+    await fetch(
+      "http://localhost:3002/houses"
+    )
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ housesTest : data });
+    });
+  
     let houses = this.formatData(items);
     let featuredHouses = houses.filter(house => house.featured === true);
     let maxPrice = Math.max(...houses.map(item => item.price));
@@ -36,6 +48,7 @@ class HouseProvider extends Component {
       maxSize
     });
     console.log(houses);
+    console.log(this.state.housesTest);
     // let featuredHouses =
   }
 
@@ -55,6 +68,12 @@ class HouseProvider extends Component {
     const house = tempHouses.find(house => house.slug === slug);
     return house;
   };
+
+  getHouseTest = slug => {
+    let tempHouses = [...this.state.housesTest];
+    const house = tempHouses.find(house => house.houseaddress === slug);
+    return house;
+  }
 
   handleChange = event => {
     const target = event.target;
@@ -103,6 +122,7 @@ class HouseProvider extends Component {
         value={{
           ...this.state,
           getHouse: this.getHouse,
+          getHouseTest: this.getHouseTest,
           handleChange: this.handleChange
         }}
       >

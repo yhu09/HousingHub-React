@@ -35,7 +35,10 @@ export default class SingleHouse extends Component {
   static contextType = HouseContext;
   render() {
     const { getHouse } = this.context;
+    const { getHouseTest } = this.context;
     const house = getHouse(this.state.slug);
+    const houseTest = getHouseTest(this.state.slug);
+    console.log(houseTest);
     if (!house) {
       return (
         <div className="error">
