@@ -18,6 +18,7 @@ export const HouseForm = () => {
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
   const [rent, setRent] = useState(875);
+  const [files, setFiles] = useState([]);
 
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
@@ -35,34 +36,62 @@ export const HouseForm = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     landlordEmail: landlordEmail,
+    //     houseAddress: houseAddress,
+    //     stateName: state,
+    //     city: city,
+    //     ZIP: ZIP,
+    //     unitLevel: unitLevel,
+    //     laundry: laundry,
+    //     basement: basement,
+    //     yard: yard,
+    //     parking: parking,
+    //     porch: porch,
+    //     bedrooms: bedrooms,
+    //     bathrooms: bathrooms,
+    //     rent: rent
+    //   })
+    // };
+    // await fetch("http://localhost:3002/houses", requestOptions)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     if (data.status === "success") {
+    //       setNewHouse(true);
+    //     }
+    //   });
+
+    console.log(files);
+    const formData = new FormData();
+    for (const file of files) {
+      console.log(file);
+      formData.append("pictures", file, file.name);
+      console.log(formData.get("pictures"));
+    }
+    console.log(formData);
+
     var requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        landlordEmail: landlordEmail,
-        houseAddress: houseAddress,
-        stateName: state,
-        city: city,
-        ZIP: ZIP,
-        unitLevel: unitLevel,
-        laundry: laundry,
-        basement: basement,
-        yard: yard,
-        parking: parking,
-        porch: porch,
-        bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        rent: rent
-      })
+      body: formData
     };
-    await fetch("http://localhost:3002/houses", requestOptions)
+    console.log(requestOptions);
+    await fetch("http://localhost:3002/houses/images", requestOptions)
       .then(response => response.json())
       .then(data => {
-        if (data.status === "success") {
-          setNewHouse(true);
-        }
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
       });
+
     console.log("House form submitted");
+  }
+
+  function fileSelectedHandler(e) {
+    setFiles([...files, ...e.target.files]);
   }
 
   function renderNewHouseStatus() {
@@ -245,6 +274,13 @@ export const HouseForm = () => {
             </Form.Control>
           </Form.Group>
 
+          <Form.Group as={Col} controlId="formPhotos">
+            <Form.Label>Photos</Form.Label>
+            <input type="file" multiple onChange={fileSelectedHandler} />
+          </Form.Group>
+
+          <br></br>
+
           <Button block bsSize="large" disabled={!validateForm()} type="submit">
             Submit
           </Button>
@@ -259,3 +295,25 @@ export const HouseForm = () => {
     </div>
   );
 };
+
+class ImageUpload extends React.Component {
+  state = {
+    files: []
+  };
+
+  fileSelectedHandler = e => {
+    this.setState({ files: [...this.state.files, ...e.target.files] });
+  };
+
+  render() {
+    return (
+      <form>
+        <div>
+          <h2>Upload images</h2>
+        </div>
+        <h3>Images</h3>
+        <input type="file" multiple onChange={this.fileSelectedHandler} />
+      </form>
+    );
+  }
+}
