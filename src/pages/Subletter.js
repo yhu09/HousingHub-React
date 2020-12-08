@@ -8,7 +8,7 @@ export const Subletter = () => {
       <Hero hero="sublettersHero">
         <Banner
           title="Need to sublet or a subletter?"
-          subtitle="You've come to the right palce!"
+          subtitle="You've come to the right place!"
         ></Banner>
       </Hero>
     </div>
