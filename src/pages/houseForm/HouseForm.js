@@ -75,7 +75,8 @@ export const HouseForm = () => {
 
     var requestOptions = {
       method: "POST",
-      body: formData
+      body: formData,
+      "Content-Type": "application/x-www-form-urlencoded"
     };
     console.log(requestOptions);
     await fetch("http://localhost:3002/houses/images", requestOptions)
