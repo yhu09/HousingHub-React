@@ -76,10 +76,12 @@ export default class SingleHouse extends Component {
       yard,
       slug,
       zip,
-      photokeys
+      photokeys,
+      mainphotokey
     } = house;
 
     // const [mainImg, ...defaultImg] = images;
+    let mainImageLink = imageLinkURL(mainphotokey);
     console.log(photokeys);
     let imageLinks = [];
     for (let key of photokeys) {
@@ -89,7 +91,7 @@ export default class SingleHouse extends Component {
     console.log(imageLinks);
     return (
       <>
-        <StyledHero>
+        <StyledHero img={mainImageLink}>
           <Banner title={`${houseaddress}`}>
             <Link to="/houses" className="btn-primary">
               Back to Houses

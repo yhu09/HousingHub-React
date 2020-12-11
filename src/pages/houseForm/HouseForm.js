@@ -20,6 +20,7 @@ export const HouseForm = () => {
   const [bathrooms, setBathrooms] = useState(1);
   const [rent, setRent] = useState(875);
   const [files, setFiles] = useState([]);
+  const [mainPhotoFile, setMainPhotoFile] = useState([]);
   const [photoKeys, setPhotoKeys] = useState([]);
 
   const history = useHistory();
@@ -40,6 +41,14 @@ export const HouseForm = () => {
 
     let slug = houseAddress.split(" ").join("-");
     let path = slug + "/";
+
+    // main image
+    console.log(mainPhotoFile);
+    let key = uploadFile(path, mainPhotoFile[0]);
+    var mainPhotoKey = path + key;
+    console.log(mainPhotoKey);
+
+    // other images
     var imagePathKey;
     for (var file of files) {
       let key = uploadFile(path, file);
@@ -56,6 +65,7 @@ export const HouseForm = () => {
         stateName: state,
         city: city,
         ZIP: ZIP,
+        rent: rent,
         unitLevel: unitLevel,
         laundry: laundry,
         basement: basement,
@@ -64,7 +74,7 @@ export const HouseForm = () => {
         porch: porch,
         bedrooms: bedrooms,
         bathrooms: bathrooms,
-        rent: rent,
+        mainPhotoKey: mainPhotoKey,
         photoKeys: photoKeys
       })
     };
@@ -80,6 +90,10 @@ export const HouseForm = () => {
 
   function fileSelectedHandler(e) {
     setFiles([...files, ...e.target.files]);
+  }
+
+  function frontPhotoSelectedHandler(e) {
+    setMainPhotoFile([...e.target.files]);
   }
 
   function renderNewHouseStatus() {
@@ -260,6 +274,11 @@ export const HouseForm = () => {
               <option>2</option>
               <option>3</option>
             </Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formPhotos">
+            <Form.Label>Front Photo</Form.Label>
+            <input type="file" multiple onChange={frontPhotoSelectedHandler} />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formPhotos">

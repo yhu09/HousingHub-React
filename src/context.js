@@ -23,16 +23,13 @@ class HouseProvider extends Component {
   };
 
   async componentDidMount() {
-    
-    await fetch(
-      "http://localhost:3002/houses"
-    )
+    await fetch("http://localhost:3002/houses")
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        this.setState({ housesTest : data });
-    });
-  
+        this.setState({ housesTest: data });
+      });
+
     let houses = this.formatData(items);
     let featuredHouses = houses.filter(house => house.featured === true);
     let maxPrice = Math.max(...houses.map(item => item.price));
@@ -67,7 +64,7 @@ class HouseProvider extends Component {
     let tempHouses = [...this.state.housesTest];
     const house = tempHouses.find(house => house.slug === slug);
     return house;
-  }
+  };
 
   handleChange = event => {
     const target = event.target;
