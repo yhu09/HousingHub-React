@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
+import { uploadFile, getFile } from "../../utility/s3-upload";
 
 export const HouseForm = () => {
   const [landlordEmail, setLandlordEmail] = useState("");
@@ -19,6 +20,7 @@ export const HouseForm = () => {
   const [bathrooms, setBathrooms] = useState(1);
   const [rent, setRent] = useState(875);
   const [files, setFiles] = useState([]);
+  const [photoKeys, setPhotoKeys] = useState([]);
 
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
@@ -36,57 +38,43 @@ export const HouseForm = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     landlordEmail: landlordEmail,
-    //     houseAddress: houseAddress,
-    //     stateName: state,
-    //     city: city,
-    //     ZIP: ZIP,
-    //     unitLevel: unitLevel,
-    //     laundry: laundry,
-    //     basement: basement,
-    //     yard: yard,
-    //     parking: parking,
-    //     porch: porch,
-    //     bedrooms: bedrooms,
-    //     bathrooms: bathrooms,
-    //     rent: rent
-    //   })
-    // };
-    // await fetch("http://localhost:3002/houses", requestOptions)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     if (data.status === "success") {
-    //       setNewHouse(true);
-    //     }
-    //   });
-
-    console.log(files);
-    const formData = new FormData();
-    for (const file of files) {
-      console.log(file);
-      formData.append("pictures", file, file.name);
-      console.log(formData.get("pictures"));
+    let slug = houseAddress.split(" ").join("-");
+    let path = slug + "/";
+    var imagePathKey;
+    for (var file of files) {
+      let key = uploadFile(path, file);
+      imagePathKey = path + key;
+      setPhotoKeys(photoKeys.push(imagePathKey));
     }
-    console.log(formData);
 
     var requestOptions = {
       method: "POST",
-      body: formData
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        landlordEmail: landlordEmail,
+        houseAddress: houseAddress,
+        stateName: state,
+        city: city,
+        ZIP: ZIP,
+        unitLevel: unitLevel,
+        laundry: laundry,
+        basement: basement,
+        yard: yard,
+        parking: parking,
+        porch: porch,
+        bedrooms: bedrooms,
+        bathrooms: bathrooms,
+        rent: rent,
+        photoKeys: photoKeys
+      })
     };
-    console.log(requestOptions);
-    await fetch("http://localhost:3002/houses/images", requestOptions)
+    await fetch("http://localhost:3002/houses", requestOptions)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error(error);
+        if (data.status === "success") {
+          setNewHouse(true);
+        }
       });
-
     console.log("House form submitted");
   }
 

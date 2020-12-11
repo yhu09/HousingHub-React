@@ -7,6 +7,7 @@ import { HouseContext } from "../context";
 import StyledHero from "../components/commonHeaders/StyledHero";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
+import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
 
 export default class SingleHouse extends Component {
   constructor(props) {
@@ -21,7 +22,8 @@ export default class SingleHouse extends Component {
 
   async componentDidMount() {
     await fetch(
-      "http://localhost:3002/houseReview/houseAddress/?houseSlug=" + this.state.slug
+      "http://localhost:3002/houseReview/houseAddress/?houseSlug=" +
+        this.state.slug
     )
       .then(response => response.json())
       .then(data => {
@@ -37,6 +39,7 @@ export default class SingleHouse extends Component {
     console.log(this.state.slug);
     const house = getHouse(this.state.slug);
     console.log(house);
+
     if (!house) {
       return (
         <div className="error">
@@ -72,18 +75,20 @@ export default class SingleHouse extends Component {
       unit,
       yard,
       slug,
-      zip
+      zip,
+      photokeys
     } = house;
+
     // const [mainImg, ...defaultImg] = images;
+    console.log(photokeys);
+    let imageLinks = [];
+    for (let key of photokeys) {
+      console.log(key);
+      imageLinks.push(imageLinkURL(key));
+    }
+    console.log(imageLinks);
     return (
       <>
-        {/* <StyledHero img={mainImg}>
-          <Banner title={`${name}`}>
-            <Link to="/houses" className="btn-primary">
-              Back to Houses
-            </Link>
-          </Banner>
-        </StyledHero> */}
         <StyledHero>
           <Banner title={`${houseaddress}`}>
             <Link to="/houses" className="btn-primary">
@@ -92,15 +97,18 @@ export default class SingleHouse extends Component {
           </Banner>
         </StyledHero>
         <section className="single-room">
-          {/* <div className="single-room-images">
-            {defaultImg.map((item, index) => {
-              return <img key={index} src={item} alt={name} />;
+          <div className="single-room-images">
+            {imageLinks.map((item, index) => {
+              return <img key={index} src={item} alt={houseaddress} />;
             })}
-          </div> */}
+          </div>
           <div className="single-room-info">
             <article className="desc">
               <h3>Full Address</h3>
-              <p> {houseaddress}, {city}, {statename} {zip} </p>
+              <p>
+                {" "}
+                {houseaddress}, {city}, {statename} {zip}{" "}
+              </p>
               <br></br>
               <h3>Contact Info</h3>
               <p> Landlord Email: {landlordemail} </p>
@@ -116,7 +124,7 @@ export default class SingleHouse extends Component {
               <h6>{parking ? "Parking space" : "No parking space"}</h6>
               <h6>{porch ? "Porch" : "No porch"}</h6>
               <h6>{yard ? "Yard" : "No yard"}</h6>
-              <h6>Floor: {unit}</h6>        
+              <h6>Floor: {unit}</h6>
             </article>
           </div>
         </section>
