@@ -58,6 +58,7 @@ export const HouseForm = () => {
 
     var requestOptions = {
       method: "POST",
+<<<<<<< HEAD
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         landlordEmail: landlordEmail,
@@ -77,6 +78,10 @@ export const HouseForm = () => {
         mainPhotoKey: mainPhotoKey,
         photoKeys: photoKeys
       })
+=======
+      body: formData,
+      "Content-Type": "application/x-www-form-urlencoded"
+>>>>>>> 3aafea79d78d304c0f395261f23eeb70dfee1a5b
     };
     await fetch("http://localhost:3002/houses", requestOptions)
       .then(response => response.json())
