@@ -2,14 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import defaulIMG from "../../images/house-2.png";
 import PropTypes from "prop-types";
+import { imageLinkURL } from "../../utility/s3-upload";
+
 export default function House({ house }) {
-  const { name, slug, images, price } = house;
+  const { houseaddress, slug, mainphotokey, rent } = house;
+  let imageLink = imageLinkURL(mainphotokey);
   return (
     <article>
       <div className="img-container">
-        <img src={images[0] || defaulIMG} alt="single room"></img>
+        <img src={imageLink || defaulIMG} alt="single room"></img>
         <div className="price-top">
-          <h6> ${price}</h6>
+          <h6> ${rent}</h6>
           <p>per month</p>
         </div>
         <Link to={`/houses/${slug}`} className="btn-primary room-link">
@@ -17,16 +20,16 @@ export default function House({ house }) {
           Features{" "}
         </Link>
       </div>
-      <p className="room-info"> {name} </p>
+      <p className="room-info"> {houseaddress} </p>
     </article>
   );
 }
 
 House.propTypes = {
   house: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    houseaddress: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
-    images: PropTypes.arrayOf(PropTypes.string).isRequired,
-    price: PropTypes.number.isRequired
+    mainphotokey: PropTypes.string.isRequired,
+    rent: PropTypes.number.isRequired
   })
 };
