@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ImageGallery from "react-image-gallery";
 import defaultBcg from "../images/house-8.jpeg";
 import Hero from "../components/commonHeaders/Hero";
 import Banner from "../components/commonHeaders/Banner";
@@ -86,8 +87,11 @@ export default class SingleHouse extends Component {
     let imageLinks = [];
     for (let key of photokeys) {
       console.log(key);
-      imageLinks.push(imageLinkURL(key));
+      let original = imageLinkURL(key);
+      let thumbnail = imageLinkURL(key);
+      imageLinks.push({ original: original, thumbnail: thumbnail });
     }
+
     console.log(imageLinks);
     return (
       <>
@@ -99,11 +103,7 @@ export default class SingleHouse extends Component {
           </Banner>
         </StyledHero>
         <section className="single-room">
-          <div className="single-room-images">
-            {imageLinks.map((item, index) => {
-              return <img key={index} src={item} alt={houseaddress} />;
-            })}
-          </div>
+          <ImageGallery items={imageLinks} />
           <div className="single-room-info">
             <article className="desc">
               <h3>Full Address</h3>
