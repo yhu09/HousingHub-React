@@ -117,6 +117,14 @@ class HouseProvider extends Component {
     this.setState({
       sortedHouses: temphouses
     });
+
+    //filter by cap
+    if (rent) {
+      temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);
+    }
+    this.setState({
+      sortedHouses: temphouses
+    });
   };
 
   render() {

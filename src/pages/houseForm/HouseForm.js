@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
@@ -58,7 +58,6 @@ export const HouseForm = () => {
 
     var requestOptions = {
       method: "POST",
-<<<<<<< HEAD
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         landlordEmail: landlordEmail,
@@ -78,10 +77,6 @@ export const HouseForm = () => {
         mainPhotoKey: mainPhotoKey,
         photoKeys: photoKeys
       })
-=======
-      body: formData,
-      "Content-Type": "application/x-www-form-urlencoded"
->>>>>>> 3aafea79d78d304c0f395261f23eeb70dfee1a5b
     };
     await fetch("http://localhost:3002/houses", requestOptions)
       .then(response => response.json())
@@ -308,24 +303,24 @@ export const HouseForm = () => {
   );
 };
 
-class ImageUpload extends React.Component {
-  state = {
-    files: []
-  };
+// class ImageUpload extends React.Component {
+//   state = {
+//     files: []
+//   };
 
-  fileSelectedHandler = e => {
-    this.setState({ files: [...this.state.files, ...e.target.files] });
-  };
+//   fileSelectedHandler = e => {
+//     this.setState({ files: [...this.state.files, ...e.target.files] });
+//   };
 
-  render() {
-    return (
-      <form>
-        <div>
-          <h2>Upload images</h2>
-        </div>
-        <h3>Images</h3>
-        <input type="file" multiple onChange={this.fileSelectedHandler} />
-      </form>
-    );
-  }
-}
+//   render() {
+//     return (
+//       <form>
+//         <div>
+//           <h2>Upload images</h2>
+//         </div>
+//         <h3>Images</h3>
+//         <input type="file" multiple onChange={this.fileSelectedHandler} />
+//       </form>
+//     );
+//   }
+// }

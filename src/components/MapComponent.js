@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Hero from "../components/commonHeaders/Hero";
 import Banner from "../components/commonHeaders/Banner";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { HouseContext } from "../context";
 
 const containerStyle = {
-  width: "1000px",
+  width: "500px",
   height: "300px"
 };
 
@@ -14,12 +14,21 @@ const center = {
   lng: -71.1183
 };
 
-export const Map = () => {
+export default function Map() {
   const [map, setMap] = React.useState(null);
-  const context = HouseContext;
+  const context = useContext(HouseContext);
   console.log(context);
-  const onLoad = React.useCallback(function callback(map) {
+
+  const onLoad = React.useCallback(async function callback(map) {
     setMap(map);
+
+    await fetch(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=355+Boston+Ave,+Medford,+MA&key=AIzaSyBhzhYkTYAkiLPPcxRUxswZa7olOZYkz0c"
+    )
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      });
   }, []);
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -28,9 +37,6 @@ export const Map = () => {
 
   return (
     <div>
-      <Hero hero="mapsHero">
-        <Banner title="Maps"></Banner>
-      </Hero>
       <LoadScript googleMapsApiKey="AIzaSyBhzhYkTYAkiLPPcxRUxswZa7olOZYkz0c">
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -45,4 +51,4 @@ export const Map = () => {
       </LoadScript>
     </div>
   );
-};
+}

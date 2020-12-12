@@ -37,7 +37,7 @@ function App() {
             <PrivateRoute exact path="/houses/" component={Houses} />
             <PrivateRoute exact path="/houses/:slug" component={SingleHouse} />
             <PrivateRoute exact path="/sublet" component={Subletter} />
-            <PrivateRoute exact path="/map" component={Map} />
+            {/* <PrivateRoute exact path="/map" component={Map} /> */}
             <Route component={Error} />
           </Switch>
         </BrowserRouter>
