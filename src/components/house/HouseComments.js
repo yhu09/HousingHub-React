@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 
-export default function HouseComments({ houseAddress, comments }) {
+ const HouseComments = ({ houseAddress, comments }) => {
   console.log(comments);
   return (
     <HouseCommentsStructure
@@ -130,3 +130,5 @@ function HouseCommentsStructure({ houseAddress, comments }) {
   //   /* <div className="HouseReviewForm">{renderForm()}</div>; */
   // }
 }
+
+export default HouseComments

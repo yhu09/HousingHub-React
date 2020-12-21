@@ -4,7 +4,7 @@ import defaulIMG from "../../images/house-2.png";
 import PropTypes from "prop-types";
 import { imageLinkURL } from "../../utility/s3-upload";
 
-export default function House({ house }) {
+const House = ({ house }) => {
   const { houseaddress, slug, mainphotokey, rent } = house;
   let imageLink = imageLinkURL(mainphotokey);
   return (
@@ -24,6 +24,7 @@ export default function House({ house }) {
     </article>
   );
 }
+export default House;
 
 House.propTypes = {
   house: PropTypes.shape({

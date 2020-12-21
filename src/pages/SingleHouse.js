@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import ImageGallery from "react-image-gallery";
 import defaultBcg from "../images/house-8.jpeg";
 import Hero from "../components/commonHeaders/Hero";
@@ -11,159 +11,286 @@ import HouseReviewList from "../components/house/houseReview/HouseReviewList";
 import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
 
-export default class SingleHouse extends Component {
-  constructor(props) {
-    super(props);
-    console.log(this.props);
-    this.state = {
-      slug: this.props.match.params.slug,
-      houseAddress: "",
-      reviews: null,
-      comments: null,
-      loaded: false,
-      defaultBcg
-    };
-  }
+const SingleHouse = (props) => {
+  console.log(props);
+  console.log(props.match.params.slug);
+  const context = useContext(HouseContext);
+  const { getHouse } = context;
+  // constructor(props) {
+  //   super(props);
+  //   console.log(this.props);
+  //   this.state = {
+  //     slug: this.props.match.params.slug,
+  //     houseAddress: "",
+  //     reviews: null,
+  //     comments: null,
+  //     loaded: false,
+  //     defaultBcg
+  //   };
+  // }
+  const [slug, setSlug] = useState("");
+  const [houseAddress, setHouseAddress] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
-  async componentDidMount() {
-    let address = this.state.slug.split("-").join(" ");
-    this.setState({ houseAddress: address });
-    console.log(this.state.houseAddress);
-    await fetch(
-      "http://localhost:3002/houseReview/houseAddress/?houseSlug=" +
-        this.state.slug
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ reviews: data });
-      });
-    console.log(this.state.reviews);
-    await fetch(
-      "http://localhost:3002/comments/houseAddress/?houseAddress=" +
-        this.state.houseAddress
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ comments: data });
-      });
-    console.log(this.state.comments);
-    this.setState({ loaded: true });
-  }
+  function initHouse() {
+    console.log(slug)
+    console.log(houseAddress)
+    const house = getHouse(slug);
+    console.log(house)
 
-  static contextType = HouseContext;
-  render() {
-    const { getHouse } = this.context;
-    console.log("here");
-    console.log(this.state.slug);
-    const house = getHouse(this.state.slug);
-    console.log(house);
-
-    if (!house) {
-      return (
-        <div className="error">
-          {" "}
-          <h3>House Not Found</h3>
-          <Link to="/houses" className="btn-primary">
-            {" "}
-            back to rooms
-          </Link>{" "}
-        </div>
-      );
-    }
-
-    const {
-      averageElecBill,
-      averageGasBill,
-      averageWaterBill,
-      basement,
-      bathrooms,
-      bedrooms,
-      city,
-      currresidentsemail,
-      houseaddress,
-      houseid,
-      landlordemail,
-      laundry,
-      leaseend,
-      leasestart,
-      parking,
-      porch,
-      rent,
-      statename,
-      unit,
-      yard,
-      slug,
-      zip,
-      photokeys,
-      mainphotokey
-    } = house;
-
-    // const [mainImg, ...defaultImg] = images;
-    let mainImageLink = imageLinkURL(mainphotokey);
-    console.log(photokeys);
+    let mainImageLink = imageLinkURL(house.mainphotokey);
+    console.log(house.photokeys);
     let imageLinks = [];
-    for (let key of photokeys) {
+    for (let key of house.photokeys) {
       console.log(key);
       let original = imageLinkURL(key);
       let thumbnail = imageLinkURL(key);
       imageLinks.push({ original: original, thumbnail: thumbnail });
     }
-
-    console.log(imageLinks);
-    return (
-      <div>
-        {this.state.loaded ? (
-          <>
-            <StyledHero img={mainImageLink}>
-              <Banner title={`${houseaddress}`}>
-                <Link to="/houses" className="btn-primary">
-                  Back to Houses
-                </Link>
-              </Banner>
-            </StyledHero>
-            <section className="single-room">
-              <ImageGallery items={imageLinks} />
-              <div className="single-room-info">
-                <article className="desc">
-                  <h3>Full Address</h3>
-                  <p>
-                    {" "}
-                    {houseaddress}, {city}, {statename} {zip}{" "}
-                  </p>
-                  <br></br>
-                  <h3>Contact Info</h3>
-                  <p> Landlord Email: {landlordemail} </p>
-                  <p> Residents Emails: {currresidentsemail} </p>
-                </article>
-                <article className="info">
-                  <h3>info</h3>
-                  <h6>rent: ${rent}</h6>
-                  <h6>bedrooms: {bedrooms}</h6>
-                  <h6>bathrooms: {bathrooms}</h6>
-                  <h6>{basement ? "Basement" : "No basement"}</h6>
-                  <h6>{laundry ? "Laundry" : "No laundry"}</h6>
-                  <h6>{parking ? "Parking space" : "No parking space"}</h6>
-                  <h6>{porch ? "Porch" : "No porch"}</h6>
-                  <h6>{yard ? "Yard" : "No yard"}</h6>
-                  <h6>Floor: {unit}</h6>
-                </article>
-              </div>
-            </section>
-            <section className="services-center">
-              <HouseComments
-                houseAddress={this.state.houseAddress}
-                comments={this.state.comments}
-              />
-              <HouseReviewList houseReviews={this.state.reviews} />
-            </section>
-            <HouseReviewForm
-              houseAddress={this.state.slug.split("-").join(" ")}
-            />
-          </>
-        ) : null}
-      </div>
-    );
   }
+
+  const getHouseInfo = useCallback(async () => {
+
+    let address = slug.split("-").join(" ");
+    setHouseAddress({ houseAddress: address });
+    console.log(houseAddress);
+    try {
+      await fetch(
+        "http://localhost:3002/houseReview/houseAddress/?houseSlug=" +
+        slug
+      )
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          setReviews(data);
+          console.log(reviews);
+        });
+
+      await fetch(
+        "http://localhost:3002/comments/houseAddress/?houseAddress=" +
+        houseAddress
+      )
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          setComments(data);
+          console.log(comments);
+        });
+      setLoaded(true);
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(props.match.params.slug);
+    setSlug(props.match.params.slug);
+    console.log(slug);
+    initHouse();
+    getHouseInfo();
+  }, [getHouseInfo, initHouse, slug]);
+
+
+
+
+
+  // const {
+  //   // averageElecBill,
+  //   // averageGasBill,
+  //   // averageWaterBill,
+  //   // basement,
+  //   // bathrooms,
+  //   // bedrooms,
+  //   // city,
+  //   // currresidentsemail,
+  //   // houseaddress,
+  //   // houseid,
+  //   // landlordemail,
+  //   // laundry,
+  //   // // leaseend,
+  //   // // leasestart,
+  //   // parking,
+  //   // porch,
+  //   // rent,
+  //   // statename,
+  //   // unit,
+  //   // yard,
+  //   // zip,
+  //   // photokeys,
+  //   // mainphotokey
+  // } = house;
+
+
+
+  return (
+    <div>
+      {loaded ? (
+        <>
+          <StyledHero img={mainImageLink}>
+            <Banner title={`${house.houseaddress}`}>
+              <Link to="/houses" className="btn-primary">
+                Back to Houses
+              </Link>
+            </Banner>
+          </StyledHero>
+          <section className="single-room">
+            <ImageGallery items={imageLinks} />
+            <div className="single-room-info">
+              <article className="desc">
+                <h3>Full Address</h3>
+                <p>
+                  {" "}
+                  {house.houseaddress}, {house.city}, {house.statename} {house.zip}{" "}
+                </p>
+                <br></br>
+                <h3>Contact Info</h3>
+                <p> Landlord Email: {house.landlordemail} </p>
+                <p> Residents Emails: {house.currresidentsemail} </p>
+              </article>
+              <article className="info">
+                <h3>info</h3>
+                <h6>rent: ${house.rent}</h6>
+                <h6>bedrooms: {house.bedrooms}</h6>
+                <h6>bathrooms: {house.bathrooms}</h6>
+                <h6>{house.basement ? "Basement" : "No basement"}</h6>
+                <h6>{house.laundry ? "Laundry" : "No laundry"}</h6>
+                <h6>{house.parking ? "Parking space" : "No parking space"}</h6>
+                <h6>{house.porch ? "Porch" : "No porch"}</h6>
+                <h6>{house.yard ? "Yard" : "No yard"}</h6>
+                <h6>Floor: {house.unit}</h6>
+              </article>
+            </div>
+          </section>
+          <section className="services-center">
+            <HouseComments
+              houseAddress={houseAddress}
+              comments={comments}
+            />
+            <HouseReviewList houseReviews={reviews} />
+          </section>
+          <HouseReviewForm
+            houseAddress={houseAddress}
+          />
+        </>
+      ) : null}
+    </div>
+  );
 }
+
+
+
+  // render() {
+  //   const { getHouse } = this.context;
+  //   console.log(this.state.slug);
+  //   const house = getHouse(this.state.slug);
+  //   console.log(house);
+
+  //   if (!house) {
+  //     return (
+  //       <div className="error">
+  //         {" "}
+  //         <h3>House Not Found</h3>
+  //         <Link to="/houses" className="btn-primary">
+  //           {" "}
+  //           back to rooms
+  //         </Link>{" "}
+  //       </div>
+  //     );
+  //   }
+
+  //   const {
+  //     averageElecBill,
+  //     averageGasBill,
+  //     averageWaterBill,
+  //     basement,
+  //     bathrooms,
+  //     bedrooms,
+  //     city,
+  //     currresidentsemail,
+  //     houseaddress,
+  //     houseid,
+  //     landlordemail,
+  //     laundry,
+  //     leaseend,
+  //     leasestart,
+  //     parking,
+  //     porch,
+  //     rent,
+  //     statename,
+  //     unit,
+  //     yard,
+  //     slug,
+  //     zip,
+  //     photokeys,
+  //     mainphotokey
+  //   } = house;
+
+  //   // const [mainImg, ...defaultImg] = images;
+  //   let mainImageLink = imageLinkURL(mainphotokey);
+  //   console.log(photokeys);
+  //   let imageLinks = [];
+  //   for (let key of photokeys) {
+  //     console.log(key);
+  //     let original = imageLinkURL(key);
+  //     let thumbnail = imageLinkURL(key);
+  //     imageLinks.push({ original: original, thumbnail: thumbnail });
+  //   }
+
+  //   console.log(imageLinks);
+  //   return (
+  //     <div>
+  //       {this.state.loaded ? (
+  //         <>
+  //           <StyledHero img={mainImageLink}>
+  //             <Banner title={`${houseaddress}`}>
+  //               <Link to="/houses" className="btn-primary">
+  //                 Back to Houses
+  //               </Link>
+  //             </Banner>
+  //           </StyledHero>
+  //           <section className="single-room">
+  //             <ImageGallery items={imageLinks} />
+  //             <div className="single-room-info">
+  //               <article className="desc">
+  //                 <h3>Full Address</h3>
+  //                 <p>
+  //                   {" "}
+  //                   {houseaddress}, {city}, {statename} {zip}{" "}
+  //                 </p>
+  //                 <br></br>
+  //                 <h3>Contact Info</h3>
+  //                 <p> Landlord Email: {landlordemail} </p>
+  //                 <p> Residents Emails: {currresidentsemail} </p>
+  //               </article>
+  //               <article className="info">
+  //                 <h3>info</h3>
+  //                 <h6>rent: ${rent}</h6>
+  //                 <h6>bedrooms: {bedrooms}</h6>
+  //                 <h6>bathrooms: {bathrooms}</h6>
+  //                 <h6>{basement ? "Basement" : "No basement"}</h6>
+  //                 <h6>{laundry ? "Laundry" : "No laundry"}</h6>
+  //                 <h6>{parking ? "Parking space" : "No parking space"}</h6>
+  //                 <h6>{porch ? "Porch" : "No porch"}</h6>
+  //                 <h6>{yard ? "Yard" : "No yard"}</h6>
+  //                 <h6>Floor: {unit}</h6>
+  //               </article>
+  //             </div>
+  //           </section>
+  //           <section className="services-center">
+  //             <HouseComments
+  //               houseAddress={this.state.houseAddress}
+  //               comments={this.state.comments}
+  //             />
+  //             <HouseReviewList houseReviews={this.state.reviews} />
+  //           </section>
+  //           <HouseReviewForm
+  //             houseAddress={this.state.slug.split("-").join(" ")}
+  //           />
+  //         </>
+  //       ) : null}
+  //     </div>
+  //   );
+  // }
+export default SingleHouse;

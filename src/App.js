@@ -26,7 +26,6 @@ function App() {
 
   return (
     <>
-      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
         <BrowserRouter>
           <Navbar />
           <Switch>
@@ -34,13 +33,12 @@ function App() {
             <Route exact path="/login/" component={Login} />
             <Route exact path="/signup/" component={Signup} />
             <Route exact path="/houseform/" component={HouseForm} />
-            <PrivateRoute exact path="/houses/" component={Houses} />
-            <PrivateRoute exact path="/houses/:slug" component={SingleHouse} />
-            <PrivateRoute exact path="/sublet" component={Subletter} />
+            <Route exact path="/houses/" component={Houses} />
+            <Route exact path="/houses/:slug" component={SingleHouse} />
+            <Route exact path="/sublet" component={Subletter} />
             <Route component={Error} />
           </Switch>
         </BrowserRouter>
-      </AuthContext.Provider>
     </>
   );
 }

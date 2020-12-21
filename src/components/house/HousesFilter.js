@@ -3,21 +3,12 @@ import { useContext } from "react";
 import { HouseContext } from "../../context";
 import Title from "../commonHeaders/Title";
 
-export default function HousesFilter({ houses }) {
+ const HousesFilter = ({ houses }) => {
   const context = useContext(HouseContext);
   const {
     handleChange,
     bedrooms,
     rent
-    // type,
-    // capacity,
-    // price,
-    // minPrice,
-    // maxPrice,
-    // minSize,
-    // maxSize,
-    // breakfast,
-    // pets
   } = context;
 
   const getUnique = (items, value) => {
@@ -26,7 +17,7 @@ export default function HousesFilter({ houses }) {
 
   // get unique types
   let bedroomsUnique = getUnique(houses, "bedrooms");
-  //
+
   bedroomsUnique = ["all", ...bedroomsUnique];
 
   bedroomsUnique = bedroomsUnique.map((item, index) => {
@@ -37,34 +28,10 @@ export default function HousesFilter({ houses }) {
     );
   });
 
-  //   let people = getUnique(houses, "capacity");
-  //   people = people.map((item, index) => {
-  //     return (
-  //       <option key={index} value={item}>
-  //         {item}
-  //       </option>
-  //     );
-  //   });
   return (
     <section className="filter-container">
       <Title title="search rooms"></Title>
       <form className="filter-form">
-        {/* room type*/}
-        {/* <div className="form-group">
-          <label htmlFor="type"> room type</label>
-          <select
-            name="type"
-            id="type"
-            value={type}
-            className="form-control"
-            onChange={handleChange}
-          >
-            {types}
-          </select>
-        </div> */}
-        {/*room type end */}
-
-        {/*number of people*/}
         <div className="form-group">
           <label htmlFor="bedrooms">bedrooms</label>
           <select
@@ -77,8 +44,9 @@ export default function HousesFilter({ houses }) {
             {bedroomsUnique}
           </select>
         </div>
-        {/*number of people end*/}
       </form>
     </section>
   );
 }
+
+export default HousesFilter

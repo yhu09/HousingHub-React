@@ -1,6 +1,6 @@
 import React from "react";
 import House from "./House";
-export default function HousesList({ houses }) {
+const HousesList = ({ houses }) => {
   if (houses.length === 0) {
     return (
       <div>
@@ -18,3 +18,4 @@ export default function HousesList({ houses }) {
     </section>
   );
 }
+export default HousesList

@@ -14,7 +14,7 @@ const center = {
   lng: -71.1183
 };
 
-export default function Map() {
+ const Map = () => {
   const [map, setMap] = React.useState(null);
   const context = useContext(HouseContext);
   console.log(context);
@@ -52,3 +52,5 @@ export default function Map() {
     </div>
   );
 }
+
+export default Map

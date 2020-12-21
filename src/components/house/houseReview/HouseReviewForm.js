@@ -3,7 +3,7 @@ import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseReviewForm.css";
 import cookie from "react-cookies";
 
-const FunctionalHouseReivewForm = props => {
+const HouseReivewForm = (props) => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [rent, setRent] = useState(0);
@@ -121,8 +121,4 @@ const FunctionalHouseReivewForm = props => {
   return <div className="HouseReviewForm">{renderForm()}</div>;
 };
 
-export default class HouseReviewForm extends Component {
-  render() {
-    return <FunctionalHouseReivewForm houseAddress={this.props.houseAddress} />;
-  }
-}
+export default HouseReivewForm

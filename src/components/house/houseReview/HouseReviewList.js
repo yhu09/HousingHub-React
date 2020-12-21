@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function HouseReviewList({ houseReviews }) {
+const HouseReviewList = ({ houseReviews }) => {
   if (houseReviews === null) {
     return <div></div>;
   }
@@ -58,3 +58,5 @@ HouseReview.propTypes = {
     email: PropTypes.string.isRequired
   })
 };
+
+export default HouseReviewList
