@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import logo from "../../images/newLogo.svg";
 import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Logout from "./Logout";
+import LoginButton from "../auth0/LoginButton";
+import LogoutButton from "../auth0/LogoutButton";
 
 export default class Navbar extends Component {
   state = {
@@ -41,7 +42,8 @@ export default class Navbar extends Component {
               <Link to="/sublet">Sublet</Link>
             </li>
             <li>
-              <Logout />
+              <LoginButton />
+              <LogoutButton />
             </li>
           </ul>
         </div>

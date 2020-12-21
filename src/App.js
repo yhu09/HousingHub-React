@@ -13,7 +13,7 @@ import { HouseForm } from "./pages/houseForm/HouseForm";
 import { AuthContext } from "./utility/auth";
 import PrivateRoute from "./PrivateRoute";
 import SingleHouse from "./pages/SingleHouse";
-import { Map } from "./pages/Map";
+import "semantic-ui-css/semantic.min.css";
 
 function App() {
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
@@ -37,7 +37,6 @@ function App() {
             <PrivateRoute exact path="/houses/" component={Houses} />
             <PrivateRoute exact path="/houses/:slug" component={SingleHouse} />
             <PrivateRoute exact path="/sublet" component={Subletter} />
-            {/* <PrivateRoute exact path="/map" component={Map} /> */}
             <Route component={Error} />
           </Switch>
         </BrowserRouter>

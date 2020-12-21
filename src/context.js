@@ -22,23 +22,25 @@ class HouseProvider extends Component {
   };
 
   async componentDidMount() {
-    await fetch("http://localhost:3002/houses")
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.setState({
-          houses: data,
-          sortedHouses: data,
-          featuredHouses: data,
-          loading: false
-        });
-      });
-
+    // await fetch("http://localhost:3002/houses", {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     this.setState({
+    //       houses: data,
+    //       sortedHouses: data,
+    //       featuredHouses: data,
+    //       loading: false
+    //     });
+    //   });
     // let houses = this.formatData(items);
     // let featuredHouses = houses.filter(house => house.featured === true);
     // let maxPrice = Math.max(...houses.map(item => item.price));
     // let maxSize = Math.max(...houses.map(item => item.price));
-
     // this.setState({
     //   houses,
     //   featuredHouses,
@@ -63,6 +65,22 @@ class HouseProvider extends Component {
   //   });
   //   return tempItems;
   // }
+
+  setHouses = houses => {
+    console.log(houses);
+    this.setState({
+      houses: houses,
+      sortedHouses: houses,
+      featuredHouses: houses,
+      loading: false
+    });
+  };
+
+  setSortedHouses = sortedHouses => {
+    this.setState({
+      sortedHouses: sortedHouses
+    });
+  };
 
   getHouse = slug => {
     let tempHouses = [...this.state.houses];
@@ -133,7 +151,8 @@ class HouseProvider extends Component {
         value={{
           ...this.state,
           getHouse: this.getHouse,
-          handleChange: this.handleChange
+          handleChange: this.handleChange,
+          setHouses: this.setHouses
         }}
       >
         {this.props.children}

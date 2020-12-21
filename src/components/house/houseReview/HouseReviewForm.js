@@ -38,6 +38,8 @@ const FunctionalHouseReivewForm = props => {
       .then(data => console.log(data));
 
     console.log("House Review Form submitted");
+
+    window.location.reload(true);
   }
 
   function renderNewHouseStatus() {

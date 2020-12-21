@@ -3,9 +3,6 @@ import { useContext } from "react";
 import { HouseContext } from "../../context";
 import Title from "../commonHeaders/Title";
 
-const getUnique = (items, value) => {
-  return [...new Set(items.map(item => item[value]))];
-};
 export default function HousesFilter({ houses }) {
   const context = useContext(HouseContext);
   const {
@@ -22,6 +19,10 @@ export default function HousesFilter({ houses }) {
     // breakfast,
     // pets
   } = context;
+
+  const getUnique = (items, value) => {
+    return [...new Set(items.map(item => item[value]))];
+  };
 
   // get unique types
   let bedroomsUnique = getUnique(houses, "bedrooms");
