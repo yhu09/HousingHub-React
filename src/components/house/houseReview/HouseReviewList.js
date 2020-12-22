@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const HouseReviewList = ({ houseReviews }) => {
+  console.log(houseReviews);
   if (houseReviews === null) {
     return <div></div>;
   }
@@ -12,12 +13,12 @@ const HouseReviewList = ({ houseReviews }) => {
     <section className="reviewlist">
       <div className="reviewlist-center">
         {houseReviews.map(item => {
-          return <HouseReview houseReview={item} />;
+          return <HouseReview key={item.housereviewid} houseReview={item} />;
         })}
       </div>
     </section>
   );
-}
+};
 
 function HouseReview({ houseReview }) {
   const {
@@ -32,7 +33,7 @@ function HouseReview({ houseReview }) {
   } = houseReview;
 
   return (
-    <div class="house-review">
+    <div className="house-review">
       <h3>Review</h3>
       <article className="review-info">
         <p>Review: {review}</p>
@@ -52,11 +53,11 @@ HouseReview.propTypes = {
   houseReview: PropTypes.shape({
     stars: PropTypes.number.isRequired,
     rent: PropTypes.number.isRequired,
-    elecBill: PropTypes.number.isRequired,
-    gasBill: PropTypes.number.isRequired,
-    waterBill: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired
+    elecbill: PropTypes.number.isRequired,
+    gasbill: PropTypes.number.isRequired,
+    waterbill: PropTypes.number.isRequired,
+    author: PropTypes.string.isRequired
   })
 };
 
-export default HouseReviewList
+export default HouseReviewList;

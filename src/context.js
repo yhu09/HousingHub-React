@@ -84,7 +84,6 @@ class HouseProvider extends Component {
 
   getHouse = slug => {
     let tempHouses = [...this.state.houses];
-    console.log("gethouse ")
     const house = tempHouses.find(house => house.slug === slug);
     return house;
   };

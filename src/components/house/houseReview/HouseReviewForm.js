@@ -3,7 +3,7 @@ import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseReviewForm.css";
 import cookie from "react-cookies";
 
-const HouseReivewForm = (props) => {
+const HouseReivewForm = props => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [rent, setRent] = useState(0);
@@ -110,7 +110,7 @@ const HouseReivewForm = (props) => {
             ></Form.Control>
           </Form.Group>
 
-          <Button block bsSize="large" disabled={!validateForm()} type="submit">
+          <Button block disabled={!validateForm()} type="submit">
             Submit
           </Button>
         </form>
@@ -121,4 +121,4 @@ const HouseReivewForm = (props) => {
   return <div className="HouseReviewForm">{renderForm()}</div>;
 };
 
-export default HouseReivewForm
+export default HouseReivewForm;

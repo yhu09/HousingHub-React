@@ -8,8 +8,8 @@ const FeaturedHouses = () => {
   const context = useContext(HouseContext);
   let { loading, houses } = context;
 
-  houses = houses.map(house => {
-    return <House key={house.id} house={house} />;
+  houses = houses.map((house, index) => {
+    return <House key={index} house={house} />;
   });
 
   return (
