@@ -6,14 +6,15 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { HouseProvider } from "./context";
 import { Auth0Provider } from "@auth0/auth0-react";
+require("dotenv").config();
 
 ReactDOM.render(
   <Auth0Provider
-    domain="dev-3wyopwot.us.auth0.com"
-    clientId="792aZp5QDorTh99dyz39xC3nwLjy1BJ1"
+    domain={process.env.REACT_APP_AuthDomain}
+    clientId={process.env.REACT_APP_AuthClientId}
     redirectUri={window.location.origin}
-    audience="http://localhost:3002/"
-    scope="read:houses"
+    audience={process.env.REACT_APP_AuthAudience}
+    scope={process.env.REACT_APP_Scope}
   >
     <HouseProvider>
       <Router>

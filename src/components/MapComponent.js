@@ -3,6 +3,7 @@ import Hero from "../components/commonHeaders/Hero";
 import Banner from "../components/commonHeaders/Banner";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import { HouseContext } from "../context";
+require("dotenv").config();
 
 const containerStyle = {
   width: "500px",
@@ -14,21 +15,21 @@ const center = {
   lng: -71.1183
 };
 
- const Map = () => {
+const Map = () => {
   const [map, setMap] = React.useState(null);
   const context = useContext(HouseContext);
-  console.log(context);
 
   const onLoad = React.useCallback(async function callback(map) {
     setMap(map);
 
-    await fetch(
-      "https://maps.googleapis.com/maps/api/geocode/json?address=355+Boston+Ave,+Medford,+MA&key=AIzaSyBhzhYkTYAkiLPPcxRUxswZa7olOZYkz0c"
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      });
+    // await fetch(
+    //   "https://maps.googleapis.com/maps/api/geocode/json?address=355+Boston+Ave,+Medford,+MA&key=" +
+    //     GoogleAPIKey
+    // )
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   });
   }, []);
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -51,6 +52,6 @@ const center = {
       </LoadScript>
     </div>
   );
-}
+};
 
-export default Map
+export default Map;

@@ -11,11 +11,11 @@ const HousesList = ({ houses }) => {
   return (
     <section className="roomslist">
       <div className="roomslist-center">
-        {houses.map(item => {
-          return <House house={item} />;
+        {houses.map((item, index) => {
+          return <House key={index} house={item} />;
         })}
       </div>
     </section>
   );
-}
-export default HousesList
+};
+export default HousesList;

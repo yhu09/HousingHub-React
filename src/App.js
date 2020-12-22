@@ -14,6 +14,7 @@ import { AuthContext } from "./utility/auth";
 import PrivateRoute from "./PrivateRoute";
 import SingleHouse from "./pages/SingleHouse";
 import "semantic-ui-css/semantic.min.css";
+require("dotenv").config();
 
 function App() {
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
@@ -26,19 +27,19 @@ function App() {
 
   return (
     <>
-        <BrowserRouter>
-          <Navbar />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login/" component={Login} />
-            <Route exact path="/signup/" component={Signup} />
-            <Route exact path="/houseform/" component={HouseForm} />
-            <Route exact path="/houses/" component={Houses} />
-            <Route exact path="/houses/:slug" component={SingleHouse} />
-            <Route exact path="/sublet" component={Subletter} />
-            <Route component={Error} />
-          </Switch>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Navbar />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login/" component={Login} />
+          <Route exact path="/signup/" component={Signup} />
+          <Route exact path="/houseform/" component={HouseForm} />
+          <Route exact path="/houses/" component={Houses} />
+          <Route exact path="/houses/:slug" component={SingleHouse} />
+          <Route exact path="/sublet" component={Subletter} />
+          <Route component={Error} />
+        </Switch>
+      </BrowserRouter>
     </>
   );
 }
