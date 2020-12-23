@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./App.css";
 import "./pages/Home";
 import { Home } from "./pages/Home";
@@ -10,20 +10,23 @@ import { Subletter } from "./pages/Subletter";
 import { Login } from "./pages/login/Login";
 import { Signup } from "./pages/login/Signup";
 import { HouseForm } from "./pages/houseForm/HouseForm";
-import { AuthContext } from "./utility/auth";
+// import { AuthContext } from "./utility/auth";
 import PrivateRoute from "./PrivateRoute";
 import SingleHouse from "./pages/SingleHouse";
 import "semantic-ui-css/semantic.min.css";
+import { useAuth0 } from "@auth0/auth0-react";
+import { HouseContext } from "./context";
+
 require("dotenv").config();
 
 function App() {
-  const existingTokens = JSON.parse(localStorage.getItem("tokens"));
-  const [authTokens, setAuthTokens] = useState(existingTokens);
+  // const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+  // const [authTokens, setAuthTokens] = useState(existingTokens);
 
-  const setTokens = data => {
-    localStorage.setItem("tokens", JSON.stringify(data));
-    setAuthTokens(data);
-  };
+  // const setTokens = data => {
+  //   localStorage.setItem("tokens", JSON.stringify(data));
+  //   setAuthTokens(data);
+  // };
 
   return (
     <>

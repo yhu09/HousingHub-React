@@ -9,18 +9,26 @@ import { HouseContext } from "../context";
 
 export const Home = () => {
   const context = useContext(HouseContext);
-  const { setHouses } = context;
-  const { getAccessTokenSilently } = useAuth0();
+  const { token, isTokenSet, setToken, setHouses } = context;
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const [housesState, setStateHouses] = useState();
+  const fetchToken = useCallback(async () => {
+    if (!isTokenSet()) {
+      try {
+        if (isAuthenticated) {
+          let tempToken = await getAccessTokenSilently({
+            audience: "http://localhost:3002/"
+          });
+          setToken(tempToken);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
   const fetchHouses = useCallback(async () => {
     try {
-      const token = await getAccessTokenSilently({
-        audience: "http://localhost:3002/",
-        scope: "read:houses"
-      });
-      console.log(token);
       await fetch("http://localhost:3002/houses", {
         headers: {
           Authorization: `Bearer ${token}`
@@ -28,18 +36,17 @@ export const Home = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
-          setStateHouses(data);
           setHouses(data);
         });
     } catch (e) {
       console.error(e);
     }
-  }, [setHouses, getAccessTokenSilently]);
+  }, [setHouses, token]);
 
   useEffect(() => {
+    fetchToken();
     fetchHouses();
-  }, [fetchHouses]);
+  }, [fetchToken, fetchHouses]);
 
   return (
     //React Fragment

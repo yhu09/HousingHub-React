@@ -20,7 +20,7 @@ const HouseReviewList = ({ houseReviews }) => {
   );
 };
 
-function HouseReview({ houseReview }) {
+const HouseReview = ({ houseReview }) => {
   const {
     stars,
     rent,
@@ -47,7 +47,7 @@ function HouseReview({ houseReview }) {
       </article>
     </div>
   );
-}
+};
 
 HouseReview.propTypes = {
   houseReview: PropTypes.shape({

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 
- const HouseComments = ({ houseAddress, comments }) => {
+const HouseComments = ({ houseAddress, comments }) => {
   console.log(comments);
   return (
     <HouseCommentsStructure
@@ -10,9 +10,9 @@ import cookie from "react-cookies";
       comments={comments}
     ></HouseCommentsStructure>
   );
-}
+};
 
-function Comments({ houseAddress, comments }) {
+const Comments = ({ houseAddress, comments }) => {
   const [inputComment, setInputComment] = useState("");
 
   function fillText(event) {
@@ -72,9 +72,9 @@ function Comments({ houseAddress, comments }) {
       ))}
     </div>
   );
-}
+};
 
-function HouseCommentsStructure({ houseAddress, comments }) {
+const HouseCommentsStructure = ({ houseAddress, comments }) => {
   const [inputComment, setInputComment] = useState("");
 
   async function handleParentComment(event) {
@@ -129,6 +129,6 @@ function HouseCommentsStructure({ houseAddress, comments }) {
   // {
   //   /* <div className="HouseReviewForm">{renderForm()}</div>; */
   // }
-}
+};
 
-export default HouseComments
+export default HouseComments;

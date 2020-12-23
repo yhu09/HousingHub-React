@@ -10,10 +10,13 @@ import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
 import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
-  const { getHouse } = context;
+  const { token, isTokenSet, setToken, getHouse } = context;
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
   // constructor(props) {
   //   super(props);
   //   console.log(this.props);
@@ -32,46 +35,89 @@ const SingleHouse = props => {
   const [comments, setComments] = useState([]);
   const [mainImageLink, setMainImageLink] = useState("");
   const [imageLinks, setImageLink] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-  const [house, setHouse] = useState(getHouse(slug));
+  const [loadedData, setLoadedData] = useState(false);
+  const [house, setHouse] = useState();
+
+  const fetchToken = useCallback(async () => {
+    if (!isTokenSet()) {
+      try {
+        if (isAuthenticated) {
+          let tempToken = await getAccessTokenSilently({
+            audience: "http://localhost:3002/"
+          });
+          setToken(tempToken);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
   const getHouseInfo = useCallback(async () => {
-    try {
-      await fetch(
-        "http://localhost:3002/houseReview/houseAddress/?houseSlug=" + slug
-      )
-        .then(response => response.json())
-        .then(data => {
-          setReviews(data);
-        });
+    if (isTokenSet()) {
+      try {
+        await fetch(
+          "http://localhost:3002/houses/houseAddress/?houseAddress=" +
+            houseAddress,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(data => {
+            let tempHouse = data[0];
+            try {
+              setMainImageLink(imageLinkURL(tempHouse.mainphotokey));
+              for (let key of tempHouse.photokeys) {
+                let original = imageLinkURL(key);
+                let thumbnail = imageLinkURL(key);
+                imageLinks.push({ original: original, thumbnail: thumbnail });
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            setHouse(data[0]);
+          });
+        await fetch(
+          "http://localhost:3002/houseReview/houseAddress/?houseAddress=" +
+            houseAddress,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(data => {
+            setReviews(data);
+          });
 
-      await fetch(
-        "http://localhost:3002/comments/houseAddress/?houseAddress=" +
-          houseAddress
-      )
-        .then(response => response.json())
-        .then(data => {
-          setComments(data);
-        });
-      setLoaded(true);
-    } catch (e) {
-      console.error(e);
+        await fetch(
+          "http://localhost:3002/comments/houseAddress/?houseAddress=" +
+            houseAddress,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(data => {
+            setComments(data);
+          });
+        setLoadedData(true);
+      } catch (e) {
+        console.error(e);
+      }
     }
-  }, [houseAddress, slug]);
-
-  const initImages = useCallback(async () => {
-    setMainImageLink(imageLinkURL(house.mainphotokey));
-    for (let key of house.photokeys) {
-      let original = imageLinkURL(key);
-      let thumbnail = imageLinkURL(key);
-      imageLinks.push({ original: original, thumbnail: thumbnail });
-    }
-  }, [house, imageLinks]);
+  }, [imageLinks, isTokenSet, token, houseAddress]);
 
   useEffect(() => {
+    fetchToken();
     getHouseInfo();
-    initImages();
-  }, [getHouseInfo, initImages]);
+  }, [fetchToken, getHouseInfo]);
 
   // const {
   //   averageElecBill,
@@ -101,7 +147,7 @@ const SingleHouse = props => {
 
   return (
     <div>
-      {loaded ? (
+      {loadedData ? (
         <>
           <StyledHero img={mainImageLink}>
             <Banner title={`${house.houseaddress}`}>

@@ -9,7 +9,8 @@ class HouseProvider extends Component {
     featuredHouses: [],
     loading: true,
     bedrooms: 1,
-    rent: 0
+    rent: 0,
+    token: ""
     // type: "all",
     // capacity: 1,
     // price: 0,
@@ -66,6 +67,18 @@ class HouseProvider extends Component {
   //   return tempItems;
   // }
 
+  setToken = token => {
+    this.setState({ token: token });
+  };
+
+  isTokenSet = () => {
+    if (this.state.token === "") {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   setHouses = houses => {
     console.log(houses);
     this.setState({
@@ -82,7 +95,29 @@ class HouseProvider extends Component {
     });
   };
 
+  // getHouse = houseAddress => {
+  //   fetchHouse
+  // }
+
+  // async fetchHouse(houseAddress) {
+  //   console.log(this.state);
+  //   await fetch(
+  //     "http://localhost:3002/houses/houseAddress/?houseAddress=" + houseAddress,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${this.state.token}`
+  //       }
+  //     }
+  //   )
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       this.setState({ selectedHouse: data[0] });
+  //     });
+  //   return this.state.selectedHouse;
+  // }
   getHouse = slug => {
+    console.log(this.state.houses);
     let tempHouses = [...this.state.houses];
     const house = tempHouses.find(house => house.slug === slug);
     return house;
@@ -152,7 +187,9 @@ class HouseProvider extends Component {
           ...this.state,
           getHouse: this.getHouse,
           handleChange: this.handleChange,
-          setHouses: this.setHouses
+          setHouses: this.setHouses,
+          isTokenSet: this.isTokenSet,
+          setToken: this.setToken
         }}
       >
         {this.props.children}
