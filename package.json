@@ -18,6 +18,7 @@
     "react-icon": "^1.0.0",
     "react-icons": "^3.11.0",
     "react-image-gallery": "^1.0.8",
+    "react-images-upload": "^1.2.8",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "semantic-ui-css": "^2.4.1",

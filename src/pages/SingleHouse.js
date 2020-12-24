@@ -11,6 +11,7 @@ import HouseReviewList from "../components/house/houseReview/HouseReviewList";
 import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
 import { useAuth0 } from "@auth0/auth0-react";
+import UploadImages from "../components/UploadImages";
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
@@ -38,6 +39,7 @@ const SingleHouse = props => {
   const [loadedData, setLoadedData] = useState(false);
   const [edit, setEdit] = useState(false);
   const [house, setHouse] = useState();
+  const [files, setFiles] = useState([]);
 
   const fetchToken = useCallback(async () => {
     if (!isTokenSet()) {
@@ -68,6 +70,7 @@ const SingleHouse = props => {
         )
           .then(response => response.json())
           .then(data => {
+            console.log(data);
             let tempHouse = data[0];
             try {
               setMainImageLink(imageLinkURL(tempHouse.mainphotokey));
@@ -121,34 +124,49 @@ const SingleHouse = props => {
   }, [fetchToken, getHouseInfo]);
 
   function onEdit() {
-    console.log("edit");
     setEdit(true);
   }
-  // const {
-  //   averageElecBill,
-  //   averageGasBill,
-  //   averageWaterBill,
-  //   basement,
-  //   bathrooms,
-  //   bedrooms,
-  //   city,
-  //   currresidentsemail,
-  //   houseaddress,
-  //   houseid,
-  //   landlordemail,
-  //   laundry,
-  //   // leaseend,
-  //   // leasestart,
-  //   parking,
-  //   porch,
-  //   rent,
-  //   statename,
-  //   unit,
-  //   yard,
-  //   zip,
-  //   photokeys,
-  //   mainphotokey
-  // } = house;
+
+  function fileSelectedHandler(e) {
+    setFiles([...files, ...e.target.files]);
+  }
+
+  async function uploadPhotos() {
+    console.log("upload photo");
+    let slug = houseAddress.split(" ").join("-");
+    let path = slug + "/";
+
+    var photoKeys = [];
+    var imagePathKey;
+    for (var file of files) {
+      let key = uploadFile(path, file);
+      imagePathKey = path + key;
+      photoKeys.push(imagePathKey);
+    }
+
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        photoKeys: photoKeys
+      })
+    };
+    try {
+      await fetch(
+        "http://localhost:3002/houses/photos/?houseAddress=" + houseAddress,
+        requestOptions
+      )
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        });
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <div>
@@ -163,8 +181,14 @@ const SingleHouse = props => {
           </StyledHero>
           <section className="single-room">
             <ImageGallery items={imageLinks} />
+            <UploadImages houseAddress={houseAddress} token={token} />
+            {/* Add more photos<br></br>
+            <input type="file" multiple onChange={fileSelectedHandler} />
+            <img src={files? URL.createObjectURL(files) : null} alt={files? files.name : null}/>
+
+            <button onClick={uploadPhotos}>Upload photos</button> */}
             {edit ? (
-              <SingleHouseEdit house={house} />
+              <SingleHouseEdit house={house} token={token} />
             ) : (
               <>
                 {" "}
@@ -195,7 +219,7 @@ const SingleHouse = props => {
                     <h6>{house.yard ? "Yard" : "No yard"}</h6>
                     <h6>Floor: {house.unit}</h6>
                   </article>
-                  <button onClick={onEdit}>Edit</button>{" "}
+                  <button onClick={onEdit}>Edit Info</button>{" "}
                 </div>
               </>
             )}
@@ -214,121 +238,7 @@ const SingleHouse = props => {
   );
 };
 
-// render() {
-//   const { getHouse } = this.context;
-//   console.log(this.state.slug);
-//   const house = getHouse(this.state.slug);
-//   console.log(house);
-
-//   if (!house) {
-//     return (
-//       <div className="error">
-//         {" "}
-//         <h3>House Not Found</h3>
-//         <Link to="/houses" className="btn-primary">
-//           {" "}
-//           back to rooms
-//         </Link>{" "}
-//       </div>
-//     );
-//   }
-
-//   const {
-//     averageElecBill,
-//     averageGasBill,
-//     averageWaterBill,
-//     basement,
-//     bathrooms,
-//     bedrooms,
-//     city,
-//     currresidentsemail,
-//     houseaddress,
-//     houseid,
-//     landlordemail,
-//     laundry,
-//     leaseend,
-//     leasestart,
-//     parking,
-//     porch,
-//     rent,
-//     statename,
-//     unit,
-//     yard,
-//     slug,
-//     zip,
-//     photokeys,
-//     mainphotokey
-//   } = house;
-
-//   // const [mainImg, ...defaultImg] = images;
-//   let mainImageLink = imageLinkURL(mainphotokey);
-//   console.log(photokeys);
-//   let imageLinks = [];
-//   for (let key of photokeys) {
-//     console.log(key);
-//     let original = imageLinkURL(key);
-//     let thumbnail = imageLinkURL(key);
-//     imageLinks.push({ original: original, thumbnail: thumbnail });
-//   }
-
-//   console.log(imageLinks);
-//   return (
-//     <div>
-//       {this.state.loaded ? (
-//         <>
-//           <StyledHero img={mainImageLink}>
-//             <Banner title={`${houseaddress}`}>
-//               <Link to="/houses" className="btn-primary">
-//                 Back to Houses
-//               </Link>
-//             </Banner>
-//           </StyledHero>
-//           <section className="single-room">
-//             <ImageGallery items={imageLinks} />
-//             <div className="single-room-info">
-//               <article className="desc">
-//                 <h3>Full Address</h3>
-//                 <p>
-//                   {" "}
-//                   {houseaddress}, {city}, {statename} {zip}{" "}
-//                 </p>
-//                 <br></br>
-//                 <h3>Contact Info</h3>
-//                 <p> Landlord Email: {landlordemail} </p>
-//                 <p> Residents Emails: {currresidentsemail} </p>
-//               </article>
-//               <article className="info">
-//                 <h3>info</h3>
-//                 <h6>rent: ${rent}</h6>
-//                 <h6>bedrooms: {bedrooms}</h6>
-//                 <h6>bathrooms: {bathrooms}</h6>
-//                 <h6>{basement ? "Basement" : "No basement"}</h6>
-//                 <h6>{laundry ? "Laundry" : "No laundry"}</h6>
-//                 <h6>{parking ? "Parking space" : "No parking space"}</h6>
-//                 <h6>{porch ? "Porch" : "No porch"}</h6>
-//                 <h6>{yard ? "Yard" : "No yard"}</h6>
-//                 <h6>Floor: {unit}</h6>
-//               </article>
-//             </div>
-//           </section>
-//           <section className="services-center">
-//             <HouseComments
-//               houseAddress={this.state.houseAddress}
-//               comments={this.state.comments}
-//             />
-//             <HouseReviewList houseReviews={this.state.reviews} />
-//           </section>
-//           <HouseReviewForm
-//             houseAddress={this.state.slug.split("-").join(" ")}
-//           />
-//         </>
-//       ) : null}
-//     </div>
-//   );
-// }
-export default SingleHouse;
-
-const SingleHouseEdit = ({ house }) => {
+const SingleHouseEdit = ({ house, token }) => {
   const [landlordEmail, setLandlordEmail] = useState(house.landlordemail);
   const [houseAddress, setHouseAddress] = useState(house.houseaddress);
   const [city, setCity] = useState(house.city);
@@ -342,8 +252,48 @@ const SingleHouseEdit = ({ house }) => {
   const [parking, setParking] = useState(house.parking);
   const [porch, setPorch] = useState(house.porch);
   const [yard, setYard] = useState(house.yard);
+  const [unit, setUnit] = useState(house.unit);
 
-  async function onUpdate() {}
+  async function onUpdate() {
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        landlordEmail: landlordEmail,
+        houseAddress: null,
+        stateName: null,
+        city: null,
+        ZIP: null,
+        rent: rent,
+        unit: unit,
+        laundry: laundry,
+        basement: basement,
+        yard: yard,
+        parking: parking,
+        porch: porch,
+        bedrooms: bedrooms,
+        bathrooms: bathrooms,
+        mainPhotoKey: null,
+        photoKeys: null
+      })
+    };
+    try {
+      await fetch(
+        "http://localhost:3002/houses/houseAddress/?houseAddress=" +
+          houseAddress,
+        requestOptions
+      )
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        });
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <form onSubmit={onUpdate}>
@@ -351,36 +301,8 @@ const SingleHouseEdit = ({ house }) => {
         <article className="desc">
           <h3>Full Address</h3>
           <p>
-            Street Address:
-            <input
-              type="text"
-              value={houseAddress}
-              onChange={event => setHouseAddress(event.target.value)}
-            />
-          </p>
-          <p>
-            City:
-            <input
-              type="text"
-              value={city}
-              onChange={event => setCity(event.target.value)}
-            />
-          </p>
-          <p>
-            State:
-            <input
-              type="text"
-              value={stateName}
-              onChange={event => setStateName(event.target.value)}
-            />
-          </p>
-          <p>
-            Zip:
-            <input
-              type="text"
-              value={zip}
-              onChange={event => setZip(event.target.value)}
-            />
+            {" "}
+            {house.houseaddress}, {house.city}, {house.statename} {house.zip}{" "}
           </p>
           <h3>Contact Info</h3>
           <p>
@@ -423,23 +345,29 @@ const SingleHouseEdit = ({ house }) => {
             Basement:
             <input
               type="checkbox"
-              onChange={event => setBasement(event.target.value)}
+              value="Basement"
+              checked={basement}
+              onClick={event => setBasement(!basement)}
             />{" "}
-            {basement ? "    Yes basement" : "    No basement"}
+            {basement ? "Yes basement" : "No basement"}
           </h6>
           <h6>
             Laundry:
             <input
               type="checkbox"
-              onChange={event => setLaundry(event.target.value)}
+              value="Laundry"
+              checked={laundry}
+              onClick={event => setLaundry(!laundry)}
             />{" "}
             {laundry ? "Yes laundry" : "No laundry"}
-          </h6>{" "}
+          </h6>
           <h6>
             Parking:
             <input
               type="checkbox"
-              onChange={event => setParking(event.target.value)}
+              value="Parking"
+              checked={parking}
+              onClick={event => setParking(!parking)}
             />{" "}
             {parking ? "Yes parking" : "No parking"}
           </h6>
@@ -447,19 +375,43 @@ const SingleHouseEdit = ({ house }) => {
             Porch:
             <input
               type="checkbox"
-              onChange={event => setPorch(event.target.value)}
+              value="Porch"
+              checked={porch}
+              onClick={event => setPorch(!porch)}
             />{" "}
-            {porch ? "    Yes porch" : "    No porch"}
+            {porch ? "Yes porch" : "No porch"}
           </h6>
           <h6>
             Yard:
             <input
               type="checkbox"
-              onChange={event => setYard(event.target.value)}
+              value="Yard"
+              checked={yard}
+              onClick={event => setYard(!yard)}
             />{" "}
-            {yard ? "    Yes yard" : "    No yard"}
+            {yard ? "Yes yard" : "No yard"}
           </h6>
-          <h6>Floor: {house.unit}</h6>
+          <h6>
+            Floor:
+            <label>
+              <input
+                type="radio"
+                value="floor-upper"
+                checked={unit === "upper"}
+                onClick={event => setUnit("upper")}
+              />
+              Upper
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="floor-lower"
+                checked={unit === "lower"}
+                onClick={event => setUnit("lower")}
+              />
+              Lower
+            </label>
+          </h6>{" "}
           <button block bsSize="large" type="submit">
             Update House Info
           </button>{" "}
@@ -468,3 +420,5 @@ const SingleHouseEdit = ({ house }) => {
     </form>
   );
 };
+
+export default SingleHouse;
