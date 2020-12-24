@@ -10,14 +10,16 @@ class HouseProvider extends Component {
     loading: true,
     bedrooms: 1,
     rent: 0,
-    token: ""
+    token: "",
     // type: "all",
     // capacity: 1,
     // price: 0,
-    // minPrice: 0,
-    // maxPrice: 0,
-    // minSize: 0,
-    // maxSize: 0,
+    minRent: 0,
+    maxRent: 0,
+    minSize: 0,
+    maxSize: 0,
+    laundry: false,
+    porch: false
     // breakfast: false,
     // pets: false
   };
@@ -85,6 +87,12 @@ class HouseProvider extends Component {
       houses: houses,
       sortedHouses: houses,
       featuredHouses: houses,
+      minRent: Math.min(...houses.map(item => item.rent)),
+      maxRent: Math.max(...houses.map(item => item.rent)),
+      minSize: Math.min(...houses.map(item => item.bedrooms)),
+      maxSize: Math.max(...houses.map(item => item.bedrooms)),
+      rent: Math.max(...houses.map(item => item.rent)),
+      laundry: false,
       loading: false
     });
   };
@@ -95,27 +103,6 @@ class HouseProvider extends Component {
     });
   };
 
-  // getHouse = houseAddress => {
-  //   fetchHouse
-  // }
-
-  // async fetchHouse(houseAddress) {
-  //   console.log(this.state);
-  //   await fetch(
-  //     "http://localhost:3002/houses/houseAddress/?houseAddress=" + houseAddress,
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${this.state.token}`
-  //       }
-  //     }
-  //   )
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       this.setState({ selectedHouse: data[0] });
-  //     });
-  //   return this.state.selectedHouse;
-  // }
   getHouse = slug => {
     console.log(this.state.houses);
     let tempHouses = [...this.state.houses];
@@ -125,7 +112,7 @@ class HouseProvider extends Component {
 
   handleChange = event => {
     const target = event.target;
-    const value = event.type === "checkbox" ? target.checked : target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = event.target.name;
     this.setState(
       {
@@ -139,45 +126,46 @@ class HouseProvider extends Component {
     let {
       houses,
       bedrooms,
-      rent
+      rent,
+      minRent,
+      maxRent,
       // houses,
       // type,
       // capacity,
       // price,
-      // minSize,
-      // maxSize,
-      // breakfast,
-      // pets
+      minSize,
+      maxSize,
+      laundry,
+      porch
     } = this.state;
 
     let temphouses = [...houses];
     bedrooms = parseInt(bedrooms);
+    rent = parseInt(rent);
+    minSize = parseInt(minSize);
+    maxSize = parseInt(maxSize);
 
-    // //filter by type
-    // if (type !== "all") {
-    //   temphouses = temphouses.filter(house => house.type === type);
-    // }
-
-    // //filter by cap
-    // if (capacity !== 1) {
-    //   temphouses = temphouses.filter(house => house.capacity >= capacity);
-    // }
-
+    temphouses = temphouses.filter(house => house.rent <= rent);
     //filter by cap
     if (bedrooms !== 1) {
       temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);
     }
+
+    temphouses = temphouses.filter(house => house.bedrooms >= minSize && house.bedrooms <= maxSize)
+
+    if (laundry) {
+      temphouses = temphouses.filter(house => house.laundry === true)
+    }
+
+    if (porch) {
+      temphouses = temphouses.filter(house => house.porch === true)
+    }
+
     this.setState({
       sortedHouses: temphouses
     });
 
-    //filter by cap
-    if (rent) {
-      temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);
-    }
-    this.setState({
-      sortedHouses: temphouses
-    });
+
   };
 
   render() {
