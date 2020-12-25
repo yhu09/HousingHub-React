@@ -7,6 +7,7 @@ import ImageGallery from "react-image-gallery";
 
 const House = ({ house }) => {
   const [imageLinks, setImageLink] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
   const {
     houseaddress,
@@ -18,30 +19,46 @@ const House = ({ house }) => {
     bathrooms
   } = house;
   let imageLink = imageLinkURL(mainphotokey);
-  for (let key of photokeys) {
-    let original = imageLinkURL(key);
-    let thumbnail = imageLinkURL(key);
-    imageLinks.push({ original: original, thumbnail: thumbnail });
+  if (!loaded) {
+    for (let key of photokeys) {
+      let original = imageLinkURL(key);
+      let thumbnail = imageLinkURL(key);
+      imageLinks.push({ original: original, thumbnail: thumbnail });
+    }
+    setLoaded(true);
   }
 
   return (
     <article>
-      <div className="img-container">
-        {/* <img src={imageLink || defaulIMG} alt="single room"></img> */}
-        <ImageGallery items={imageLinks} />
-        <div className="price-top">
-          <h6> ${rent}</h6>
-          <p>per month</p>
-        </div>
-        <Link to={`/houses/${slug}`} className="btn-primary room-link">
+      {/* <div className="img-container"> */}
+      {/* <img src={imageLink || defaulIMG} alt="single room"></img> */}
+      <div className="thumbnail">
+        <ImageGallery
+          items={imageLinks}
+          showThumbnails={false}
+          showFullscreenButton={false}
+          showPlayButton={false}
+          showBullets={true}
+          showNav={true}
+        />
+      </div>
+      <div className="price-top">
+        <h6> ${rent}</h6>
+        <p>per month</p>
+      </div>
+      {/* <Link to={`/houses/${slug}`} className="btn-primary room-link">
           {" "}
           Features{" "}
-        </Link>
-      </div>
+        </Link> */}
+      {/* </div> */}
       <p className="room-info">
         {houseaddress} <br></br>
         Bedrooms: {bedrooms} <br></br>
-        Bathrooms: {bathrooms}
+        Bathrooms: {bathrooms} <br></br>
+        <Link to={`/houses/${slug}`} className="btn-primary">
+          {" "}
+          Check it out!{" "}
+        </Link>
       </p>
     </article>
   );
