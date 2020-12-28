@@ -29,7 +29,7 @@ const House = ({ house }) => {
   }
 
   return (
-    <article>
+    <div className="box">
       {/* <div className="img-container"> */}
       {/* <img src={imageLink || defaulIMG} alt="single room"></img> */}
       <div className="thumbnail">
@@ -39,7 +39,8 @@ const House = ({ house }) => {
           showFullscreenButton={false}
           showPlayButton={false}
           showBullets={true}
-          showNav={true}
+          showNav={false}
+          disableKeyDown={true}
         />
       </div>
       <div className="price-top">
@@ -60,7 +61,7 @@ const House = ({ house }) => {
           Check it out!{" "}
         </Link>
       </p>
-    </article>
+    </div>
   );
 };
 export default House;

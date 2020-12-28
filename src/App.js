@@ -16,6 +16,7 @@ import SingleHouse from "./pages/SingleHouse";
 import "semantic-ui-css/semantic.min.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HouseContext } from "./context";
+import VerifyEmail from "./pages/VerifyEmail";
 
 require("dotenv").config();
 
@@ -40,6 +41,7 @@ function App() {
           <Route exact path="/houses/" component={Houses} />
           <Route exact path="/houses/:slug" component={SingleHouse} />
           <Route exact path="/sublet" component={Subletter} />
+          <Route exact path="/verification" component={VerifyEmail} />
           <Route component={Error} />
         </Switch>
       </BrowserRouter>
