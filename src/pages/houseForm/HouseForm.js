@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
 import { uploadFile, getFile } from "../../utility/s3-upload";
+import * as Survey from "survey-react";
+import $ from 'jquery';
+import "survey-react/survey.css";
+
 
 export const HouseForm = () => {
   const [landlordEmail, setLandlordEmail] = useState("");
@@ -22,31 +26,16 @@ export const HouseForm = () => {
   const [files, setFiles] = useState([]);
   const [mainPhotoFile, setMainPhotoFile] = useState([]);
   const [photoKeys, setPhotoKeys] = useState([]);
-
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  function validateForm() {
-    return (
-      landlordEmail.length > 0 &&
-      houseAddress.length > 0 &&
-      city.length > 0 &&
-      ZIP.length > 0
-    );
-  }
+  var temporaryFilesStorage = {};
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
+  async function handleSubmit() {
     let slug = houseAddress.split(" ").join("-");
     let path = slug + "/";
-
-    // main image
-    console.log(mainPhotoFile);
-    let key = uploadFile(path, mainPhotoFile[0]);
-    var mainPhotoKey = path + key;
-    console.log(mainPhotoKey);
 
     // other images
     var imagePathKey;
@@ -54,11 +43,11 @@ export const HouseForm = () => {
       let key = uploadFile(path, file);
       imagePathKey = path + key;
       setPhotoKeys(photoKeys.push(imagePathKey));
-    }
+    } 
 
     var requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", },
       body: JSON.stringify({
         landlordEmail: landlordEmail,
         houseAddress: houseAddress,
@@ -74,10 +63,13 @@ export const HouseForm = () => {
         porch: porch,
         bedrooms: bedrooms,
         bathrooms: bathrooms,
-        mainPhotoKey: mainPhotoKey,
+        mainPhotoKey: "",
         photoKeys: photoKeys
       })
     };
+    console.log("request options: " + requestOptions.body);
+
+
     await fetch("http://localhost:3002/houses", requestOptions)
       .then(response => response.json())
       .then(data => {
@@ -86,6 +78,7 @@ export const HouseForm = () => {
         }
       });
     console.log("House form submitted");
+    setReadyToSubmit(false)
   }
 
   function fileSelectedHandler(e) {
@@ -100,227 +93,280 @@ export const HouseForm = () => {
     return <div>Successful</div>;
   }
 
-  function renderForm() {
-    return (
-      <div className="HouseForm">
-        <form onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="formGridEmail" bsSize="large">
-            <Form.Label>Landlord Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="land.lord@example.com"
-              onChange={e => setLandlordEmail(e.target.value)}
-              value={landlordEmail}
-            />
-          </Form.Group>
 
-          <Form.Group controlId="formGridAddress">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              placeholder="123 Boston Ave"
-              onChange={e => setHouseAddress(e.target.value)}
-              value={houseAddress}
-            />
-          </Form.Group>
+  Survey.StylesManager.applyTheme("winterstone");
 
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label>City</Form.Label>
-              <Form.Control
-                placeholder="Medford"
-                onChange={e => setCity(e.target.value)}
-                value={city}
-              />
-            </Form.Group>
+  let json = {
+    "title": "Create House Review",
+    "pages": [
+      {
+        "name": "page1",
+        "navigationTitle": "Where Is It?",
+        "navigationDescription": "House info",
+        "elements": [
+          {
+            "type": "image",
+            "name": "first_page_image",
+            "imageLink": "https://pinehallbrick.com/wp-content/uploads/2020/05/lb_tufts_gso2.jpg",
+            "imageFit": "none",
+            "imageHeight": 726,
+            "imageWidth": 500,
+            "width": "600px"
+          }, {
+            "type": "panel",
+            "name": "first_page_container_panel",
+            "elements": [
+              {
+                "type": "panel",
+                "name": "house_information",
+                "isRequired": true,
+                "elements": [
+                  {
+                    "type": "text",
+                    "name": "house_address",
+                    "isRequired": true,
+                    "title": "House address"
+                  }, {
+                    "type": "text",
+                    "name": "city",
+                    "title": "City"
+                  }, {
+                    "type": "dropdown",
+                    "name": "state",
+                    "title": "State",
+                    "isRequired": true,
+                    "choicesByUrl": {
+                      "url": "https://gist.githubusercontent.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_titlecase.json",
+                      "valueName": "name"
+                    }
+                  }, {
+                    "type": "text",
+                    "name": "zip_code",
+                    "title": "Zip Code",
+                    "isRequired": true,
+                    "inputType": "number"
+                  }, {
+                    "type": "text",
+                    "name": "email",
+                    "title": "Email",
+                    "isRequired": true,
+                    "inputType": "email"
+                  }, {
+                    "type": "text",
+                    "name": "rent",
+                    "title": "Rent",
+                    "isRequired": true,
+                    "inputType": "number"
+                  }
+                ],
+                "title": "House Information",
+                "showNumber": true,
+                "showQuestionNumbers": "off"
+              }
+            ],
+            "startWithNewLine": false
+          }
+        ]
+      }, {
+        "name": "page2",
+        "navigationTitle": "Who Owns It?",
+        "navigationDescription": "Landlord info",
+        "elements": [
+          {
+            "type": "panel",
+            "name": "first_page_container_panel",
+            "isRequired": true,
+            "elements": [
+              {
+                "type": "panel",
+                "name": "landlord_information",
+                "isRequired": true,
+                "elements": [
+                  {
+                    "type": "text",
+                    "name": "landlord_name",
+                    "isRequired": true,
+                    "title": "Landlord Name"
+                  }, {
+                    "type": "text",
+                    "name": "landlord_email",
+                    "title": "Landlord Email",
+                    "isRequired": true,
+                    "inputType": "email"
+                  }, {
+                    "type": "text",
+                    "name": "landlord_number",
+                    "title": "Landlord Number",
+                    "isRequired": true,
+                    "inputType": "number"
+                  }
+                ],
+                "title": "House Information",
+                "showNumber": true,
+                "showQuestionNumbers": "off"
+              }
+            ],
+            "startWithNewLine": false
+          }
+        ]
+      }, {
+        "name": "page3",
+        "navigationTitle": "Tell Us More!",
+        "navigationDescription": "Detailed House Info",
+        "elements": [
+          {
+            "type": "panel",
+            "name": "detailed_house_info",
+            "elements": [{
+              "type": "boolean",
+              "name": "Laundry",
+              "labelTrue": "Yes",
+              "labelFalse": "No",
+              "isRequired": true,
+              "hideNumber": true
+            }, {
+              "type": "boolean",
+              "name": "Basement",
+              "labelTrue": "Yes",
+              "labelFalse": "No",
+              "isRequired": true,
+              "hideNumber": true
+            }, {
+              "type": "boolean",
+              "name": "Yard",
+              "labelTrue": "Yes",
+              "labelFalse": "No",
+              "isRequired": true,
+              "hideNumber": true
+            }, {
+              "type": "boolean",
+              "name": "Parking",
+              "labelTrue": "Yes",
+              "labelFalse": "No",
+              "isRequired": true,
+              "hideNumber": true
+            }, {
+              "type": "boolean",
+              "name": "Porch",
+              "labelTrue": "Yes",
+              "labelFalse": "No",
+              "isRequired": true,
+              "hideNumber": true
+            }, {
+              "type": "text",
+              "name": "bedrooms",
+              "title": "Number of Bedroom",
+              "isRequired": true,
+              "inputType": "number"
+            }, {
+              "type": "text",
+              "name": "bathrooms",
+              "title": "Number of Bathrooms",
+              "isRequired": true,
+              "inputType": "number"
+            }, {
+              "type": "dropdown",
+              "name": "unit",
+              "title": "Unit level",
+              "isRequired": true,
+              "colCount": 0,
+              "choices": [
+                "upper",
+                "lower",
+                "Entire House"
+              ]
+            }, {
+              "type": "file",
+              "title": "Do you have photos?",
+              "name": "Files",
+              "storeDataAsText": false,
+              "allowMultiple": true,
+              "showPreview": true
+            }
+            ],
+            "title": "Basic Info",
+            "showNumber": true
+          }]
+      }
+    ],
+    "showProgressBar": "top",
+    "progressBarType": "buttons"
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>State</Form.Label>
-              <Form.Control
-                as="select"
-                defaultValue="Massachusetts"
-                onChange={e => setState(e.target.value)}
-                value={state}
-              >
-                <option>New York</option>
-                <option>Massachusetts</option>
-              </Form.Control>
-            </Form.Group>
+  };
+  var survey = new Survey.Model(json);
 
-            <Form.Group as={Col} controlId="formGridZip">
-              <Form.Label>Zip</Form.Label>
-              <Form.Control
-                placeholder="12345"
-                onChange={e => setZIP(e.target.value)}
-                value={ZIP}
-              />
-            </Form.Group>
-          </Form.Row>
+  survey.onComplete.add(function (result) {
+    console.log(result.data)
+    setHouseAddress(result.data.house_address);
+    setLandlordEmail(result.data.email);
+    setState(result.data.state)
+    setCity(result.data.city)
+    setZIP(result.data.zip_code)
+    setLaundry(result.data.Laundry)
+    setBasement(result.data.Basement)
+    setYard(result.data.Yard)
+    setParking(result.data.Parking)
+    setPorch(result.data.Porch)
+    setBedrooms(result.data.bedrooms)
+    setBathrooms(result.data.bathrooms)
+    setRent(result.data.rent)
+    setUnitLevel(result.data.unit)
+    setReadyToSubmit(true)
+    if (temporaryFilesStorage.files != null) {
+      setFiles([...temporaryFilesStorage.files])
+    }
+  });
 
-          <Form.Group as={Col} controlId="formGridRent">
-            <Form.Label>Rent</Form.Label>
-            <Form.Control
-              placeholder="875"
-              onChange={e => setRent(e.target.value)}
-              value={rent}
-            ></Form.Control>
-          </Form.Group>
+  useEffect(() => {
+    if (readyToSubmit) {
+      console.log(houseAddress)
+      handleSubmit()
+    }
+  }, [readyToSubmit]);
 
-          <Form.Group as={Col} controlId="formGridUnitLevel">
-            <Form.Label>Unit Level</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="lower"
-              onChange={e => setUnitLevel(e.target.value)}
-              value={unitLevel}
-            >
-              <option>lower</option>
-              <option>upper</option>
-            </Form.Control>
-          </Form.Group>
+  survey
+    .onUploadFiles
+    .add(function (survey, options) {
+      // Add files to the temporary storage
+      if (temporaryFilesStorage[options.name] !== undefined) {
+        temporaryFilesStorage[options.name].concat(options.files);
+      } else {
+        temporaryFilesStorage[options.name] = options.files;
+      }
 
-          <Form.Group as={Col} controlId="formGridLaundry">
-            <Form.Label>Laundry</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="false"
-              onChange={e => setLaundry(e.target.value)}
-              value={laundry}
-            >
-              <option>true</option>
-              <option>false</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridBasement">
-            <Form.Label>Basement</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="false"
-              onChange={e => setBasement(e.target.value)}
-              value={basement}
-            >
-              <option>true</option>
-              <option>false</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridYard">
-            <Form.Label>Yard</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="false"
-              onChange={e => setYard(e.target.value)}
-              value={yard}
-            >
-              <option>true</option>
-              <option>false</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridParking">
-            <Form.Label>Parking</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="false"
-              onChange={e => setParking(e.target.value)}
-              value={parking}
-            >
-              <option>true</option>
-              <option>false</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridPorch">
-            <Form.Label>Porch</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="false"
-              onChange={e => setPorch(e.target.value)}
-              value={porch}
-            >
-              <option>true</option>
-              <option>false</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridBedrooms">
-            <Form.Label>Bedrooms</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="1"
-              onChange={e => setBedrooms(e.target.value)}
-              value={bedrooms}
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridBathrooms">
-            <Form.Label>Bathrooms</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="1"
-              onChange={e => setBathrooms(e.target.value)}
-              value={bathrooms}
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formPhotos">
-            <Form.Label>Front Photo</Form.Label>
-            <input type="file" multiple onChange={frontPhotoSelectedHandler} />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formPhotos">
-            <Form.Label>Photos</Form.Label>
-            <input type="file" multiple onChange={fileSelectedHandler} />
-          </Form.Group>
-
-          <br></br>
-
-          <Button block bsSize="large" disabled={!validateForm()} type="submit">
-            Submit
-          </Button>
-        </form>
-      </div>
-    );
-  }
+      // Load previews in base64. Until survey not completed files are loaded temporary as base64 in order to get previews
+      var question = survey.getQuestionByName(options.name);
+      var content = [];
+      options
+        .files
+        .forEach(function (file) {
+          let fileReader = new FileReader();
+          fileReader.onload = function (e) {
+            content = content.concat([
+              {
+                name: file.name,
+                type: file.type,
+                content: fileReader.result,
+                file: file
+              }
+            ]);
+            if (content.length === options.files.length) {
+              //question.value = (question.value || []).concat(content);
+              options.callback("success", content.map(function (fileContent) {
+                return { file: fileContent.file, content: fileContent.content };
+              }));
+            }
+          };
+          fileReader.readAsDataURL(file);
+        });
+      console.log("in func" + temporaryFilesStorage);
+    });
 
   return (
-    <div className="HouseForm">
-      {newHouse === null ? renderForm() : renderNewHouseStatus()}
+    <div align="left">
+      <h1></h1>
+      <h1></h1>
+      <Survey.Survey model={survey} showCompletedPage={true} allowImagesPreview={true} />
     </div>
   );
 };
-
-// class ImageUpload extends React.Component {
-//   state = {
-//     files: []
-//   };
-
-//   fileSelectedHandler = e => {
-//     this.setState({ files: [...this.state.files, ...e.target.files] });
-//   };
-
-//   render() {
-//     return (
-//       <form>
-//         <div>
-//           <h2>Upload images</h2>
-//         </div>
-//         <h3>Images</h3>
-//         <input type="file" multiple onChange={this.fileSelectedHandler} />
-//       </form>
-//     );
-//   }
-// }

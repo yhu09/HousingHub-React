@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { HouseContext } from "../../context";
 import Title from "../commonHeaders/Title";
+import SearchBar from "material-ui-search-bar";
 
 const HousesFilter = ({ houses }) => {
   const context = useContext(HouseContext);
   const {
     handleChange,
+    handleSearchInput,
     bedrooms,
     rent,
     laundry,
@@ -16,6 +18,7 @@ const HousesFilter = ({ houses }) => {
     minSize,
     maxSize
   } = context;
+  const [searchValue, setSearchValue] = useState("");
 
   const getUnique = (items, value) => {
     return [...new Set(items.map(item => item[value]))];
@@ -33,9 +36,24 @@ const HousesFilter = ({ houses }) => {
     );
   });
 
+  useEffect(() => {
+    handleSearchInput(searchValue)
+  }, [searchValue]);
+
   return (
     <section className="filter-container">
       <Title title="search rooms"></Title>
+      <div className="filter-form">
+        <SearchBar
+          value={searchValue}
+          onChange={(newValue) => {
+            setSearchValue(newValue);
+          }
+          }
+          onRequestSearch={() => handleSearchInput(searchValue)}
+        />
+      </div>
+      <br></br>
       <form className="filter-form">
         <div className="form-group">
           <label htmlFor="bedrooms">bedrooms</label>

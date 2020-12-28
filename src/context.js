@@ -110,6 +110,17 @@ class HouseProvider extends Component {
     return house;
   };
 
+  handleSearchInput = value => {
+    let tempHouses = [...this.state.houses];
+    console.log(tempHouses);
+    console.log(value);
+    tempHouses = tempHouses.filter(house => house.houseaddress.includes(value));
+    this.setState({
+      sortedHouses: tempHouses
+    });
+
+  }
+
   handleChange = event => {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -164,8 +175,6 @@ class HouseProvider extends Component {
     this.setState({
       sortedHouses: temphouses
     });
-
-
   };
 
   render() {
@@ -175,6 +184,7 @@ class HouseProvider extends Component {
           ...this.state,
           getHouse: this.getHouse,
           handleChange: this.handleChange,
+          handleSearchInput: this.handleSearchInput,
           setHouses: this.setHouses,
           isTokenSet: this.isTokenSet,
           setToken: this.setToken
