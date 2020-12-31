@@ -16,6 +16,7 @@
   /* margin: 100px auto; */
   background: white;
   border-radius: 2px;
+  position: relative;
 }
 
 * {
@@ -115,7 +116,7 @@ h6 {
   width: 100%;
   padding: 0.75rem 2rem;
   background: var(--offWhite);
-  z-index: 1;
+  z-index: 6;
 }
 .nav-header {
   display: flex;
@@ -340,6 +341,7 @@ h6 {
   transition: var(--mainTransition);
 }
 .price-top {
+  z-index: 5;
   position: absolute;
   top: 0;
   left: 0;
@@ -352,6 +354,7 @@ h6 {
   transition: var(--mainTransition);
 }
 .price-top h6 {
+  z-index: 5;
   margin-bottom: 0;
   font-size: 0.9rem;
   font-weight: 300;
@@ -376,14 +379,45 @@ h6 {
 .img-container:hover .room-link {
   transform: translate(-50%, -50%) scale(1);
 }
+.thumbnail {
+  z-index: 3;
+}
+.room-info-rating {
+  padding-left: 2%;
+  top: 5%;
+  left: 0px;
+}
+.room-info-address {
+  text-align: left;
+  width: 80%;
+  padding-left: 2%;
+  font-size: 15px;
+  letter-spacing: var(--mainSpacing);
+  display: table-cell;
+}
 .room-info {
-  background: var(--darkGrey);
+  background: var(--White);
   text-transform: capitalize;
   padding: 0.5rem 0;
-  text-align: center;
+  /* text-align: center; */
   font-weight: 700;
-  letter-spacing: var(--mainSpacing);
+  /* letter-spacing: var(--mainSpacing); */
 }
+.room-info-info {
+  /* bottom: 0; */
+  /* float: left; */
+  top: 6%;
+  left: 0px;
+  position: relative;
+  padding-left: 3%;
+  font-size: 12px;
+  color: var(--mainBlack);
+}
+.room-info-button {
+  padding-right: 10px;
+  display: table-cell;
+}
+
 /* end of room  */
 /* single room*/
 

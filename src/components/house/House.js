@@ -4,6 +4,7 @@ import defaulIMG from "../../images/house-2.png";
 import PropTypes from "prop-types";
 import { imageLinkURL } from "../../utility/s3-upload";
 import ImageGallery from "react-image-gallery";
+import StarRatings from "react-star-ratings";
 
 const House = ({ house }) => {
   const [imageLinks, setImageLink] = useState([]);
@@ -52,15 +53,30 @@ const House = ({ house }) => {
           Features{" "}
         </Link> */}
       {/* </div> */}
-      <p className="room-info">
-        {houseaddress} <br></br>
-        Bedrooms: {bedrooms} <br></br>
-        Bathrooms: {bathrooms} <br></br>
-        <Link to={`/houses/${slug}`} className="btn-primary">
-          {" "}
-          Check it out!{" "}
-        </Link>
-      </p>
+
+      <div className="room-info">
+        <div className="room-info-address">{houseaddress}</div>
+        <div className="room-info-button">
+          <Link to={`/houses/${slug}`} className="btn-primary">
+            {" "}
+            Link{" "}
+          </Link>
+        </div>
+        <div className="room-info-rating">
+          <StarRatings
+            numberOfStars={5}
+            rating={2}
+            starDimension="15px"
+            starSpacing="1px"
+            starRatedColor="blue"
+          />
+        </div>
+        <div className="room-info-info">
+          Bedrooms: {bedrooms}
+          <br></br>
+          Bathrooms: {bathrooms}
+        </div>
+      </div>
     </div>
   );
 };
