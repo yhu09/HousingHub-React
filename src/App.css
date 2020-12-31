@@ -384,14 +384,12 @@ h6 {
 }
 .room-info-rating {
   padding-left: 2%;
-  top: 5%;
-  left: 0px;
 }
 .room-info-address {
   text-align: left;
   width: 80%;
   padding-left: 2%;
-  font-size: 15px;
+  font-size: 20px;
   letter-spacing: var(--mainSpacing);
   display: table-cell;
 }
