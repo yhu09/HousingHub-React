@@ -412,6 +412,7 @@ h6 {
   color: var(--mainBlack);
 }
 .room-info-button {
+  flex: 50%;
   padding-right: 10px;
   display: table-cell;
 }
@@ -439,6 +440,8 @@ h6 {
   display: grid;
   grid-template-columns: 1fr;
   margin: 2rem auto;
+  border-bottom: solid black;
+  padding-bottom: 10px;
 }
 .desc,
 .info {
@@ -569,6 +572,9 @@ h6 {
   }
 }
 
-/* Sob's Code */
+/*added code  css*/
+div.info {
+  column-count: 2;
+}
 
 /* end of rooms fitler*/

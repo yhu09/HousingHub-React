@@ -12,6 +12,14 @@ import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
 import { useAuth0 } from "@auth0/auth0-react";
 import UploadImages from "../components/UploadImages";
+import { BiBed, BiBath } from 'react-icons/bi'
+import { MdLocalLaundryService, MdLocalParking } from "react-icons/md";
+import { FaUmbrellaBeach, FaCheck, FaTimes } from "react-icons/fa";
+import { BsArrowsExpand } from "react-icons/bs";
+import { GiGrass, GiStairs } from "react-icons/gi";
+import { Button } from "react-bootstrap";
+
+
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
@@ -61,7 +69,7 @@ const SingleHouse = props => {
       try {
         await fetch(
           "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-            houseAddress,
+          houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -86,7 +94,7 @@ const SingleHouse = props => {
           });
         await fetch(
           "http://localhost:3002/houseReview/houseAddress/?houseAddress=" +
-            houseAddress,
+          houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -100,7 +108,7 @@ const SingleHouse = props => {
 
         await fetch(
           "http://localhost:3002/comments/houseAddress/?houseAddress=" +
-            houseAddress,
+          houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -190,39 +198,42 @@ const SingleHouse = props => {
             {edit ? (
               <SingleHouseEdit house={house} token={token} />
             ) : (
-              <>
-                {" "}
-                <div className="single-room-info">
-                  <article className="desc">
-                    <h3>Full Address</h3>
-                    <p>
-                      {" "}
-                      {house.houseaddress}, {house.city}, {house.statename}{" "}
-                      {house.zip}{" "}
-                    </p>
-                    {/* <br></br> */}
-                    <h3>Contact Info</h3>
-                    <p> Landlord Email: {house.landlordemail} </p>
-                    <p> Residents Emails: {house.currresidentsemail} </p>
-                  </article>
-                  <article className="info">
-                    <h3>info</h3>
-                    <h6>rent: ${house.rent}</h6>
-                    <h6>bedrooms: {house.bedrooms}</h6>
-                    <h6>bathrooms: {house.bathrooms}</h6>
-                    <h6>{house.basement ? "Basement" : "No basement"}</h6>
-                    <h6>{house.laundry ? "Laundry" : "No laundry"}</h6>
-                    <h6>
-                      {house.parking ? "Parking space" : "No parking space"}
-                    </h6>
-                    <h6>{house.porch ? "Porch" : "No porch"}</h6>
-                    <h6>{house.yard ? "Yard" : "No yard"}</h6>
-                    <h6>Floor: {house.unit}</h6>
-                  </article>
-                  <button onClick={onEdit}>Edit Info</button>{" "}
-                </div>
-              </>
-            )}
+                <>
+                  {" "}
+                  <div className="single-room-info" >
+                    <article className="desc">
+                      <h3>Full Address</h3>
+                      <p>
+                        {" "}
+                        {house.houseaddress}, {house.city}, {house.statename}{" "}
+                        {house.zip}{" "}
+                      </p>
+                      <h3>Contact Info</h3>
+                      <p> Landlord Email: {house.landlordemail} </p>
+                      <p> Residents Emails: {house.currresidentsemail} </p>
+                    </article>
+                    <div align="left">
+                      <h3>Basic Info</h3>
+                      <div className="info">
+                        <h6>rent: ${house.rent}</h6>
+                        <h6> <BiBed /> bedrooms: {house.bedrooms}</h6>
+                        <h6> <BiBath /> bathrooms: {house.bathrooms}</h6>
+                        <h6> <GiStairs /> Basement: {house.basement ? <FaCheck/>  : <FaTimes/> }</h6>
+                        <h6> <MdLocalLaundryService /> Laundry: {house.laundry ? <FaCheck/> : <FaTimes/>}</h6>
+                        <h6> <MdLocalParking /> Parking: {house.parking ? <FaCheck/> : <FaTimes/>}</h6>
+                        <h6> <FaUmbrellaBeach /> Porch: {house.porch ? <FaCheck/> : <FaTimes/>}</h6>
+                        <h6> <GiGrass /> Yard: {house.yard ? <FaCheck/> : <FaTimes/>}</h6>
+                        <h6> <BsArrowsExpand /> Floor: {house.unit}</h6>
+                      </div>
+                    </div>
+                    <div>
+                      <Button onClick={onEdit} className="room-info-button">Edit House Info</Button>{" "}
+                    </div>
+                    <br>
+                    </br>
+                  </div>
+                </>
+              )}
           </section>
           <section className="services-center">
             <HouseComments houseAddress={houseAddress} comments={comments} />
@@ -283,7 +294,7 @@ const SingleHouseEdit = ({ house, token }) => {
     try {
       await fetch(
         "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-          houseAddress,
+        houseAddress,
         requestOptions
       )
         .then(response => response.json())
