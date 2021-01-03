@@ -219,7 +219,13 @@ const SingleHouse = props => {
 
             <button onClick={uploadPhotos}>Upload photos</button> */}
             {edit ? (
-              <SingleHouseEdit house={house} token={token} />
+              <SingleHouseEdit
+                house={house}
+                token={token}
+                averageElectric={averageElectric}
+                averageGas={averageGas}
+                averageWater={averageWater}
+              />
             ) : (
               <>
                 {" "}
@@ -314,7 +320,13 @@ const SingleHouse = props => {
   );
 };
 
-const SingleHouseEdit = ({ house, token }) => {
+const SingleHouseEdit = ({
+  house,
+  token,
+  averageElectric,
+  averageGas,
+  averageWater
+}) => {
   const [landlordEmail, setLandlordEmail] = useState(house.landlordemail);
   const [houseAddress, setHouseAddress] = useState(house.houseaddress);
   const [city, setCity] = useState(house.city);
@@ -373,6 +385,7 @@ const SingleHouseEdit = ({ house, token }) => {
 
   return (
     <form onSubmit={onUpdate}>
+      {" "}
       <div className="single-room-info">
         <article className="desc">
           <h3>Full Address</h3>
@@ -382,6 +395,7 @@ const SingleHouseEdit = ({ house, token }) => {
           </p>
           <h3>Contact Info</h3>
           <p>
+            {" "}
             Landlord Email:
             <input
               type="text"
@@ -391,107 +405,134 @@ const SingleHouseEdit = ({ house, token }) => {
           </p>
           <p> Residents Emails: {house.currresidentsemail} </p>
         </article>
-        <article className="info">
-          <h3>info</h3>
-          <h6>
-            Rent:
-            <input
-              type="text"
-              value={rent}
-              onChange={event => setRent(event.target.value)}
-            />
-          </h6>
-          <h6>
-            Bedrooms:
-            <input
-              type="text"
-              value={bedrooms}
-              onChange={event => setBedrooms(event.target.value)}
-            />
-          </h6>
-          <h6>
-            Bathrooms:
-            <input
-              type="text"
-              value={bathrooms}
-              onChange={event => setBathrooms(event.target.value)}
-            />
-          </h6>
-          <h6>
-            Basement:
-            <input
-              type="checkbox"
-              value="Basement"
-              checked={basement}
-              onClick={event => setBasement(!basement)}
-            />{" "}
-            {basement ? "Yes basement" : "No basement"}
-          </h6>
-          <h6>
-            Laundry:
-            <input
-              type="checkbox"
-              value="Laundry"
-              checked={laundry}
-              onClick={event => setLaundry(!laundry)}
-            />{" "}
-            {laundry ? "Yes laundry" : "No laundry"}
-          </h6>
-          <h6>
-            Parking:
-            <input
-              type="checkbox"
-              value="Parking"
-              checked={parking}
-              onClick={event => setParking(!parking)}
-            />{" "}
-            {parking ? "Yes parking" : "No parking"}
-          </h6>
-          <h6>
-            Porch:
-            <input
-              type="checkbox"
-              value="Porch"
-              checked={porch}
-              onClick={event => setPorch(!porch)}
-            />{" "}
-            {porch ? "Yes porch" : "No porch"}
-          </h6>
-          <h6>
-            Yard:
-            <input
-              type="checkbox"
-              value="Yard"
-              checked={yard}
-              onClick={event => setYard(!yard)}
-            />{" "}
-            {yard ? "Yes yard" : "No yard"}
-          </h6>
-          <h6>
-            Floor:
-            <label>
+        <div>
+          <h3>Basic Info</h3>
+          <div className="info">
+            <h6>
+              rent:{" "}
               <input
-                type="radio"
-                value="floor-upper"
-                checked={unit === "upper"}
-                onClick={event => setUnit("upper")}
+                type="text"
+                value={rent}
+                onChange={event => setRent(event.target.value)}
               />
-              Upper
-            </label>
-            <label>
+            </h6>
+            <h6>
+              {" "}
+              <GiElectric /> Electric: ${averageElectric}
+            </h6>
+            <h6>
+              {" "}
+              <BiGasPump /> Gas: ${averageGas}
+            </h6>
+            <h6>
+              {" "}
+              <GiWaterDrop /> Water: ${averageWater}
+            </h6>
+            <h6>
+              {" "}
+              <BiBed /> Bedrooms:{" "}
               <input
-                type="radio"
-                value="floor-lower"
-                checked={unit === "lower"}
-                onClick={event => setUnit("lower")}
+                type="text"
+                size="10"
+                value={bedrooms}
+                onChange={event => setBedrooms(event.target.value)}
               />
-              Lower
-            </label>
-          </h6>{" "}
+            </h6>
+            <h6>
+              {" "}
+              <BiBath /> Bathrooms:{" "}
+              <input
+                type="text"
+                size="10"
+                value={bathrooms}
+                onChange={event => setBathrooms(event.target.value)}
+              />
+            </h6>
+            <h6>
+              {" "}
+              <GiStairs /> Basement:{" "}
+              <input
+                type="checkbox"
+                value="Basement"
+                checked={basement}
+                onClick={event => setBasement(!basement)}
+              />{" "}
+              {basement ? <FaCheck /> : <FaTimes />}
+            </h6>
+            <h6>
+              {" "}
+              <MdLocalLaundryService /> Laundry:{" "}
+              <input
+                type="checkbox"
+                value="laundry"
+                checked={laundry}
+                onClick={event => setLaundry(!laundry)}
+              />{" "}
+              {laundry ? <FaCheck /> : <FaTimes />}
+            </h6>
+            <h6>
+              {" "}
+              <MdLocalParking /> Parking:{" "}
+              <input
+                type="checkbox"
+                value="parking"
+                checked={parking}
+                onClick={event => setParking(!parking)}
+              />{" "}
+              {parking ? <FaCheck /> : <FaTimes />}
+            </h6>
+            <h6>
+              {" "}
+              <FaUmbrellaBeach /> Porch:{" "}
+              <input
+                type="checkbox"
+                value="porch"
+                checked={porch}
+                onClick={event => setPorch(!porch)}
+              />{" "}
+              {porch ? <FaCheck /> : <FaTimes />}
+            </h6>
+            <h6>
+              {" "}
+              <GiGrass /> Yard:{" "}
+              <input
+                type="checkbox"
+                value="yard"
+                checked={yard}
+                onClick={event => setYard(!yard)}
+              />{" "}
+              {yard ? <FaCheck /> : <FaTimes />}
+            </h6>
+            <h6>
+              {" "}
+              <BsArrowsExpand /> Floor:{" "}
+              <label>
+                <input
+                  type="radio"
+                  value="floor-upper"
+                  checked={unit === "upper"}
+                  onClick={event => setUnit("upper")}
+                />
+                Upper
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="floor-lower"
+                  checked={unit === "lower"}
+                  onClick={event => setUnit("lower")}
+                />
+                Lower
+              </label>
+            </h6>
+          </div>
+        </div>
+        <div>
           <button block bsSize="large" type="submit">
             Update House Info
           </button>{" "}
-        </article>
+        </div>
+        <br></br>
       </div>
     </form>
   );
