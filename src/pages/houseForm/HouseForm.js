@@ -25,7 +25,7 @@ export const HouseForm = () => {
   const [rent, setRent] = useState(875);
   const [files, setFiles] = useState([]);
   const [mainPhotoFile, setMainPhotoFile] = useState([]);
-  const [photoKeys, setPhotoKeys] = useState([]);
+  // const [photoKeys, setPhotoKeys] = useState([]);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
@@ -38,12 +38,15 @@ export const HouseForm = () => {
     let path = slug + "/";
 
     // other images
+    var photoKeys = [];
     var imagePathKey;
     for (var file of files) {
       let key = uploadFile(path, file);
       imagePathKey = path + key;
-      setPhotoKeys(photoKeys.push(imagePathKey));
-    } 
+      photoKeys.push(imagePathKey);
+      console.log(imagePathKey);
+      // setPhotoKeys(photoKeys.push(imagePathKey));
+    }
 
     var requestOptions = {
       method: "POST",
@@ -311,10 +314,15 @@ export const HouseForm = () => {
     setBathrooms(result.data.bathrooms)
     setRent(result.data.rent)
     setUnitLevel(result.data.unit)
-    setReadyToSubmit(true)
-    if (temporaryFilesStorage.files != null) {
-      setFiles([...temporaryFilesStorage.files])
+
+    if (temporaryFilesStorage.Files != null) {
+      console.log(temporaryFilesStorage.Files)
+
+      setFiles([...temporaryFilesStorage.Files])
     }
+    console.log(files)
+
+    setReadyToSubmit(true)
   });
 
   useEffect(() => {
