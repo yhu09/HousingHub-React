@@ -16,7 +16,7 @@ import { BiBed, BiBath, BiGasPump } from "react-icons/bi";
 import { MdLocalLaundryService, MdLocalParking } from "react-icons/md";
 import { FaUmbrellaBeach, FaCheck, FaTimes } from "react-icons/fa";
 import { BsArrowsExpand } from "react-icons/bs";
-import { GiGrass, GiStairs, GiWaterDrop, GiElectric } from "react-icons/gi";
+import { GiHouse, GiGrass, GiStairs, GiWaterDrop, GiElectric } from "react-icons/gi";
 import { Button } from "react-bootstrap";
 
 const SingleHouse = props => {
@@ -244,7 +244,7 @@ const SingleHouse = props => {
                   <div>
                     <h3>Basic Info</h3>
                     <div className="info">
-                      <h6>rent: ${house.rent}</h6>
+                      <h6>{" "} <GiHouse /> Rent: ${house.rent}</h6>
                       <h6>
                         {" "}
                         <GiElectric /> Electric: ${averageElectric}
