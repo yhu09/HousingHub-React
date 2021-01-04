@@ -16,7 +16,13 @@ import { BiBed, BiBath, BiGasPump } from "react-icons/bi";
 import { MdLocalLaundryService, MdLocalParking } from "react-icons/md";
 import { FaUmbrellaBeach, FaCheck, FaTimes } from "react-icons/fa";
 import { BsArrowsExpand } from "react-icons/bs";
-import { GiHouse, GiGrass, GiStairs, GiWaterDrop, GiElectric } from "react-icons/gi";
+import {
+  GiHouse,
+  GiGrass,
+  GiStairs,
+  GiWaterDrop,
+  GiElectric
+} from "react-icons/gi";
 import { Button } from "react-bootstrap";
 
 const SingleHouse = props => {
@@ -24,18 +30,6 @@ const SingleHouse = props => {
   const { token, isTokenSet, setToken, getHouse } = context;
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  // constructor(props) {
-  //   super(props);
-  //   console.log(this.props);
-  //   this.state = {
-  //     slug: this.props.match.params.slug,
-  //     houseAddress: "",
-  //     reviews: null,
-  //     comments: null,
-  //     loaded: false,
-  //     defaultBcg
-  //   };
-  // }
   const [slug, setSlug] = useState(props.match.params.slug);
   const [houseAddress, setHouseAddress] = useState(slug.split("-").join(" "));
   const [reviews, setReviews] = useState([]);
@@ -158,47 +152,6 @@ const SingleHouse = props => {
     setEdit(true);
   }
 
-  function fileSelectedHandler(e) {
-    setFiles([...files, ...e.target.files]);
-  }
-
-  async function uploadPhotos() {
-    console.log("upload photo");
-    let slug = houseAddress.split(" ").join("-");
-    let path = slug + "/";
-
-    var photoKeys = [];
-    var imagePathKey;
-    for (var file of files) {
-      let key = uploadFile(path, file);
-      imagePathKey = path + key;
-      photoKeys.push(imagePathKey);
-    }
-
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        photoKeys: photoKeys
-      })
-    };
-    try {
-      await fetch(
-        "http://localhost:3002/houses/photos/?houseAddress=" + houseAddress,
-        requestOptions
-      )
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-        });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   return (
     <div>
       {loadedData ? (
@@ -211,13 +164,15 @@ const SingleHouse = props => {
             </Banner>
           </StyledHero>
           <section className="single-room">
-            <ImageGallery items={imageLinks} />
+            <div className="single-house-images">
+              <ImageGallery
+                items={imageLinks}
+                showFullscreenButton={true}
+                showPlayButton={false}
+                showNav={true}
+              />
+            </div>
             <UploadImages houseAddress={houseAddress} token={token} />
-            {/* Add more photos<br></br>
-            <input type="file" multiple onChange={fileSelectedHandler} />
-            <img src={files? URL.createObjectURL(files) : null} alt={files? files.name : null}/>
-
-            <button onClick={uploadPhotos}>Upload photos</button> */}
             {edit ? (
               <SingleHouseEdit
                 house={house}
@@ -244,7 +199,10 @@ const SingleHouse = props => {
                   <div>
                     <h3>Basic Info</h3>
                     <div className="info">
-                      <h6>{" "} <GiHouse /> Rent: ${house.rent}</h6>
+                      <h6>
+                        {" "}
+                        <GiHouse /> Rent: ${house.rent}
+                      </h6>
                       <h6>
                         {" "}
                         <GiElectric /> Electric: ${averageElectric}

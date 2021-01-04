@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { GiHouse, GiWaterDrop, GiElectric } from "react-icons/gi";
 import { BiGasPump } from "react-icons/bi";
@@ -26,7 +26,23 @@ const HouseReviewList = ({ houseReviews }) => {
   );
 };
 
+const calendar = {
+  "01" : "January",
+  "02" : "Feburary",
+  "03" : "March",
+  "04" : "April",
+  "05" : "May",
+  "06" : "June",
+  "07" : "July",
+  "08" : "August",
+  "09" : "September",
+  "10" : "October",
+  "11" : "November",
+  "12" : "December",
+};
+
 const HouseReview = ({ houseReview }) => {
+  const [date, setDate] = useState("");
   const {
     stars,
     rent,
@@ -37,6 +53,19 @@ const HouseReview = ({ houseReview }) => {
     author,
     createddate
   } = houseReview;
+
+  
+  function formatDate() {
+    let dateArr = createddate.split("-", 2);
+    let year = dateArr[0];
+    let monthNum = dateArr[1];
+    var monthAlp = calendar[monthNum];
+    setDate(monthAlp + " " + year);
+  }
+
+  useEffect(() => {
+    formatDate();
+  }, [formatDate]);
 
   return (
     <div className="review-box">
@@ -61,7 +90,7 @@ const HouseReview = ({ houseReview }) => {
       <div className="review-credentials">
         <p>
           {author} <br></br>
-          {createddate}
+          <span className="review-date">{date}</span>
         </p>
       </div>
       <div className="review-review">
