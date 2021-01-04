@@ -97,7 +97,7 @@ export const HouseForm = () => {
   Survey.StylesManager.applyTheme("winterstone");
 
   let json = {
-    "title": "Create House Page",
+    "title": "Create a House",
     "pages": [
       {
         "name": "page1",
@@ -117,7 +117,7 @@ export const HouseForm = () => {
             "name": "first_page_container_panel",
             "elements": [
               {
-                "type": "pawnel",
+                "type": "panel",
                 "name": "house_information",
                 "isRequired": true,
                 "elements": [
