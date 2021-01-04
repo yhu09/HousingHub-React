@@ -13,6 +13,7 @@
     "aws-sdk": "^2.807.0",
     "crypto-js": "^4.0.0",
     "jquery": "^3.5.1",
+    "jquery-bar-rating": "^1.2.2",
     "material-ui-search-bar": "^1.0.0",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",
@@ -28,7 +29,8 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",
-    "survey-react": "^1.8.22"
+    "survey-react": "^1.8.22",
+    "surveyjs-widgets": "^1.8.23"
   },
   "scripts": {
     "start": "react-scripts start",

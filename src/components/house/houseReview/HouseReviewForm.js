@@ -1,7 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect} from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseReviewForm.css";
 import cookie from "react-cookies";
+import * as Survey from "survey-react";
+import "survey-react/survey.css";
+
 
 const HouseReivewForm = props => {
   const [stars, setStars] = useState(0);
@@ -10,14 +13,13 @@ const HouseReivewForm = props => {
   const [elecBill, setElecBill] = useState(0);
   const [gasBill, setGasBill] = useState(0);
   const [waterBill, setWaterBill] = useState(0);
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
 
   function validateForm() {
     return true;
   }
 
   async function handleSubmit(event) {
-    event.preventDefault();
-
     let email = cookie.load("email");
     var requestOptions = {
       method: "POST",
@@ -33,92 +35,126 @@ const HouseReivewForm = props => {
         author: email
       })
     };
+    console.log(requestOptions);
     await fetch("http://localhost:3002/houseReview", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 
     console.log("House Review Form submitted");
-
-    window.location.reload(true);
+    setReadyToSubmit(false);
+    // window.location.reload(true);
   }
 
   function renderNewHouseStatus() {
     return <div>Successful</div>;
   }
 
-  function renderForm() {
-    return (
-      <div className="HouseReviewForm">
-        <form onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="formGridBathrooms">
-            <Form.Label>Stars</Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="1"
-              onChange={e => setStars(e.target.value)}
-              value={stars}
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </Form.Control>
-          </Form.Group>
+  Survey.StylesManager.applyTheme("winterstone");
 
-          <Form.Group as={Col} controlId="formGridElectric">
-            <Form.Label>Review</Form.Label>
-            <textarea
-              value={review}
-              onChange={e => setReview(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridElectric">
-            <Form.Label>Electric per Month</Form.Label>
-            <Form.Control
-              placeholder="25"
-              onChange={e => setElecBill(e.target.value)}
-              value={elecBill}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridGas">
-            <Form.Label>Gas per Month</Form.Label>
-            <Form.Control
-              placeholder="25"
-              onChange={e => setGasBill(e.target.value)}
-              value={gasBill}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridWater">
-            <Form.Label>Water per Month</Form.Label>
-            <Form.Control
-              placeholder="25"
-              onChange={e => setWaterBill(e.target.value)}
-              value={waterBill}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridRent">
-            <Form.Label>Rent</Form.Label>
-            <Form.Control
-              placeholder="875"
-              onChange={e => setRent(e.target.value)}
-              value={rent}
-            ></Form.Control>
-          </Form.Group>
-
-          <Button block disabled={!validateForm()} type="submit">
-            Submit
-          </Button>
-        </form>
-      </div>
-    );
+  function doOnCurrentPageChanged(survey) {
+    document
+      .getElementById('surveyComplete')
+      .style
+      .display = survey.result.status_of_form_completion_boolean ? "inline" : "none";
   }
 
-  return <div className="HouseReviewForm">{renderForm()}</div>;
+  let json = {
+    "showQuestionNumbers": "off",
+    "elements": [{
+      "type": "panel",
+      "name": "create-review",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "status_of_form_completion_boolean",
+          "title": "Would you like to create a review?",
+          "isRequired": true,
+          "labelTrue": "Yes",
+          "labelFalse": "No"
+        }, {
+          "type": "panel",
+          "name": "review-panel",
+          "visibleIf": "{status_of_form_completion_boolean} = true",
+          "title": "House Review:",
+          "hasOther": true,
+          "elements": [
+            {
+              "type": "rating",
+              "name": "rating",
+              "isRequired": true,
+              "ratingTheme": "fontawesome-stars",
+              "title": "Overall experience living in the House",
+              "choices": ["1", "2", "3", "4", "5"]
+            }, {
+              "type": "text",
+              "name": "rent",
+              "isRequired": true,
+              "title": "Rent per month",
+              "inputType": "number"
+            }, {
+              "type": "text",
+              "name": "electric",
+              "isRequired": true,
+              "title": "Electricity per month",
+              "inputType": "number"
+            }, {
+              "type": "text",
+              "name": "gas",
+              "isRequired": true,
+              "title": "Gas per month",
+              "inputType": "number"
+            }, {
+              "type": "text",
+              "name": "water",
+              "isRequired": true,
+              "title": "Water per month",
+              "inputType": "number"
+            }, {
+              "type": "comment",
+              "name": "review",
+              "title": "Review"
+            }
+          ],
+          "otherText": "Other, specific:"
+        }, {
+          "visibleIf": "{status_of_form_completion_boolean} = false",
+          "title": "Enjoy the website"
+        }
+      ],
+      "startWithNewLine": false,
+      "showNumber": false,
+      "showCompletedPage": false,
+      "showQuestionNumbers": "off"
+    }
+    ]
+  }
+
+  var survey = new Survey.Model(json);
+
+  survey.onComplete.add(function (result) {
+    console.log(result.data)
+    if (result.data.status_of_form_completion_boolean == true) {
+      setStars(result.data.rating)
+      setGasBill(result.data.gas)
+      setWaterBill(result.data.water)
+      setRent(result.data.rent)
+      setElecBill(result.data.electric)
+      setReview(result.data.review)
+      setReadyToSubmit(true)
+    }
+  });
+
+  useEffect(() => {
+    if (readyToSubmit) {
+      handleSubmit()
+    }
+  }, [readyToSubmit]);
+
+  return (
+    <div align="left">
+      <h1></h1>
+      <Survey.Survey model={survey} showCompletedPage={false} allowImagesPreview={true} />
+    </div>);
 };
 
 export default HouseReivewForm;
