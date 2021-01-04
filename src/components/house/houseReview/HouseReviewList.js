@@ -1,5 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { GiHouse, GiWaterDrop, GiElectric } from "react-icons/gi";
+import { BiGasPump } from "react-icons/bi";
+import { Rating } from "semantic-ui-react";
 
 const HouseReviewList = ({ houseReviews }) => {
   console.log(houseReviews);
@@ -10,13 +13,16 @@ const HouseReviewList = ({ houseReviews }) => {
     return <div></div>;
   }
   return (
-    <section className="reviewlist">
+    <>
+      <div className="review-header">
+        <h3>Review</h3>
+      </div>
       <div className="reviewlist-center">
         {houseReviews.map(item => {
           return <HouseReview key={item.housereviewid} houseReview={item} />;
         })}
       </div>
-    </section>
+    </>
   );
 };
 
@@ -33,18 +39,46 @@ const HouseReview = ({ houseReview }) => {
   } = houseReview;
 
   return (
-    <div className="house-review">
-      <h3>Review</h3>
-      <article className="review-info">
-        <p>Review: {review}</p>
-        <p>Stars: {stars} </p>
-        <p>Rent: {rent} </p>
-        <p>Electric Bill: {elecbill} </p>
-        <p>Gas Bill: {gasbill} </p>
-        <p>Water Bill: {waterbill} </p>
-        <p>Reviewer: {author}</p>
-        <p>Date: {createddate}</p>
-      </article>
+    <div className="review-box">
+      <div className="review-stat">
+        <h6>
+          {" "}
+          <GiHouse /> Rent: ${rent}</h6>
+        <h6>
+          {" "}
+          <GiElectric /> Electric: ${elecbill}
+        </h6>
+        <h6>
+          {" "}
+          <BiGasPump /> Gas: ${gasbill}
+        </h6>
+        <h6>
+          {" "}
+          <GiWaterDrop /> Water: ${waterbill}
+        </h6>
+        <Rating icon="star" defaultRating={stars} maxRating={5} disabled />
+      </div>
+      <div className="review-credentials">
+        <p>
+          {author} <br></br>
+          {createddate}
+        </p>
+      </div>
+      <div className="review-review">
+        <p>{review}</p> 
+      </div>
+      {/* <article className="review-info">
+        <p>
+          Reviewer: {author}
+          <br></br>
+          Date: {createddate}
+          <br></br>
+          Stars: {stars}
+          <br></br>
+          Review: {review} <br></br>
+        </p>
+      </article> */}
+      <br></br>
     </div>
   );
 };
