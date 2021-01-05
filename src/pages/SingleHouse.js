@@ -34,7 +34,6 @@ const SingleHouse = props => {
   const [houseAddress, setHouseAddress] = useState(slug.split("-").join(" "));
   const [reviews, setReviews] = useState([]);
   const [comments, setComments] = useState([]);
-  const [mainImageLink, setMainImageLink] = useState("");
   const [imageLinks, setImageLink] = useState([]);
   const [loadedData, setLoadedData] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -97,7 +96,6 @@ const SingleHouse = props => {
             console.log(data);
             let tempHouse = data[0];
             try {
-              setMainImageLink(imageLinkURL(tempHouse.mainphotokey));
               for (let key of tempHouse.photokeys) {
                 let original = imageLinkURL(key);
                 let thumbnail = imageLinkURL(key);
@@ -152,11 +150,39 @@ const SingleHouse = props => {
     setEdit(true);
   }
 
+  async function onThumbnailFailure(e) {
+    let baseLink = imageLinkURL("");
+    let imageLink = e.target.src;
+    let photoKey = imageLink.split(baseLink)[1];
+    photoKey = decodeURI(photoKey);
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        photoKey: photoKey
+      })
+    };
+    try {
+      await fetch(
+        "http://localhost:3002/houses/removePhotoKey/?houseAddress=" +
+          houseAddress,
+        requestOptions
+      )
+        .then(response => response.json())
+        .then(data => console.log(data));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       {loadedData ? (
         <>
-          <StyledHero img={mainImageLink}>
+          <StyledHero>
             <Banner title={`${house.houseaddress}`}>
               <Link to="/houses" className="btn-primary">
                 Back to Houses
@@ -170,6 +196,7 @@ const SingleHouse = props => {
                 showFullscreenButton={true}
                 showPlayButton={false}
                 showNav={true}
+                onThumbnailError={onThumbnailFailure}
               />
             </div>
             <UploadImages houseAddress={houseAddress} token={token} />

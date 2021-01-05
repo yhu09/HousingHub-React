@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import ImageUploader from "react-images-upload";
 import { uploadFile } from "../utility/s3-upload";
+import Loading from "../components/commonHeaders/Loading";
 
 const UploadImages = ({ token, houseAddress }) => {
-  const [pictures, setPictures] = useState([]);
+  const [pictures, setPictures] = useState(null);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   function updateSubmitStatus(pictureFiles) {
     if (pictureFiles.length === 0) {
@@ -22,6 +28,7 @@ const UploadImages = ({ token, houseAddress }) => {
   }
 
   async function uploadPhotos() {
+    setUploading(true);
     console.log(pictures);
     console.log("upload photo");
     let slug = houseAddress.split(" ").join("-");
@@ -30,7 +37,8 @@ const UploadImages = ({ token, houseAddress }) => {
     var photoKeys = [];
     var imagePathKey;
     for (var file of pictures) {
-      let key = uploadFile(path, file);
+      let key = await uploadFile(path, file);
+      console.log(key);
       imagePathKey = path + key;
       photoKeys.push(imagePathKey);
     }
@@ -57,27 +65,37 @@ const UploadImages = ({ token, houseAddress }) => {
     } catch (e) {
       console.error(e);
     }
+    setReadyToSubmit(false);
+    await sleep(5000);
     window.location.reload(false);
   }
 
   return (
     <div>
-      <ImageUploader
-        withIcon={false}
-        withPreview={true}
-        buttonText="Add more images"
-        onChange={onDrop}
-        imgExtension={[".webp", ".jpg", ".gif", ".png"]}
-        maxFileSize={5242880}
-      />
-      {readyToSubmit ? (
-        <button
-          style={{ position: "relative", left: "46%" }}
-          onClick={uploadPhotos}
-        >
-          Upload photos
-        </button>
-      ) : null}
+      {uploading ? (
+        <Loading />
+      ) : (
+        <div>
+          <ImageUploader
+            withIcon={false}
+            withPreview={true}
+            buttonText="Add more images"
+            onChange={onDrop}
+            imgExtension={[".webp", ".jpg", ".gif", ".png"]}
+            maxFileSize={5242880}
+          />
+          {readyToSubmit ? (
+            <button
+              style={{ position: "relative", left: "46%" }}
+              onClick={async () => {
+                await uploadPhotos();
+              }}
+            >
+              Upload photos
+            </button>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };

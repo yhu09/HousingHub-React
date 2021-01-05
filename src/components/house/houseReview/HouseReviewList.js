@@ -27,18 +27,18 @@ const HouseReviewList = ({ houseReviews }) => {
 };
 
 const calendar = {
-  "01" : "January",
-  "02" : "Feburary",
-  "03" : "March",
-  "04" : "April",
-  "05" : "May",
-  "06" : "June",
-  "07" : "July",
-  "08" : "August",
-  "09" : "September",
-  "10" : "October",
-  "11" : "November",
-  "12" : "December",
+  "01": "January",
+  "02": "Feburary",
+  "03": "March",
+  "04": "April",
+  "05": "May",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December"
 };
 
 const HouseReview = ({ houseReview }) => {
@@ -54,7 +54,7 @@ const HouseReview = ({ houseReview }) => {
     createddate
   } = houseReview;
 
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function formatDate() {
     let dateArr = createddate.split("-", 2);
     let year = dateArr[0];
@@ -72,7 +72,8 @@ const HouseReview = ({ houseReview }) => {
       <div className="review-stat">
         <h6>
           {" "}
-          <GiHouse /> Rent: ${rent}</h6>
+          <GiHouse /> Rent: ${rent}
+        </h6>
         <h6>
           {" "}
           <GiElectric /> Electric: ${elecbill}
@@ -94,7 +95,7 @@ const HouseReview = ({ houseReview }) => {
         </p>
       </div>
       <div className="review-review">
-        <p>{review}</p> 
+        <p>{review}</p>
       </div>
       {/* <article className="review-info">
         <p>

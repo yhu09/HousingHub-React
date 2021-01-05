@@ -30,19 +30,21 @@ export const uploadFile = (path, file) => {
     }
   });
   let name = data.body.name;
-
   return name;
 };
 
-export const getFile = key => {
+export const getFile = async key => {
   var getParams = {
     Bucket: BUCKET_NAME, // your bucket name,
     Key: key // path to the object you're looking for
   };
 
-  s3.getObject(getParams, function(err, data) {
+  s3.getObject(getParams, async function(err, data) {
     // Handle any error and exit
-    if (err) return err;
+    if (err) {
+      console.log(err);
+      return err;
+    }
     console.log("success");
     // No error happened
     // Convert Body from a Buffer to a String
