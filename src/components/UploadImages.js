@@ -29,8 +29,6 @@ const UploadImages = ({ token, houseAddress }) => {
 
   async function uploadPhotos() {
     setUploading(true);
-    console.log(pictures);
-    console.log("upload photo");
     let slug = houseAddress.split(" ").join("-");
     let path = slug + "/";
 
@@ -38,33 +36,10 @@ const UploadImages = ({ token, houseAddress }) => {
     var imagePathKey;
     for (var file of pictures) {
       let key = await uploadFile(path, file);
-      console.log(key);
       imagePathKey = path + key;
       photoKeys.push(imagePathKey);
     }
 
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        photoKeys: photoKeys
-      })
-    };
-    try {
-      await fetch(
-        "http://localhost:3002/houses/photos/?houseAddress=" + houseAddress,
-        requestOptions
-      )
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-        });
-    } catch (e) {
-      console.error(e);
-    }
     setReadyToSubmit(false);
     await sleep(5000);
     window.location.reload(false);
