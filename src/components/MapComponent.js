@@ -15,6 +15,8 @@ const center = {
   lng: -71.1183
 };
 
+const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
+
 const Map = () => {
   const [map, setMap] = React.useState(null);
   const context = useContext(HouseContext);
@@ -38,7 +40,7 @@ const Map = () => {
 
   return (
     <div>
-      <LoadScript googleMapsApiKey="AIzaSyBhzhYkTYAkiLPPcxRUxswZa7olOZYkz0c">
+      <LoadScript googleMapsApiKey={APIKey}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}

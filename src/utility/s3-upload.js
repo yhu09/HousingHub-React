@@ -1,11 +1,12 @@
 const fs = require("fs");
 const AWS = require("aws-sdk");
+require("dotenv").config();
 
-const ID = "AKIAJKBEUTABQOCPIGTQ";
-const SECRET = "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";
+const ID = process.env.REACT_APP_S3Id;
+const SECRET = process.env.REACT_APP_S3Secret;
 
 // The name of the bucket that you have created
-const BUCKET_NAME = "tufts-housing-hub";
+const BUCKET_NAME = process.env.REACT_APP_S3BucketName;
 
 const s3 = new AWS.S3({
   accessKeyId: ID,
@@ -33,25 +34,20 @@ export const uploadFile = (path, file) => {
   return name;
 };
 
-export const getFile = async key => {
+export async function listFilesInFolder(folder) {
   var getParams = {
     Bucket: BUCKET_NAME, // your bucket name,
-    Key: key // path to the object you're looking for
+    Delimiter: "",
+    Prefix: folder
   };
 
-  s3.getObject(getParams, async function(err, data) {
-    // Handle any error and exit
-    if (err) {
-      console.log(err);
-      return err;
-    }
-    console.log("success");
-    // No error happened
-    // Convert Body from a Buffer to a String
-    console.log(data);
-    let objectData = data.Body.toString("utf-8"); // Use the encoding necessary
-  });
-};
+  try {
+    var data = await s3.listObjects(getParams).promise();
+  } catch (error) {
+    throw error;
+  }
+  return data;
+}
 
 export const imageLinkURL = key => {
   return "https://" + BUCKET_NAME + ".s3.amazonaws.com/" + key;

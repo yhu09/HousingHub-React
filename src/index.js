@@ -8,6 +8,10 @@ import { HouseProvider } from "./context";
 import { Auth0Provider } from "@auth0/auth0-react";
 require("dotenv").config();
 
+if (process.env.NODE_ENV === "development") {
+  console.log("development");
+}
+
 ReactDOM.render(
   <Auth0Provider
     domain={process.env.REACT_APP_AuthDomain}

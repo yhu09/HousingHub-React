@@ -8,7 +8,11 @@ import { HouseContext } from "../context";
 import StyledHero from "../components/commonHeaders/StyledHero";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
-import { uploadFile, getFile, imageLinkURL } from "../utility/s3-upload";
+import {
+  uploadFile,
+  listFilesInFolder,
+  imageLinkURL
+} from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
 import { useAuth0 } from "@auth0/auth0-react";
 import UploadImages from "../components/UploadImages";
@@ -41,7 +45,6 @@ const SingleHouse = props => {
   const [averageGas, setAverageGas] = useState(null);
   const [averageWater, setAverageWater] = useState(null);
   const [house, setHouse] = useState();
-  const [files, setFiles] = useState([]);
 
   const fetchToken = useCallback(async () => {
     if (!isTokenSet()) {
@@ -92,17 +95,13 @@ const SingleHouse = props => {
           }
         )
           .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            let tempHouse = data[0];
-            try {
-              for (let key of tempHouse.photokeys) {
-                let original = imageLinkURL(key);
-                let thumbnail = imageLinkURL(key);
-                imageLinks.push({ original: original, thumbnail: thumbnail });
-              }
-            } catch (e) {
-              console.error(e);
+          .then(async data => {
+            let pictures = await listFilesInFolder(props.match.params.slug);
+            let imageContents = pictures.Contents;
+            console.log(imageContents);
+            for (let imageContent of imageContents) {
+              let source = imageLinkURL(imageContent.Key);
+              imageLinks.push({ original: source, thumbnail: source });
             }
             setHouse(data[0]);
           });
@@ -139,7 +138,7 @@ const SingleHouse = props => {
         console.error(e);
       }
     }
-  }, [imageLinks, isTokenSet, token, houseAddress]);
+  }, [imageLinks, isTokenSet, token, houseAddress, props]);
 
   useEffect(() => {
     fetchToken();
@@ -150,33 +149,33 @@ const SingleHouse = props => {
     setEdit(true);
   }
 
-  async function onThumbnailFailure(e) {
-    let baseLink = imageLinkURL("");
-    let imageLink = e.target.src;
-    let photoKey = imageLink.split(baseLink)[1];
-    photoKey = decodeURI(photoKey);
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        photoKey: photoKey
-      })
-    };
-    try {
-      await fetch(
-        "http://localhost:3002/houses/removePhotoKey/?houseAddress=" +
-          houseAddress,
-        requestOptions
-      )
-        .then(response => response.json())
-        .then(data => console.log(data));
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // async function onThumbnailFailure(e) {
+  //   let baseLink = imageLinkURL("");
+  //   let imageLink = e.target.src;
+  //   let photoKey = imageLink.split(baseLink)[1];
+  //   photoKey = decodeURI(photoKey);
+  //   const requestOptions = {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`
+  //     },
+  //     body: JSON.stringify({
+  //       photoKey: photoKey
+  //     })
+  //   };
+  //   try {
+  //     await fetch(
+  //       "http://localhost:3002/houses/removePhotoKey/?houseAddress=" +
+  //         houseAddress,
+  //       requestOptions
+  //     )
+  //       .then(response => response.json())
+  //       .then(data => console.log(data));
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   return (
     <div>
@@ -196,7 +195,7 @@ const SingleHouse = props => {
                 showFullscreenButton={true}
                 showPlayButton={false}
                 showNav={true}
-                onThumbnailError={onThumbnailFailure}
+                // onThumbnailError={onThumbnailFailure}
               />
             </div>
             <UploadImages houseAddress={houseAddress} token={token} />
