@@ -41,7 +41,7 @@ const UploadImages = ({ token, houseAddress }) => {
     }
 
     setReadyToSubmit(false);
-    await sleep(5000);
+    await sleep(60000);
     window.location.reload(false);
   }
 

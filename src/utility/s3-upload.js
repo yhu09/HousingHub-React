@@ -1,4 +1,3 @@
-const fs = require("fs");
 const AWS = require("aws-sdk");
 require("dotenv").config();
 
@@ -13,14 +12,28 @@ const s3 = new AWS.S3({
   secretAccessKey: SECRET
 });
 
+function makeid(length) {
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+const photoIDLength = 8;
 export const uploadFile = (path, file) => {
-  // Read content from the file
-  // const fileContent = fs.readFileSync(fileName);
+  // make photoId
+  let id = makeid(photoIDLength);
+  let fileType = file.name.split(".")[1];
+  let fileName = id + "." + fileType;
 
   // Setting up S3 upload parameters
   const params = {
     Bucket: BUCKET_NAME,
-    Key: path + file.name, // File name you want to save as in S3
+    Key: path + fileName, // File name you want to save as in S3
     Body: file
   };
 
