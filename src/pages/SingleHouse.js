@@ -291,11 +291,15 @@ const SingleHouse = props => {
             )}
           </section>
           <section className="services-center">
-            <HouseComments houseAddress={houseAddress} comments={comments} />
+            <HouseComments
+              houseAddress={houseAddress}
+              comments={comments}
+              token={token}
+            />
             <section>
               {" "}
               <HouseReviewList houseReviews={reviews} />
-              <HouseReviewForm houseAddress={houseAddress} />
+              <HouseReviewForm houseAddress={houseAddress} token={token} />
             </section>
           </section>
         </>

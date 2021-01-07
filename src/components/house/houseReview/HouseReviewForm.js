@@ -1,12 +1,11 @@
-import React, { Component, useState, useEffect} from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseReviewForm.css";
 import cookie from "react-cookies";
 import * as Survey from "survey-react";
 import "survey-react/survey.css";
 
-
-const HouseReivewForm = props => {
+const HouseReviewForm = ({ houseAddress, token }) => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [rent, setRent] = useState(0);
@@ -23,9 +22,12 @@ const HouseReivewForm = props => {
     let email = cookie.load("email");
     var requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({
-        house: props.houseAddress,
+        house: houseAddress,
         stars: stars,
         review: review,
         rent: rent,
@@ -52,109 +54,123 @@ const HouseReivewForm = props => {
   Survey.StylesManager.applyTheme("winterstone");
 
   function doOnCurrentPageChanged(survey) {
-    document
-      .getElementById('surveyComplete')
-      .style
-      .display = survey.result.status_of_form_completion_boolean ? "inline" : "none";
+    document.getElementById("surveyComplete").style.display = survey.result
+      .status_of_form_completion_boolean
+      ? "inline"
+      : "none";
   }
 
   let json = {
-    "showQuestionNumbers": "off",
-    "elements": [{
-      "type": "panel",
-      "name": "create-review",
-      "elements": [
-        {
-          "type": "boolean",
-          "name": "status_of_form_completion_boolean",
-          "title": "Would you like to create a review?",
-          "isRequired": true,
-          "labelTrue": "Yes",
-          "labelFalse": "No"
-        }, {
-          "type": "panel",
-          "name": "review-panel",
-          "visibleIf": "{status_of_form_completion_boolean} = true",
-          "title": "House Review:",
-          "hasOther": true,
-          "elements": [
-            {
-              "type": "rating",
-              "name": "rating",
-              "isRequired": true,
-              "ratingTheme": "fontawesome-stars",
-              "title": "Overall experience living in the House",
-              "choices": ["1", "2", "3", "4", "5"]
-            }, {
-              "type": "text",
-              "name": "rent",
-              "isRequired": true,
-              "title": "Rent per month",
-              "inputType": "number"
-            }, {
-              "type": "text",
-              "name": "electric",
-              "isRequired": true,
-              "title": "Electricity per month",
-              "inputType": "number"
-            }, {
-              "type": "text",
-              "name": "gas",
-              "isRequired": true,
-              "title": "Gas per month",
-              "inputType": "number"
-            }, {
-              "type": "text",
-              "name": "water",
-              "isRequired": true,
-              "title": "Water per month",
-              "inputType": "number"
-            }, {
-              "type": "comment",
-              "name": "review",
-              "title": "Review"
-            }
-          ],
-          "otherText": "Other, specific:"
-        }, {
-          "visibleIf": "{status_of_form_completion_boolean} = false",
-          "title": "Enjoy the website"
-        }
-      ],
-      "startWithNewLine": false,
-      "showNumber": false,
-      "showCompletedPage": false,
-      "showQuestionNumbers": "off"
-    }
+    showQuestionNumbers: "off",
+    elements: [
+      {
+        type: "panel",
+        name: "create-review",
+        elements: [
+          {
+            type: "boolean",
+            name: "status_of_form_completion_boolean",
+            title: "Would you like to create a review?",
+            isRequired: true,
+            labelTrue: "Yes",
+            labelFalse: "No"
+          },
+          {
+            type: "panel",
+            name: "review-panel",
+            visibleIf: "{status_of_form_completion_boolean} = true",
+            title: "House Review:",
+            hasOther: true,
+            elements: [
+              {
+                type: "rating",
+                name: "rating",
+                isRequired: true,
+                ratingTheme: "fontawesome-stars",
+                title: "Overall experience living in the House",
+                choices: ["1", "2", "3", "4", "5"]
+              },
+              {
+                type: "text",
+                name: "rent",
+                isRequired: true,
+                title: "Rent per month",
+                inputType: "number"
+              },
+              {
+                type: "text",
+                name: "electric",
+                isRequired: true,
+                title: "Electricity per month",
+                inputType: "number"
+              },
+              {
+                type: "text",
+                name: "gas",
+                isRequired: true,
+                title: "Gas per month",
+                inputType: "number"
+              },
+              {
+                type: "text",
+                name: "water",
+                isRequired: true,
+                title: "Water per month",
+                inputType: "number"
+              },
+              {
+                type: "comment",
+                name: "review",
+                title: "Review"
+              }
+            ],
+            otherText: "Other, specific:"
+          },
+          {
+            visibleIf: "{status_of_form_completion_boolean} = false",
+            title: "Enjoy the website"
+          }
+        ],
+        startWithNewLine: false,
+        showNumber: false,
+        showCompletedPage: false,
+        showQuestionNumbers: "off"
+      }
     ]
-  }
+  };
 
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function (result) {
-    console.log(result.data)
+  survey.onComplete.add(function(result) {
+    console.log(result.data);
     if (result.data.status_of_form_completion_boolean == true) {
-      setStars(result.data.rating)
-      setGasBill(result.data.gas)
-      setWaterBill(result.data.water)
-      setRent(result.data.rent)
-      setElecBill(result.data.electric)
-      setReview(result.data.review)
-      setReadyToSubmit(true)
+      setStars(result.data.rating);
+      setGasBill(result.data.gas);
+      setWaterBill(result.data.water);
+      setRent(result.data.rent);
+      setElecBill(result.data.electric);
+      setReview(result.data.review);
+      setReadyToSubmit(true);
     }
   });
 
   useEffect(() => {
     if (readyToSubmit) {
-      handleSubmit()
+      handleSubmit();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyToSubmit]);
 
   return (
     <div align="left">
       <h1></h1>
-      <Survey.Survey model={survey} showCompletedPage={false} allowImagesPreview={true} />
-    </div>);
+      <Survey.Survey
+        model={survey}
+        showCompletedPage={false}
+        allowImagesPreview={true}
+      />
+    </div>
+  );
 };
 
-export default HouseReivewForm;
+export default HouseReviewForm;

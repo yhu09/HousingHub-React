@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 
-const HouseComments = ({ houseAddress, comments }) => {
+const HouseComments = ({ houseAddress, comments, token }) => {
   console.log(comments);
   return (
     <HouseCommentsStructure
       houseAddress={houseAddress}
       comments={comments}
+      token={token}
     ></HouseCommentsStructure>
   );
 };
@@ -74,7 +75,7 @@ const Comments = ({ houseAddress, comments }) => {
   );
 };
 
-const HouseCommentsStructure = ({ houseAddress, comments }) => {
+const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
   const [inputComment, setInputComment] = useState("");
 
   async function handleParentComment(event) {
@@ -83,7 +84,10 @@ const HouseCommentsStructure = ({ houseAddress, comments }) => {
     let email = cookie.load("email");
     var requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({
         house: houseAddress,
         author: email,
