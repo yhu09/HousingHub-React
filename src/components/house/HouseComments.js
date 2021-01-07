@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
+import { Collapse } from "react-bootstrap";
 
 const HouseComments = ({ houseAddress, comments, token }) => {
   console.log(comments);
@@ -42,38 +43,62 @@ const Comments = ({ houseAddress, comments }) => {
     window.location.reload(true);
   }
 
-  function replyButton() {
-    return <Button onClick={nestedReply}>Reply</Button>;
-  }
+  // function replyButton() {
+  //   return <Button onClick={nestedReply}>Reply</Button>;
+  // }
 
-  function nestedReply() {
-    console.log("nestedREply");
-    return (
-      <Form reply onSubmit={handleChildComment}>
-        <Form.TextArea onChange={fillText} />
-        <Button content="Add Reply" labelPosition="left" icon="edit" primary />
-      </Form>
-    );
-  }
+  // function nestedReply() {
+  //   console.log("nestedREply");
+  //   return (
+  //     <Form reply onSubmit={handleChildComment}>
+  //       <Form.TextArea onChange={fillText} />
+  //       <Button content="Add Reply" labelPosition="left" icon="edit" primary />
+  //     </Form>
+  //   );
+  // }
 
   return (
     <div>
-      {comments.map((comment, index) => (
-        <Comment key={index}>
-          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">{comment.author}</Comment.Author>
-            <Comment.Metadata>{comment.createddate}</Comment.Metadata>
-            <Comment.Text>{comment.content}</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
-      ))}
+      {comments.map((comment, index) =>
+        <HouseComment comment={comment}
+          index={index}
+        ></HouseComment>)}
     </div>
   );
 };
+
+const HouseComment = ({ comment, index }) => {
+  const [collapsed, setCollapsed] = useState(true);
+  function handleCollapse() {
+    setCollapsed(!collapsed)
+  }
+
+  return (<div>
+    <Comment key={index}>
+      <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+      <Comment.Content>
+        <Comment.Author as="a">{comment.author}</Comment.Author>
+        <Comment.Metadata>{comment.createddate}</Comment.Metadata>
+        <Comment.Text>{comment.content}</Comment.Text>
+        <Comment.Actions>
+          <Comment.Action onClick={handleCollapse}>Reply</Comment.Action>
+          <Comment.Group collapsed={collapsed} >
+            <Form reply size='mini'>
+              <Form.TextArea />
+              <Button
+                content='Add Reply'
+                labelPosition='left'
+                icon='edit'
+                primary
+              />
+            </Form>
+          </Comment.Group>
+        </Comment.Actions>
+      </Comment.Content>
+    </Comment>
+  </div>);
+}
+
 
 const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
   const [inputComment, setInputComment] = useState("");
@@ -109,7 +134,7 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
 
   function renderForm() {
     return (
-      <Comment.Group threaded>
+      <Comment.Group threaded={false}>
         <Header as="h3" dividing>
           Comments
         </Header>
@@ -130,9 +155,6 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
   }
 
   return <div>{renderForm()}</div>;
-  // {
-  //   /* <div className="HouseReviewForm">{renderForm()}</div>; */
-  // }
 };
 
 export default HouseComments;
