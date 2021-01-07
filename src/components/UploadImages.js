@@ -3,7 +3,7 @@ import ImageUploader from "react-images-upload";
 import { uploadFile } from "../utility/s3-upload";
 import Loading from "../components/commonHeaders/Loading";
 
-const UploadImages = ({ token, houseAddress }) => {
+const UploadImages = ({ houseAddress }) => {
   const [pictures, setPictures] = useState(null);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [uploading, setUploading] = useState(false);

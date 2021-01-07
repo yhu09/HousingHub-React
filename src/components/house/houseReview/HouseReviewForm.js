@@ -14,10 +14,6 @@ const HouseReviewForm = ({ houseAddress, token }) => {
   const [waterBill, setWaterBill] = useState(0);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
 
-  function validateForm() {
-    return true;
-  }
-
   async function handleSubmit(event) {
     let email = cookie.load("email");
     var requestOptions = {
@@ -44,11 +40,6 @@ const HouseReviewForm = ({ houseAddress, token }) => {
 
     console.log("House Review Form submitted");
     setReadyToSubmit(false);
-    // window.location.reload(true);
-  }
-
-  function renderNewHouseStatus() {
-    return <div>Successful</div>;
   }
 
   Survey.StylesManager.applyTheme("winterstone");
@@ -163,7 +154,6 @@ const HouseReviewForm = ({ houseAddress, token }) => {
 
   return (
     <div align="left">
-      <h1></h1>
       <Survey.Survey
         model={survey}
         showCompletedPage={false}

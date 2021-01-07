@@ -31,8 +31,6 @@ const House = ({ house }) => {
 
   return (
     <div className="box">
-      {/* <div className="img-container"> */}
-      {/* <img src={imageLink || defaulIMG} alt="single room"></img> */}
       <div className="thumbnail">
         <ImageGallery
           items={imageLinks}
@@ -48,12 +46,6 @@ const House = ({ house }) => {
         <h6> ${rent}</h6>
         <p>per month</p>
       </div>
-      {/* <Link to={`/houses/${slug}`} className="btn-primary room-link">
-          {" "}
-          Features{" "}
-        </Link> */}
-      {/* </div> */}
-
       <div className="room-info">
         <div className="room-info-address">{houseaddress}</div>
         <div className="room-info-button">

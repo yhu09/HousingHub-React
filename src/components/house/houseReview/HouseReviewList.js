@@ -97,17 +97,6 @@ const HouseReview = ({ houseReview }) => {
       <div className="review-review">
         <p>{review}</p>
       </div>
-      {/* <article className="review-info">
-        <p>
-          Reviewer: {author}
-          <br></br>
-          Date: {createddate}
-          <br></br>
-          Stars: {stars}
-          <br></br>
-          Review: {review} <br></br>
-        </p>
-      </article> */}
       <br></br>
     </div>
   );

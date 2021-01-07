@@ -87,7 +87,7 @@ const SingleHouse = props => {
       try {
         await fetch(
           "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-          houseAddress,
+            houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -107,7 +107,7 @@ const SingleHouse = props => {
           });
         await fetch(
           "http://localhost:3002/houseReview/houseAddress/?houseAddress=" +
-          houseAddress,
+            houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -122,7 +122,7 @@ const SingleHouse = props => {
 
         await fetch(
           "http://localhost:3002/comments/houseAddress/?houseAddress=" +
-          houseAddress,
+            houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -207,9 +207,14 @@ const SingleHouse = props => {
               <h1>{`${house.houseaddress}`}</h1>
             </div>
             <div className="house-attribute-container">
-              <span className="house-attribute" > <BsFillStarFill/> 4.3 (5) </span>
-              <span className="house-attribute" aria-hidden="true">·</span>
-              <span className="house-attribute" > Close to Picantes </span>
+              <span className="house-attribute">
+                {" "}
+                <BsFillStarFill /> 4.3 (5){" "}
+              </span>
+              <span className="house-attribute" aria-hidden="true">
+                ·
+              </span>
+              <span className="house-attribute"> Close to Picantes </span>
             </div>
           </div>
           <section className="single-room">
@@ -219,10 +224,10 @@ const SingleHouse = props => {
                 showFullscreenButton={true}
                 showPlayButton={false}
                 showNav={true}
-              // onThumbnailError={onThumbnailFailure}
+                // onThumbnailError={onThumbnailFailure}
               />
             </div>
-            <UploadImages houseAddress={houseAddress} token={token} />
+            <UploadImages houseAddress={houseAddress} />
             {edit ? (
               <SingleHouseEdit
                 house={house}
@@ -232,87 +237,87 @@ const SingleHouse = props => {
                 averageWater={averageWater}
               />
             ) : (
-                <>
-                  {" "}
-                  <div className="single-room-info">
-                    <article className="desc">
-                      <h3>Full Address</h3>
-                      <p>
+              <>
+                {" "}
+                <div className="single-room-info">
+                  <article className="desc">
+                    <h3>Full Address</h3>
+                    <p>
+                      {" "}
+                      {house.houseaddress}, {house.city}, {house.statename}{" "}
+                      {house.zip}{" "}
+                    </p>
+                    <h3>Contact Info</h3>
+                    <p> Landlord Email: {house.landlordemail} </p>
+                    <p> Residents Emails: {house.currresidentsemail} </p>
+                  </article>
+                  <div>
+                    <h3>Basic Info</h3>
+                    <div className="info">
+                      <h6>
                         {" "}
-                        {house.houseaddress}, {house.city}, {house.statename}{" "}
-                        {house.zip}{" "}
-                      </p>
-                      <h3>Contact Info</h3>
-                      <p> Landlord Email: {house.landlordemail} </p>
-                      <p> Residents Emails: {house.currresidentsemail} </p>
-                    </article>
-                    <div>
-                      <h3>Basic Info</h3>
-                      <div className="info">
-                        <h6>
-                          {" "}
-                          <GiHouse /> Rent: ${house.rent}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <GiElectric /> Electric: ${averageElectric}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiGasPump /> Gas: ${averageGas}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <GiWaterDrop /> Water: ${averageWater}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBed /> Bedrooms: {house.bedrooms}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBath /> Bathrooms: {house.bathrooms}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <GiStairs /> Basement:{" "}
-                          {house.basement ? <FaCheck /> : <FaTimes />}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <MdLocalLaundryService /> Laundry:{" "}
-                          {house.laundry ? <FaCheck /> : <FaTimes />}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <MdLocalParking /> Parking:{" "}
-                          {house.parking ? <FaCheck /> : <FaTimes />}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <FaUmbrellaBeach /> Porch:{" "}
-                          {house.porch ? <FaCheck /> : <FaTimes />}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <GiGrass /> Yard:{" "}
-                          {house.yard ? <FaCheck /> : <FaTimes />}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BsArrowsExpand /> Floor: {house.unit}
-                        </h6>
-                      </div>
+                        <GiHouse /> Rent: ${house.rent}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <GiElectric /> Electric: ${averageElectric}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiGasPump /> Gas: ${averageGas}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <GiWaterDrop /> Water: ${averageWater}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBed /> Bedrooms: {house.bedrooms}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBath /> Bathrooms: {house.bathrooms}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <GiStairs /> Basement:{" "}
+                        {house.basement ? <FaCheck /> : <FaTimes />}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <MdLocalLaundryService /> Laundry:{" "}
+                        {house.laundry ? <FaCheck /> : <FaTimes />}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <MdLocalParking /> Parking:{" "}
+                        {house.parking ? <FaCheck /> : <FaTimes />}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <FaUmbrellaBeach /> Porch:{" "}
+                        {house.porch ? <FaCheck /> : <FaTimes />}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <GiGrass /> Yard:{" "}
+                        {house.yard ? <FaCheck /> : <FaTimes />}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BsArrowsExpand /> Floor: {house.unit}
+                      </h6>
                     </div>
-                    <div>
-                      <Button onClick={onEdit} className="room-info-button">
-                        Edit House Info
-                    </Button>{" "}
-                    </div>
-                    <br></br>
                   </div>
-                </>
-              )}
+                  <div>
+                    <Button onClick={onEdit} className="room-info-button">
+                      Edit House Info
+                    </Button>{" "}
+                  </div>
+                  <br></br>
+                </div>
+              </>
+            )}
           </section>
           <section className="services-center">
             <HouseComments
@@ -383,7 +388,7 @@ const SingleHouseEdit = ({
     try {
       await fetch(
         "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-        houseAddress,
+          houseAddress,
         requestOptions
       )
         .then(response => response.json())

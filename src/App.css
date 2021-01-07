@@ -427,7 +427,8 @@ h6 {
 /* single room*/
 
 .single-room {
-  padding: 5rem 0 0 0;
+  position: relative;
+  top: -65px;
 }
 .single-room-images {
   width: 80vw;
@@ -642,14 +643,14 @@ div.info {
 }
 
 .house-title {
-    max-width: 1170px;
-    margin: 0 auto;
-    display: block;
-    border-bottom: solid #77c7f5;
+  max-width: 1170px;
+  margin: 0 auto;
+  display: block;
+  /* border-bottom: solid #77c7f5; */
 }
 
 .house-attribute {
-    padding-right: 5px;
+  padding-right: 5px;
 }
 
 /* end of rooms fitler*/
