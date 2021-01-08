@@ -4,6 +4,7 @@ import "./HouseReviewForm.css";
 import cookie from "react-cookies";
 import * as Survey from "survey-react";
 import "survey-react/survey.css";
+import { APIBASE } from "../../../utility/api-base";
 
 const HouseReviewForm = ({ houseAddress, token }) => {
   const [stars, setStars] = useState(0);
@@ -34,7 +35,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
       })
     };
     console.log(requestOptions);
-    await fetch("http://localhost:3002/houseReview", requestOptions)
+    await fetch(APIBASE + "houseReview", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 

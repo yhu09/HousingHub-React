@@ -8,16 +8,17 @@ import { HouseProvider } from "./context";
 import { Auth0Provider } from "@auth0/auth0-react";
 require("dotenv").config();
 
-if (process.env.NODE_ENV === "development") {
-  console.log("development");
-}
+const audience =
+  process.env.REACT_APP_STAGE === "production"
+    ? process.env.REACT_APP_AuthAudienceProduction
+    : process.env.REACT_APP_AuthAudienceLocal;
 
 ReactDOM.render(
   <Auth0Provider
     domain={process.env.REACT_APP_AuthDomain}
     clientId={process.env.REACT_APP_AuthClientId}
     redirectUri={window.location.origin}
-    audience={process.env.REACT_APP_AuthAudience}
+    audience={audience}
     scope={process.env.REACT_APP_Scope}
   >
     <HouseProvider>

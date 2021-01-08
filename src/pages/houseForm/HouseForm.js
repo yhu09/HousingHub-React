@@ -6,6 +6,7 @@ import { uploadFile, getFile } from "../../utility/s3-upload";
 import * as Survey from "survey-react";
 import $ from "jquery";
 import "survey-react/survey.css";
+import { APIBASE } from "../../utility/api-base";
 
 export const HouseForm = () => {
   const [landlordEmail, setLandlordEmail] = useState("");
@@ -64,7 +65,7 @@ export const HouseForm = () => {
     };
     console.log("request options: " + requestOptions.body);
 
-    await fetch("http://localhost:3002/houses", requestOptions)
+    await fetch(APIBASE + "houses", requestOptions)
       .then(response => response.json())
       .then(data => {
         if (data.status === "success") {

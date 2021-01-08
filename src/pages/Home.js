@@ -6,6 +6,7 @@ import Services from "../components/commonHeaders/Services";
 import FeaturedHouses from "../components/house/FeaturedHouses";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HouseContext } from "../context";
+import { APIBASE } from "../utility/api-base";
 
 export const Home = () => {
   const context = useContext(HouseContext);
@@ -17,7 +18,7 @@ export const Home = () => {
       try {
         if (isAuthenticated) {
           let tempToken = await getAccessTokenSilently({
-            audience: "http://localhost:3002/"
+            audience: APIBASE
           });
           setToken(tempToken);
         }
@@ -29,7 +30,8 @@ export const Home = () => {
 
   const fetchHouses = useCallback(async () => {
     try {
-      await fetch("http://localhost:3002/houses", {
+      console.log(token);
+      await fetch(APIBASE + "houses", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -44,8 +46,11 @@ export const Home = () => {
   }, [setHouses, token]);
 
   useEffect(() => {
-    fetchToken();
-    fetchHouses();
+    async function fetchData() {
+      await fetchToken();
+      await fetchHouses();
+    }
+    fetchData();
   }, [fetchToken, fetchHouses]);
 
   return (

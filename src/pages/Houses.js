@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import HousesContainer from "../container/HousesContainer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HouseContext } from "../context";
+import { APIBASE } from "../utility/api-base";
 
 export const Houses = () => {
   const context = useContext(HouseContext);
@@ -16,7 +17,7 @@ export const Houses = () => {
       try {
         if (isAuthenticated) {
           let tempToken = await getAccessTokenSilently({
-            audience: "http://localhost:3002/"
+            audience: APIBASE
           });
           setToken(tempToken);
         }
@@ -28,7 +29,7 @@ export const Houses = () => {
 
   const fetchHouses = useCallback(async () => {
     try {
-      await fetch("http://localhost:3002/houses", {
+      await fetch(APIBASE + "houses", {
         headers: {
           Authorization: `Bearer ${token}`
         }

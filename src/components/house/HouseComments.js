@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 import { Collapse } from "react-bootstrap";
+import { APIBASE } from "../../utility/api-base";
 
 const HouseComments = ({ houseAddress, comments, token }) => {
   console.log(comments);
@@ -34,7 +35,7 @@ const Comments = ({ houseAddress, comments }) => {
         content: inputComment
       })
     };
-    await fetch("http://localhost:3002/comment", requestOptions)
+    await fetch(APIBASE + "comment", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 
@@ -59,10 +60,9 @@ const Comments = ({ houseAddress, comments }) => {
 
   return (
     <div>
-      {comments.map((comment, index) =>
-        <HouseComment comment={comment}
-          index={index}
-        ></HouseComment>)}
+      {comments.map((comment, index) => (
+        <HouseComment comment={comment} index={index}></HouseComment>
+      ))}
     </div>
   );
 };
@@ -70,35 +70,36 @@ const Comments = ({ houseAddress, comments }) => {
 const HouseComment = ({ comment, index }) => {
   const [collapsed, setCollapsed] = useState(true);
   function handleCollapse() {
-    setCollapsed(!collapsed)
+    setCollapsed(!collapsed);
   }
 
-  return (<div>
-    <Comment key={index}>
-      <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-      <Comment.Content>
-        <Comment.Author as="a">{comment.author}</Comment.Author>
-        <Comment.Metadata>{comment.createddate}</Comment.Metadata>
-        <Comment.Text>{comment.content}</Comment.Text>
-        <Comment.Actions>
-          <Comment.Action onClick={handleCollapse}>Reply</Comment.Action>
-          <Comment.Group collapsed={collapsed} >
-            <Form reply size='mini'>
-              <Form.TextArea />
-              <Button
-                content='Add Reply'
-                labelPosition='left'
-                icon='edit'
-                primary
-              />
-            </Form>
-          </Comment.Group>
-        </Comment.Actions>
-      </Comment.Content>
-    </Comment>
-  </div>);
-}
-
+  return (
+    <div>
+      <Comment key={index}>
+        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        <Comment.Content>
+          <Comment.Author as="a">{comment.author}</Comment.Author>
+          <Comment.Metadata>{comment.createddate}</Comment.Metadata>
+          <Comment.Text>{comment.content}</Comment.Text>
+          <Comment.Actions>
+            <Comment.Action onClick={handleCollapse}>Reply</Comment.Action>
+            <Comment.Group collapsed={collapsed}>
+              <Form reply size="mini">
+                <Form.TextArea />
+                <Button
+                  content="Add Reply"
+                  labelPosition="left"
+                  icon="edit"
+                  primary
+                />
+              </Form>
+            </Comment.Group>
+          </Comment.Actions>
+        </Comment.Content>
+      </Comment>
+    </div>
+  );
+};
 
 const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
   const [inputComment, setInputComment] = useState("");
@@ -119,7 +120,7 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
         content: inputComment
       })
     };
-    await fetch("http://localhost:3002/comment", requestOptions)
+    await fetch(APIBASE + "comment", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 

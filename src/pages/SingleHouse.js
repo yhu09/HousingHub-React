@@ -28,6 +28,7 @@ import {
   GiElectric
 } from "react-icons/gi";
 import { Button } from "react-bootstrap";
+import { APIBASE } from "../utility/api-base";
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
@@ -51,7 +52,7 @@ const SingleHouse = props => {
       try {
         if (isAuthenticated) {
           let tempToken = await getAccessTokenSilently({
-            audience: "http://localhost:3002/"
+            audience: APIBASE
           });
           setToken(tempToken);
         }
@@ -86,8 +87,7 @@ const SingleHouse = props => {
     if (isTokenSet()) {
       try {
         await fetch(
-          "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-            houseAddress,
+          APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -106,8 +106,7 @@ const SingleHouse = props => {
             setHouse(data[0]);
           });
         await fetch(
-          "http://localhost:3002/houseReview/houseAddress/?houseAddress=" +
-            houseAddress,
+          APIBASE + "houseReview/houseAddress/?houseAddress=" + houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -121,8 +120,7 @@ const SingleHouse = props => {
           });
 
         await fetch(
-          "http://localhost:3002/comments/houseAddress/?houseAddress=" +
-            houseAddress,
+          APIBASE + "comments/houseAddress/?houseAddress=" + houseAddress,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -387,8 +385,7 @@ const SingleHouseEdit = ({
     };
     try {
       await fetch(
-        "http://localhost:3002/houses/houseAddress/?houseAddress=" +
-          houseAddress,
+        APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress,
         requestOptions
       )
         .then(response => response.json())
