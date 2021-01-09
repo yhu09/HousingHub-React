@@ -98,10 +98,14 @@ const SingleHouse = props => {
           .then(async data => {
             let pictures = await listFilesInFolder(props.match.params.slug);
             let imageContents = pictures.Contents;
-            console.log(imageContents);
-            for (let imageContent of imageContents) {
-              let source = imageLinkURL(imageContent.Key);
-              imageLinks.push({ original: source, thumbnail: source });
+            if (imageContents.length === 0) {
+              let defaultImg = imageLinkURL("default.jpg");
+              imageLinks.push({ original: defaultImg, thumbnail: defaultImg });
+            } else {
+              for (let imageContent of imageContents) {
+                let source = imageLinkURL(imageContent.Key);
+                imageLinks.push({ original: source, thumbnail: source });
+              }
             }
             setHouse(data[0]);
           });

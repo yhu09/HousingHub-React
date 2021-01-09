@@ -41,7 +41,7 @@ const UploadImages = ({ houseAddress }) => {
     }
 
     setReadyToSubmit(false);
-    await sleep(60000);
+    await sleep(6000);
     window.location.reload(false);
   }
 
@@ -50,7 +50,7 @@ const UploadImages = ({ houseAddress }) => {
       {uploading ? (
         <Loading />
       ) : (
-        <div>
+        <div className="image-uploader">
           <ImageUploader
             withIcon={false}
             withPreview={true}

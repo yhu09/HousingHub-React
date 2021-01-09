@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import defaulIMG from "../../images/house-2.png";
 import PropTypes from "prop-types";
-import { imageLinkURL } from "../../utility/s3-upload";
+import { listFilesInFolder, imageLinkURL } from "../../utility/s3-upload";
 import ImageGallery from "react-image-gallery";
 import StarRatings from "react-star-ratings";
 
@@ -20,14 +20,34 @@ const House = ({ house }) => {
     bathrooms
   } = house;
   let imageLink = imageLinkURL(mainphotokey);
-  if (!loaded) {
-    for (let key of photokeys) {
-      let original = imageLinkURL(key);
-      let thumbnail = imageLinkURL(key);
-      imageLinks.push({ original: original, thumbnail: thumbnail });
+  
+  useEffect(() => {
+    async function loadPictures() {
+      if (!loaded) {
+        // for (let key of photokeys) {
+        //   let original = imageLinkURL(key);
+        //   let thumbnail = imageLinkURL(key);
+        //   imageLinks.push({ original: original, thumbnail: thumbnail });
+        // }
+        let pictures = await listFilesInFolder(slug);
+        let imageContents = pictures.Contents;
+        if (imageContents.length === 0) {
+          let defaultImg = imageLinkURL("default.jpg");
+          imageLinks.push({ original: defaultImg, thumbnail: defaultImg });
+        } else {
+          for (let imageContent of imageContents) {
+            let source = imageLinkURL(imageContent.Key);
+            imageLinks.push({ original: source, thumbnail: source });
+          }
+        }
+        setLoaded(true);
+      }
     }
-    setLoaded(true);
-  }
+
+    loadPictures();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <div className="box">
