@@ -7,6 +7,8 @@ import * as Survey from "survey-react";
 import $ from "jquery";
 import "survey-react/survey.css";
 import { APIBASE } from "../../utility/api-base";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 export const HouseForm = () => {
   const [landlordEmail, setLandlordEmail] = useState("");
@@ -30,6 +32,7 @@ export const HouseForm = () => {
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth0();
 
   var temporaryFilesStorage = {};
 
@@ -74,6 +77,8 @@ export const HouseForm = () => {
       });
     console.log("House form submitted");
     setReadyToSubmit(false);
+    var url = "http://localhost:3000/houses/" + slug;
+    window.location.replace(url);
   }
 
   function fileSelectedHandler(e) {
@@ -306,7 +311,7 @@ export const HouseForm = () => {
   };
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function(result) {
+  survey.onComplete.add(function (result) {
     console.log(result.data);
     setHouseAddress(result.data.house_address);
     setLandlordEmail(result.data.email);
@@ -340,7 +345,7 @@ export const HouseForm = () => {
     }
   }, [readyToSubmit]);
 
-  survey.onUploadFiles.add(function(survey, options) {
+  survey.onUploadFiles.add(function (survey, options) {
     // Add files to the temporary storage
     if (temporaryFilesStorage[options.name] !== undefined) {
       temporaryFilesStorage[options.name].concat(options.files);
@@ -351,9 +356,9 @@ export const HouseForm = () => {
     // Load previews in base64. Until survey not completed files are loaded temporary as base64 in order to get previews
     var question = survey.getQuestionByName(options.name);
     var content = [];
-    options.files.forEach(function(file) {
+    options.files.forEach(function (file) {
       let fileReader = new FileReader();
-      fileReader.onload = function(e) {
+      fileReader.onload = function (e) {
         content = content.concat([
           {
             name: file.name,
@@ -366,7 +371,7 @@ export const HouseForm = () => {
           //question.value = (question.value || []).concat(content);
           options.callback(
             "success",
-            content.map(function(fileContent) {
+            content.map(function (fileContent) {
               return { file: fileContent.file, content: fileContent.content };
             })
           );
@@ -377,15 +382,26 @@ export const HouseForm = () => {
     console.log("in func" + temporaryFilesStorage);
   });
 
-  return (
-    <div align="left">
-      <h1></h1>
-      <h1></h1>
-      <Survey.Survey
-        model={survey}
-        showCompletedPage={true}
-        allowImagesPreview={true}
-      />
-    </div>
-  );
+  if (isAuthenticated) {
+    return (
+      <div align="left">
+        <h1></h1>
+        <h1></h1>
+        <Survey.Survey
+          model={survey}
+          showCompletedPage={true}
+          allowImagesPreview={true}
+        />
+      </div>
+    );
+  } else {
+    return (
+      < div >
+        <br></br>
+        <br></br>
+        <br></br>
+        <h1>Please log in to access create house</h1>;
+      </div >);
+  }
+
 };

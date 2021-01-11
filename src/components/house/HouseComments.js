@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
-import { Collapse } from "react-bootstrap";
 import { APIBASE } from "../../utility/api-base";
 
 const HouseComments = ({ houseAddress, comments, token }) => {
@@ -61,7 +60,7 @@ const Comments = ({ houseAddress, comments }) => {
   return (
     <div>
       {comments.map((comment, index) => (
-        <HouseComment comment={comment} index={index}></HouseComment>
+        <HouseComment comment={comment} index={index} key={index}></HouseComment>
       ))}
     </div>
   );

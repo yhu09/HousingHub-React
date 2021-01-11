@@ -151,59 +151,10 @@ const SingleHouse = props => {
     setEdit(true);
   }
 
-  // async function onThumbnailFailure(e) {
-  //   let baseLink = imageLinkURL("");
-  //   let imageLink = e.target.src;
-  //   let photoKey = imageLink.split(baseLink)[1];
-  //   photoKey = decodeURI(photoKey);
-  //   const requestOptions = {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`
-  //     },
-  //     body: JSON.stringify({
-  //       photoKey: photoKey
-  //     })
-  //   };
-  //   try {
-  //     await fetch(
-  //       "http://localhost:3002/houses/removePhotoKey/?houseAddress=" +
-  //         houseAddress,
-  //       requestOptions
-  //     )
-  //       .then(response => response.json())
-  //       .then(data => console.log(data));
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
-
-  // br > < /br> <
-  // br > < /br> <
-  // br > < /br> <
-  // br > < /br> <
-  // div className = "house-title" >
-  // <
-  // div className = "house-address" >
-  // <
-  // h1 > { `${house.houseaddress}` } < /h1> <
-  // /div> <
-  // div className = "house-attribute-container" >
-  // <
-  // span className = "house-attribute" > 5 stars out of 17 review < /span> <
-  // span className = "house-attribute" > close to Picantes < /span> <
-  // /div> <
-  // /div> <
-
   return (
     <div>
       {loadedData ? (
         <>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
           <div className="house-title">
             <div className="house-address">
               <h1>{`${house.houseaddress}`}</h1>
