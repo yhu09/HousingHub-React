@@ -6,8 +6,9 @@ import { HouseContext } from "../context";
 require("dotenv").config();
 
 const containerStyle = {
-  width: "500px",
-  height: "300px"
+  position: "fixed",
+  width: "100%",
+  height: "100vh"
 };
 
 const center = {

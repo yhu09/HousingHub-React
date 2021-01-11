@@ -3,8 +3,10 @@ import { useContext } from "react";
 import { HouseContext } from "../../context";
 import Title from "../commonHeaders/Title";
 import SearchBar from "material-ui-search-bar";
+import { ToggleButton } from "@material-ui/lab";
+import { FaMapMarkedAlt } from "react-icons/fa";
 
-const HousesFilter = ({ houses }) => {
+const HousesFilter = ({ houses, viewMap, setViewMap }) => {
   const context = useContext(HouseContext);
   const {
     handleChange,
@@ -37,8 +39,8 @@ const HousesFilter = ({ houses }) => {
   });
 
   useEffect(() => {
-    handleSearchInput(searchValue)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    handleSearchInput(searchValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   return (
@@ -47,10 +49,9 @@ const HousesFilter = ({ houses }) => {
       <div className="filter-form">
         <SearchBar
           value={searchValue}
-          onChange={(newValue) => {
+          onChange={newValue => {
             setSearchValue(newValue);
-          }
-          }
+          }}
           onRequestSearch={() => handleSearchInput(searchValue)}
         />
       </div>
@@ -69,32 +70,74 @@ const HousesFilter = ({ houses }) => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="rent">
-            rent ${rent}
-          </label>
-          <input type="range" name="rent" id="rent" value={rent} min={minRent} max={maxRent} onChange={handleChange}
-            className="form-control"></input>
+          <label htmlFor="rent">rent ${rent}</label>
+          <input
+            type="range"
+            name="rent"
+            id="rent"
+            value={rent}
+            min={minRent}
+            max={maxRent}
+            onChange={handleChange}
+            className="form-control"
+          ></input>
         </div>
         <div className="form-group">
           <label htmlFor="bedroom">bedroom rage</label>
           <div className="size-input">
-            <input type="number" name="minSize" id="bedroom" value={minSize} onChange={handleChange} className="size-input"></input>
-            <input type="number" name="maxSize" id="bedroom" value={maxSize} onChange={handleChange} className="size-input"></input>
+            <input
+              type="number"
+              name="minSize"
+              id="bedroom"
+              value={minSize}
+              onChange={handleChange}
+              className="size-input"
+            ></input>
+            <input
+              type="number"
+              name="maxSize"
+              id="bedroom"
+              value={maxSize}
+              onChange={handleChange}
+              className="size-input"
+            ></input>
           </div>
         </div>
         <div className="form-group">
           <div className="single-extra">
-            <input type="checkbox" name="laundry" id="laundry" checked={laundry} onChange={handleChange} />
+            <input
+              type="checkbox"
+              name="laundry"
+              id="laundry"
+              checked={laundry}
+              onChange={handleChange}
+            />
             <label htmlFor="laundry">laundry</label>
           </div>
           <div className="single-extra">
-            <input type="checkbox" name="porch" id="porch" checked={porch} onChange={handleChange} />
+            <input
+              type="checkbox"
+              name="porch"
+              id="porch"
+              checked={porch}
+              onChange={handleChange}
+            />
             <label htmlFor="porch">porch</label>
           </div>
         </div>
+        <ToggleButton
+          className="map-toggle-button"
+          value="check"
+          selected={viewMap}
+          onChange={() => {
+            setViewMap(!viewMap);
+          }}
+        >
+          <FaMapMarkedAlt />
+        </ToggleButton>
       </form>
     </section>
   );
-}
+};
 
-export default HousesFilter
+export default HousesFilter;

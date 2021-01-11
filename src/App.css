@@ -587,7 +587,7 @@ h6 {
 /* end of roomlist */
 /*  rooms fitler*/
 .filter-container {
-  padding: 5rem 0;
+  padding: 5rem 0 0 0;
 }
 .filter-form {
   width: 60vw;
@@ -654,3 +654,18 @@ div.info {
 }
 
 /* end of rooms fitler*/
+
+.houses-map-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.houses-list-list {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.houses-list-map {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  z-index: 5;
+}
