@@ -13,22 +13,15 @@ const House = ({ house }) => {
   const {
     houseaddress,
     slug,
-    mainphotokey,
     photokeys,
     rent,
     bedrooms,
     bathrooms
   } = house;
-  let imageLink = imageLinkURL(mainphotokey);
   
   useEffect(() => {
     async function loadPictures() {
       if (!loaded) {
-        // for (let key of photokeys) {
-        //   let original = imageLinkURL(key);
-        //   let thumbnail = imageLinkURL(key);
-        //   imageLinks.push({ original: original, thumbnail: thumbnail });
-        // }
         let pictures = await listFilesInFolder(slug);
         let imageContents = pictures.Contents;
         if (imageContents.length === 0) {
@@ -98,7 +91,6 @@ House.propTypes = {
   house: PropTypes.shape({
     houseaddress: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
-    mainphotokey: PropTypes.string.isRequired,
     rent: PropTypes.number.isRequired
   })
 };

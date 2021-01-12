@@ -43,20 +43,6 @@ const Comments = ({ houseAddress, comments }) => {
     window.location.reload(true);
   }
 
-  // function replyButton() {
-  //   return <Button onClick={nestedReply}>Reply</Button>;
-  // }
-
-  // function nestedReply() {
-  //   console.log("nestedREply");
-  //   return (
-  //     <Form reply onSubmit={handleChildComment}>
-  //       <Form.TextArea onChange={fillText} />
-  //       <Button content="Add Reply" labelPosition="left" icon="edit" primary />
-  //     </Form>
-  //   );
-  // }
-
   return (
     <div>
       {comments.map((comment, index) => (

@@ -5,8 +5,6 @@ import MapComponent from "../components/MapComponent";
 import { withHouseConsumer } from "../context";
 import Loading from "../components/commonHeaders/Loading";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ToggleButton } from "@material-ui/lab";
-import { FaMapMarkedAlt } from "react-icons/fa";
 
 function HousesContainer({ context }) {
   const { loading, sortedHouses, houses } = context;

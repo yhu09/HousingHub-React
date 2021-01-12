@@ -54,7 +54,6 @@ export const Home = () => {
   }, [fetchToken, fetchHouses]);
 
   return (
-    //React Fragment
     <>
       <Hero hero="defaultHero">
         <Banner title="Nice House!" subtitle="It will cost you $10 a month">
