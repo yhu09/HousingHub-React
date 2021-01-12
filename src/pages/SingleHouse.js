@@ -29,6 +29,7 @@ import {
 } from "react-icons/gi";
 import { Button } from "react-bootstrap";
 import { APIBASE } from "../utility/api-base";
+import noimage from "../images/noimage.jpg";
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
@@ -99,8 +100,7 @@ const SingleHouse = props => {
             let pictures = await listFilesInFolder(props.match.params.slug);
             let imageContents = pictures.Contents;
             if (imageContents.length === 0) {
-              let defaultImg = imageLinkURL("default.jpg");
-              imageLinks.push({ original: defaultImg, thumbnail: defaultImg });
+              imageLinks.push({ original: noimage, thumbnail: noimage });
             } else {
               for (let imageContent of imageContents) {
                 let source = imageLinkURL(imageContent.Key);
@@ -333,9 +333,7 @@ const SingleHouseEdit = ({
         parking: parking,
         porch: porch,
         bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        mainPhotoKey: null,
-        photoKeys: null
+        bathrooms: bathrooms
       })
     };
     try {

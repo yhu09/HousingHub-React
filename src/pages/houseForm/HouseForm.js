@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
@@ -8,9 +8,13 @@ import $ from "jquery";
 import "survey-react/survey.css";
 import { APIBASE } from "../../utility/api-base";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { HouseContext } from "../../context";
 
 export const HouseForm = () => {
+  const context = useContext(HouseContext);
+  const { token, isTokenSet, setToken, getHouse } = context;
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
   const [landlordEmail, setLandlordEmail] = useState("");
   const [houseAddress, setHouseAddress] = useState("");
   const [state, setState] = useState("");
@@ -32,9 +36,23 @@ export const HouseForm = () => {
   const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated } = useAuth0();
 
   var temporaryFilesStorage = {};
+
+  const fetchToken = useCallback(async () => {
+    if (!isTokenSet()) {
+      try {
+        if (isAuthenticated) {
+          let tempToken = await getAccessTokenSilently({
+            audience: APIBASE
+          });
+          setToken(tempToken);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
   async function handleSubmit() {
     let slug = houseAddress.split(" ").join("-");
@@ -46,7 +64,10 @@ export const HouseForm = () => {
 
     var requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({
         landlordEmail: landlordEmail,
         houseAddress: houseAddress,
@@ -61,9 +82,7 @@ export const HouseForm = () => {
         parking: parking,
         porch: porch,
         bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        mainPhotoKey: "",
-        photoKeys: []
+        bathrooms: bathrooms
       })
     };
     console.log("request options: " + requestOptions.body);
@@ -311,7 +330,7 @@ export const HouseForm = () => {
   };
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function (result) {
+  survey.onComplete.add(function(result) {
     console.log(result.data);
     setHouseAddress(result.data.house_address);
     setLandlordEmail(result.data.email);
@@ -339,13 +358,13 @@ export const HouseForm = () => {
   });
 
   useEffect(() => {
+    fetchToken();
     if (readyToSubmit) {
-      console.log(houseAddress);
       handleSubmit();
     }
-  }, [readyToSubmit]);
+  }, [fetchToken, readyToSubmit]);
 
-  survey.onUploadFiles.add(function (survey, options) {
+  survey.onUploadFiles.add(function(survey, options) {
     // Add files to the temporary storage
     if (temporaryFilesStorage[options.name] !== undefined) {
       temporaryFilesStorage[options.name].concat(options.files);
@@ -356,9 +375,9 @@ export const HouseForm = () => {
     // Load previews in base64. Until survey not completed files are loaded temporary as base64 in order to get previews
     var question = survey.getQuestionByName(options.name);
     var content = [];
-    options.files.forEach(function (file) {
+    options.files.forEach(function(file) {
       let fileReader = new FileReader();
-      fileReader.onload = function (e) {
+      fileReader.onload = function(e) {
         content = content.concat([
           {
             name: file.name,
@@ -371,7 +390,7 @@ export const HouseForm = () => {
           //question.value = (question.value || []).concat(content);
           options.callback(
             "success",
-            content.map(function (fileContent) {
+            content.map(function(fileContent) {
               return { file: fileContent.file, content: fileContent.content };
             })
           );
@@ -396,12 +415,12 @@ export const HouseForm = () => {
     );
   } else {
     return (
-      < div >
+      <div>
         <br></br>
         <br></br>
         <br></br>
         <h1>Please log in to access create house</h1>;
-      </div >);
+      </div>
+    );
   }
-
 };

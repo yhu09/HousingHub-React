@@ -150,7 +150,6 @@ const HouseReviewForm = ({ houseAddress, token }) => {
     if (readyToSubmit) {
       handleSubmit();
     }
-    
   }, [readyToSubmit]);
 
   return (
