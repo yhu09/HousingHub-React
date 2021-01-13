@@ -9,26 +9,21 @@ import StarRatings from "react-star-ratings";
 const House = ({ house }) => {
   const [imageLinks, setImageLink] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [numReviews, setNumReviews] = useState(0);
+  const [stars, setStars] = useState();
 
   const {
     houseaddress,
     slug,
-    mainphotokey,
-    photokeys,
     rent,
     bedrooms,
-    bathrooms
+    bathrooms,
+    reviewRatings
   } = house;
-  let imageLink = imageLinkURL(mainphotokey);
-  
+
   useEffect(() => {
     async function loadPictures() {
       if (!loaded) {
-        // for (let key of photokeys) {
-        //   let original = imageLinkURL(key);
-        //   let thumbnail = imageLinkURL(key);
-        //   imageLinks.push({ original: original, thumbnail: thumbnail });
-        // }
         let pictures = await listFilesInFolder(slug);
         let imageContents = pictures.Contents;
         if (imageContents.length === 0) {
@@ -44,10 +39,21 @@ const House = ({ house }) => {
       }
     }
 
-    loadPictures();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    function calculateAverageRating() {
+      let numberOfReviews = reviewRatings.length;
+      setNumReviews(numberOfReviews);
+      let sum = 0;
+      for (var i in numberOfReviews) {
+        sum = sum + reviewRatings[i];
+      }
+      let average = sum / numberOfReviews;
+      setStars(average);
+    }
 
+    loadPictures();
+    calculateAverageRating();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="box">
@@ -77,7 +83,7 @@ const House = ({ house }) => {
         <div className="room-info-rating">
           <StarRatings
             numberOfStars={5}
-            rating={2}
+            rating={stars}
             starDimension="15px"
             starSpacing="1px"
             starRatedColor="blue"

@@ -39,6 +39,21 @@ const HouseReviewForm = ({ houseAddress, token }) => {
       .then(response => response.json())
       .then(data => console.log(data));
 
+    requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        reviewRating: stars
+      })
+    };
+    console.log(requestOptions);
+    await fetch(APIBASE + "houses/addReviewRating", requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
     console.log("House Review Form submitted");
     setReadyToSubmit(false);
   }
