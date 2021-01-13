@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "../../images/newLogo.png";
+import logo from "../../images/newLogo.svg";
 import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import LoginButton from "../auth0/LoginButton";

@@ -88,7 +88,7 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
             <input
               type="number"
               name="minSize"
-              id="bedroom"
+              id="bedroom-min"
               value={minSize}
               onChange={handleChange}
               className="size-input"
@@ -96,7 +96,7 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
             <input
               type="number"
               name="maxSize"
-              id="bedroom"
+              id="bedroom-max"
               value={maxSize}
               onChange={handleChange}
               className="size-input"

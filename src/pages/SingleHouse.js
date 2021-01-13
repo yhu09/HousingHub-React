@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import ImageGallery from "react-image-gallery";
-import defaultBcg from "../images/house-8.jpeg";
-import Hero from "../components/commonHeaders/Hero";
-import Banner from "../components/commonHeaders/Banner";
-import { Link } from "react-router-dom";
 import { HouseContext } from "../context";
-import StyledHero from "../components/commonHeaders/StyledHero";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
 import {
-  uploadFile,
   listFilesInFolder,
   imageLinkURL
 } from "../utility/s3-upload";
@@ -35,7 +29,6 @@ const SingleHouse = props => {
   const context = useContext(HouseContext);
   const { token, isTokenSet, setToken, getHouse } = context;
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
   const [slug, setSlug] = useState(props.match.params.slug);
   const [houseAddress, setHouseAddress] = useState(slug.split("-").join(" "));
   const [reviews, setReviews] = useState([]);
@@ -177,7 +170,6 @@ const SingleHouse = props => {
                 showFullscreenButton={true}
                 showPlayButton={false}
                 showNav={true}
-                // onThumbnailError={onThumbnailFailure}
               />
             </div>
             <UploadImages houseAddress={houseAddress} />

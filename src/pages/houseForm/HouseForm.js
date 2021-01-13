@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import { Col, Row, Form, Button } from "react-bootstrap";
 import "./HouseForm.css";
-import { uploadFile, getFile } from "../../utility/s3-upload";
+import { uploadFile } from "../../utility/s3-upload";
 import * as Survey from "survey-react";
-import $ from "jquery";
 import "survey-react/survey.css";
 import { APIBASE } from "../../utility/api-base";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -30,12 +27,8 @@ export const HouseForm = () => {
   const [bathrooms, setBathrooms] = useState(1);
   const [rent, setRent] = useState(875);
   const [files, setFiles] = useState([]);
-  const [mainPhotoFile, setMainPhotoFile] = useState([]);
-  // const [photoKeys, setPhotoKeys] = useState([]);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
-  const history = useHistory();
   const [newHouse, setNewHouse] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   var temporaryFilesStorage = {};
 
@@ -98,18 +91,6 @@ export const HouseForm = () => {
     setReadyToSubmit(false);
     var url = "http://localhost:3000/houses/" + slug;
     window.location.replace(url);
-  }
-
-  function fileSelectedHandler(e) {
-    setFiles([...files, ...e.target.files]);
-  }
-
-  function frontPhotoSelectedHandler(e) {
-    setMainPhotoFile([...e.target.files]);
-  }
-
-  function renderNewHouseStatus() {
-    return <div>Successful</div>;
   }
 
   Survey.StylesManager.applyTheme("winterstone");

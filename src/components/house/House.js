@@ -20,7 +20,6 @@ const House = ({ house }) => {
     bathrooms,
     reviewRatings
   } = house;
-
   useEffect(() => {
     async function loadPictures() {
       if (!loaded) {
@@ -104,7 +103,6 @@ House.propTypes = {
   house: PropTypes.shape({
     houseaddress: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
-    mainphotokey: PropTypes.string.isRequired,
     rent: PropTypes.number.isRequired
   })
 };

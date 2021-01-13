@@ -60,13 +60,6 @@ const HouseReviewForm = ({ houseAddress, token }) => {
 
   Survey.StylesManager.applyTheme("winterstone");
 
-  function doOnCurrentPageChanged(survey) {
-    document.getElementById("surveyComplete").style.display = survey.result
-      .status_of_form_completion_boolean
-      ? "inline"
-      : "none";
-  }
-
   let json = {
     showQuestionNumbers: "off",
     elements: [
