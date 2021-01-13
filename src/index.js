@@ -13,6 +13,8 @@ const audience =
     ? process.env.REACT_APP_AuthAudienceProduction
     : process.env.REACT_APP_AuthAudienceLocal;
 
+console.log(audience);
+
 ReactDOM.render(
   <Auth0Provider
     domain={process.env.REACT_APP_AuthDomain}

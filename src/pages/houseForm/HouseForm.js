@@ -89,7 +89,8 @@ export const HouseForm = () => {
       });
     console.log("House form submitted");
     setReadyToSubmit(false);
-    var url = "http://localhost:3000/houses/" + slug;
+    var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
+    // var url = "http://localhost:3000/houses/" + slug;
     window.location.replace(url);
   }
 

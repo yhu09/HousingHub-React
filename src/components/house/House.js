@@ -50,7 +50,7 @@ const House = ({ house }) => {
     }
 
     loadPictures();
-    calculateAverageRating();
+    // calculateAverageRating();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
