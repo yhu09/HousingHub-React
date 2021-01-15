@@ -31,7 +31,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
         elecBill: elecBill,
         gasBill: gasBill,
         waterBill: waterBill,
-        author: email
+        author: ""
       })
     };
     console.log(requestOptions);
@@ -40,7 +40,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
       .then(data => console.log(data));
 
     requestOptions = {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`

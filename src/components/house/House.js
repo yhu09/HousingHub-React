@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { listFilesInFolder, imageLinkURL } from "../../utility/s3-upload";
 import ImageGallery from "react-image-gallery";
 import StarRatings from "react-star-ratings";
+import noimage from "../../images/noimage.jpg";
 
 const House = ({ house }) => {
   const [imageLinks, setImageLink] = useState([]);
@@ -26,8 +27,7 @@ const House = ({ house }) => {
         let pictures = await listFilesInFolder(slug);
         let imageContents = pictures.Contents;
         if (imageContents.length === 0) {
-          let defaultImg = imageLinkURL("default.jpg");
-          imageLinks.push({ original: defaultImg, thumbnail: defaultImg });
+          imageLinks.push({ original: noimage, thumbnail: noimage });
         } else {
           for (let imageContent of imageContents) {
             let source = imageLinkURL(imageContent.Key);
@@ -39,18 +39,23 @@ const House = ({ house }) => {
     }
 
     function calculateAverageRating() {
-      let numberOfReviews = reviewRatings.length;
+      console.log(reviewRatings);
+      let numberOfReviews = reviewRatings ? reviewRatings.length : 0;
       setNumReviews(numberOfReviews);
-      let sum = 0;
-      for (var i in numberOfReviews) {
-        sum = sum + reviewRatings[i];
+      if (numberOfReviews === 0) {
+        setStars(0);
+      } else {
+        let sum = 0;
+        for (var i in numberOfReviews) {
+          sum = sum + reviewRatings[i];
+        }
+        let average = sum / numberOfReviews;
+        setStars(average);
       }
-      let average = sum / numberOfReviews;
-      setStars(average);
     }
 
     loadPictures();
-    // calculateAverageRating();
+    calculateAverageRating();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,7 +91,8 @@ const House = ({ house }) => {
             starDimension="15px"
             starSpacing="1px"
             starRatedColor="blue"
-          />
+          />{" "}
+          ({numReviews})
         </div>
         <div className="room-info-info">
           Bedrooms: {bedrooms}
