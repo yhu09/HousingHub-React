@@ -75,7 +75,8 @@ export const HouseForm = () => {
         parking: parking,
         porch: porch,
         bedrooms: bedrooms,
-        bathrooms: bathrooms
+        bathrooms: bathrooms,
+        reviewRatings: []
       })
     };
     console.log("request options: " + requestOptions.body);

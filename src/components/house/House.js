@@ -19,7 +19,7 @@ const House = ({ house }) => {
     rent,
     bedrooms,
     bathrooms,
-    reviewRatings
+    reviewratings
   } = house;
   useEffect(() => {
     async function loadPictures() {
@@ -39,15 +39,14 @@ const House = ({ house }) => {
     }
 
     function calculateAverageRating() {
-      console.log(reviewRatings);
-      let numberOfReviews = reviewRatings ? reviewRatings.length : 0;
+      let numberOfReviews = reviewratings ? reviewratings.length : 0;
       setNumReviews(numberOfReviews);
       if (numberOfReviews === 0) {
         setStars(0);
       } else {
         let sum = 0;
-        for (var i in numberOfReviews) {
-          sum = sum + reviewRatings[i];
+        for (var i = 0; i < numberOfReviews; i++) {
+          sum = sum + reviewratings[i];
         }
         let average = sum / numberOfReviews;
         setStars(average);
@@ -84,16 +83,18 @@ const House = ({ house }) => {
             Link{" "}
           </Link>
         </div>
-        <div className="room-info-rating">
-          <StarRatings
-            numberOfStars={5}
-            rating={stars}
-            starDimension="15px"
-            starSpacing="1px"
-            starRatedColor="blue"
-          />{" "}
-          ({numReviews})
-        </div>
+        {stars !== undefined ? (
+          <div className="room-info-rating">
+            <StarRatings
+              numberOfStars={5}
+              rating={stars}
+              starDimension="15px"
+              starSpacing="1px"
+              starRatedColor="blue"
+            />{" "}
+            ({numReviews})
+          </div>
+        ) : null}
         <div className="room-info-info">
           Bedrooms: {bedrooms}
           <br></br>

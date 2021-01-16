@@ -643,9 +643,11 @@ div.info {
 }
 
 .house-title {
+  position: relative;
   max-width: 1170px;
   margin: 0 auto;
   display: block;
+  top: 15vh;
   /* border-bottom: solid #77c7f5; */
 }
 

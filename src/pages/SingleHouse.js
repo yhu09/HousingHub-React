@@ -3,10 +3,7 @@ import ImageGallery from "react-image-gallery";
 import { HouseContext } from "../context";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
-import {
-  listFilesInFolder,
-  imageLinkURL
-} from "../utility/s3-upload";
+import { listFilesInFolder, imageLinkURL } from "../utility/s3-upload";
 import HouseComments from "../components/house/HouseComments";
 import { useAuth0 } from "@auth0/auth0-react";
 import UploadImages from "../components/UploadImages";
@@ -40,6 +37,7 @@ const SingleHouse = props => {
   const [averageGas, setAverageGas] = useState(null);
   const [averageWater, setAverageWater] = useState(null);
   const [house, setHouse] = useState();
+  const [averageStars, setAverageStars] = useState();
 
   const fetchToken = useCallback(async () => {
     if (!isTokenSet()) {
@@ -61,20 +59,24 @@ const SingleHouse = props => {
       var sumElectric = 0;
       var sumGas = 0;
       var sumWater = 0;
+      var sumStars = 0;
       var reviewCount = reviewsData.length;
       for (var review of reviewsData) {
         sumElectric += review.elecbill;
         sumGas += review.gasbill;
         sumWater += review.waterbill;
+        sumStars += review.stars;
       }
       if (reviewCount !== 0) {
         setAverageElectric(sumElectric / reviewCount);
         setAverageGas(sumGas / reviewCount);
         setAverageWater(sumWater / reviewCount);
+        setAverageStars(sumStars / reviewCount);
       } else {
         setAverageElectric("No reviews");
         setAverageGas("No reviews");
         setAverageWater("No reviews");
+        setAverageStars("No reviews");
       }
     }
 
@@ -155,7 +157,9 @@ const SingleHouse = props => {
             <div className="house-attribute-container">
               <span className="house-attribute">
                 {" "}
-                <BsFillStarFill /> 4.3 (5){" "}
+                <BsFillStarFill /> {averageStars} {"("}
+                {reviews.length}
+                {")"}
               </span>
               <span className="house-attribute" aria-hidden="true">
                 ·

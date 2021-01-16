@@ -50,7 +50,10 @@ const HouseReviewForm = ({ houseAddress, token }) => {
       })
     };
     console.log(requestOptions);
-    await fetch(APIBASE + "houses/addReviewRating", requestOptions)
+    await fetch(
+      APIBASE + "houses/addReviewRating?houseAddress=" + houseAddress,
+      requestOptions
+    )
       .then(response => response.json())
       .then(data => console.log(data));
 
