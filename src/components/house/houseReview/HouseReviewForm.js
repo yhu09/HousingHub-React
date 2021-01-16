@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { Col, Row, Form, Button } from "react-bootstrap";
+import { useAuth0 } from "@auth0/auth0-react";
 import "./HouseReviewForm.css";
 import cookie from "react-cookies";
 import * as Survey from "survey-react";
@@ -14,9 +14,13 @@ const HouseReviewForm = ({ houseAddress, token }) => {
   const [gasBill, setGasBill] = useState(0);
   const [waterBill, setWaterBill] = useState(0);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const { user } = useAuth0();
+
 
   async function handleSubmit(event) {
-    let email = cookie.load("email");
+    // let email = cookie.load("email");
+    let author = user.given_name + " " +user.family_name;
+
     var requestOptions = {
       method: "POST",
       headers: {
@@ -31,7 +35,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
         elecBill: elecBill,
         gasBill: gasBill,
         waterBill: waterBill,
-        author: ""
+        author: author
       })
     };
     console.log(requestOptions);
@@ -49,6 +53,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
         reviewRating: stars
       })
     };
+    console.log(author);
     console.log(requestOptions);
     await fetch(
       APIBASE + "houses/addReviewRating?houseAddress=" + houseAddress,

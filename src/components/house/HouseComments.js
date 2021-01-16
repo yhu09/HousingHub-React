@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 import { APIBASE } from "../../utility/api-base";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const HouseComments = ({ houseAddress, comments, token }) => {
   console.log(comments);
@@ -15,6 +16,7 @@ const HouseComments = ({ houseAddress, comments, token }) => {
 };
 
 const Comments = ({ houseAddress, comments }) => {
+  const { user } = useAuth0();
   const [inputComment, setInputComment] = useState("");
 
   function fillText(event) {
@@ -88,11 +90,13 @@ const HouseComment = ({ comment, index }) => {
 
 const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
   const [inputComment, setInputComment] = useState("");
+  const { user } = useAuth0();
 
   async function handleParentComment(event) {
     event.preventDefault();
 
-    let email = cookie.load("email");
+    let author = user.given_name + " " + user.family_name;
+
     var requestOptions = {
       method: "POST",
       headers: {
@@ -101,17 +105,20 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
       },
       body: JSON.stringify({
         house: houseAddress,
-        author: email,
+        author: author,
         content: inputComment
       })
     };
-    await fetch(APIBASE + "comment", requestOptions)
-      .then(response => response.json())
-      .then(data => console.log(data));
+    if (inputComment != "") {
+      console.log(inputComment);
+      await fetch(APIBASE + "comment", requestOptions)
+        .then(response => response.json())
+        .then(data => console.log(data));
 
-    console.log("Comment submitted");
+      console.log("Comment submitted");
 
-    window.location.reload(true);
+      window.location.reload(true);
+    }
   }
 
   function fillText(event) {
