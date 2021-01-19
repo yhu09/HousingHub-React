@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HousesFilter from "../components/house/HousesFilter";
 import HousesList from "../components/house/HousesList";
+import MapHousesList from "../components/house/MapHousesList";
 import MapComponent from "../components/MapComponent";
 import { withHouseConsumer } from "../context";
 import Loading from "../components/commonHeaders/Loading";
@@ -26,7 +27,7 @@ function HousesContainer({ context }) {
         {viewMap ? (
           <div className="houses-map-container">
             <div className="houses-list-list">
-              <HousesList houses={sortedHouses} />
+              <MapHousesList houses={sortedHouses} />
             </div>
             <div className="houses-list-map">
               <MapComponent />
