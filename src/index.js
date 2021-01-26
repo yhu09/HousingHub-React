@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { HouseProvider } from "./context";
+import { SubletProvider } from "./subletContext";
 import { Auth0Provider } from "@auth0/auth0-react";
 require("dotenv").config();
 
@@ -23,11 +24,13 @@ ReactDOM.render(
     audience={audience}
     scope={process.env.REACT_APP_Scope}
   >
-    <HouseProvider>
-      <Router>
-        <App />
-      </Router>
-    </HouseProvider>
+    <SubletProvider>
+      <HouseProvider>
+        <Router>
+          <App />
+        </Router>
+      </HouseProvider>
+    </SubletProvider>
   </Auth0Provider>,
   document.getElementById("root")
 );

@@ -11,16 +11,17 @@
 }
 
 .box {
-  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  /* box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
     0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-    0 100px 80px rgba(0, 0, 0, 0.12);
+    0 100px 80px rgba(0, 0, 0, 0.12); */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   min-height: 300px;
   width: 100%;
   /* margin: 100px auto; */
   background: white;
-  border-radius: 2px;
+  border-radius: 10px;
   position: relative;
 }
 
@@ -81,6 +82,7 @@ h6 {
 
 .btn-primary {
   display: inline-block;
+  border-radius: 25px;
   text-decoration: none;
   letter-spacing: var(--mainSpacing);
   color: var(--mainBlack);
@@ -121,7 +123,7 @@ h6 {
   width: 100%;
   padding: 0.75rem 2rem;
   background: var(--offWhite);
-  z-index: 6;
+  z-index: 15;
 }
 .nav-header {
   display: flex;
@@ -423,6 +425,56 @@ h6 {
   display: table-cell;
 }
 
+.sublet-info-address {
+  text-align: left;
+  width: 100%;
+  padding-left: 2%;
+  padding-top: 3%;
+  font-size: 18px;
+  letter-spacing: var(--mainSpacing);
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.sublet-info {
+  background: var(--White);
+  display: grid;
+  text-transform: capitalize;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  grid-template-columns: 45% 25% 30%;
+  grid-template-rows: 32% 68%;
+  white-space: nowrap;
+}
+.sublet-info-info {
+  /* bottom: 0; */
+  /* float: left; */
+  /* top: 6%;
+  left: 0px; */
+  /* position: relative; */
+  padding-left: 3%;
+  padding-top: 5px;
+  font-size: 12px;
+  color: var(--mainBlack);
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.sublet-info-button {
+  padding-right: 10px;
+}
+.sublet-dates {
+  padding-right: 10px;
+  padding-top: 5px;
+  font-size: 12px;
+  color: var(--mainBlack);
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
 /* end of room  */
 /* single room*/
 

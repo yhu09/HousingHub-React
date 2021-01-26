@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const FeaturedHouses = () => {
   const context = useContext(HouseContext);
-  let { loading, houses } = context;
+  let { loadingHouses, houses } = context;
   const { isAuthenticated } = useAuth0();
 
   houses = houses.map((house, index) => {
@@ -19,7 +19,7 @@ const FeaturedHouses = () => {
       <section className="featured-rooms">
         <Title title="featured" />
         <div className="featured-rooms-center">
-          {loading ? <Loading /> : houses}
+          {loadingHouses ? <Loading /> : houses}
         </div>
       </section>
     );

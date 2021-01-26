@@ -7,7 +7,7 @@ class HouseProvider extends Component {
     houses: [],
     sortedHouses: [],
     featuredHouses: [],
-    loading: true,
+    loadingHouses: true,
     bedrooms: 1,
     rent: 0,
     token: "",
@@ -93,7 +93,7 @@ class HouseProvider extends Component {
       maxSize: Math.max(...houses.map(item => item.bedrooms)),
       rent: Math.max(...houses.map(item => item.rent)),
       laundry: false,
-      loading: false
+      loadingHouses: false
     });
   };
 
@@ -118,8 +118,7 @@ class HouseProvider extends Component {
     this.setState({
       sortedHouses: tempHouses
     });
-
-  }
+  };
 
   handleChange = event => {
     const target = event.target;
@@ -156,14 +155,16 @@ class HouseProvider extends Component {
       temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);
     }
 
-    temphouses = temphouses.filter(house => house.bedrooms >= minSize && house.bedrooms <= maxSize)
+    temphouses = temphouses.filter(
+      house => house.bedrooms >= minSize && house.bedrooms <= maxSize
+    );
 
     if (laundry) {
-      temphouses = temphouses.filter(house => house.laundry === true)
+      temphouses = temphouses.filter(house => house.laundry === true);
     }
 
     if (porch) {
-      temphouses = temphouses.filter(house => house.porch === true)
+      temphouses = temphouses.filter(house => house.porch === true);
     }
 
     this.setState({

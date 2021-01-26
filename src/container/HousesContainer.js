@@ -8,13 +8,13 @@ import Loading from "../components/commonHeaders/Loading";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function HousesContainer({ context }) {
-  const { loading, sortedHouses, houses } = context;
+  const { loadingHouses, sortedHouses, houses } = context;
   const { isAuthenticated } = useAuth0();
 
   const [viewMap, setViewMap] = useState(false);
 
   if (isAuthenticated) {
-    if (loading) {
+    if (loadingHouses) {
       return <Loading />;
     }
     return (

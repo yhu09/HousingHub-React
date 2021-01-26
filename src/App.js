@@ -6,9 +6,11 @@ import { Houses } from "./pages/Houses";
 import { Error } from "./pages/Error";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/commonHeaders/Navbar";
-import { Subletter } from "./pages/Subletter"
+import { Subletter } from "./pages/Subletter";
+import { SubletForm } from "./pages/subletForm/SubletForm";
 import { HouseForm } from "./pages/houseForm/HouseForm";
 import SingleHouse from "./pages/SingleHouse";
+import SingleSubletter from "./pages/SingleSubletter";
 import "semantic-ui-css/semantic.min.css";
 import VerifyEmail from "./pages/VerifyEmail";
 
@@ -22,9 +24,11 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/houseform/" component={HouseForm} />
+          <Route exact path="/subletform/" component={SubletForm} />
           <Route exact path="/houses/" component={Houses} />
           <Route exact path="/houses/:slug" component={SingleHouse} />
           <Route exact path="/sublet" component={Subletter} />
+          <Route exact path="/sublet/:slug" component={SingleSubletter} />
           <Route exact path="/verification" component={VerifyEmail} />
           <Route component={Error} />
         </Switch>

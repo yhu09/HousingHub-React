@@ -10,7 +10,11 @@ import UploadImages from "../components/UploadImages";
 import { BiBed, BiBath, BiGasPump } from "react-icons/bi";
 import { MdLocalLaundryService, MdLocalParking } from "react-icons/md";
 import { FaUmbrellaBeach, FaCheck, FaTimes } from "react-icons/fa";
-import { BsArrowsExpand, BsFillStarFill } from "react-icons/bs";
+import {
+  BsArrowsExpand,
+  BsFillStarFill,
+  BsFillPeopleFill
+} from "react-icons/bs";
 import {
   GiHouse,
   GiGrass,
@@ -176,7 +180,7 @@ const SingleHouse = props => {
                 showNav={true}
               />
             </div>
-            <UploadImages houseAddress={houseAddress} />
+            <UploadImages houseAddress={houseAddress} type={"house"} />
             {edit ? (
               <SingleHouseEdit
                 house={house}
@@ -199,6 +203,8 @@ const SingleHouse = props => {
                     <h3>Contact Info</h3>
                     <p> Landlord Email: {house.landlordemail} </p>
                     <p> Residents Emails: {house.currresidentsemail} </p>
+                    <h3>Description</h3>
+                    <p></p>
                   </article>
                   <div>
                     <h3>Basic Info</h3>
@@ -226,6 +232,11 @@ const SingleHouse = props => {
                       <h6>
                         {" "}
                         <BiBath /> Bathrooms: {house.bathrooms}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BsFillPeopleFill /> Connected with house:<br></br>
+                        {"355 Boston Ave"}
                       </h6>
                       <h6>
                         {" "}
