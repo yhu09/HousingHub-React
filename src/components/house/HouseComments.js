@@ -43,32 +43,33 @@ const HouseComments = ({ houseAddress, comments, token }) => {
 const Comments = ({ comments }) => {
 
   return (
-    <div>
+    <Comment>
       {comments.map((comment, index) => (
         <HouseComment comment={comment} index={index} key={index}></HouseComment>
       ))}
-    </div>
+    </Comment>
   );
 };
 
 const ChildComment = ({ childComments }) => {
 
   return (
-    <div>{childComments.map((comment, index) => (
-      <Comment key={index}>
-        {console.log(comment)}
-        <Comment.Content>
-          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-          <Comment.Author >{comment.author}</Comment.Author>
-          <Comment.Metadata>
-            <span>{formatDate(comment.createddate)}</span>
-          </Comment.Metadata>
-          <Comment.Text>
-            <p>{comment.content}</p>
-          </Comment.Text>
-        </Comment.Content>
-      </Comment>))}
-    </div>)
+    <Comment.Group>
+      {
+        childComments.map((comment, index) => (
+          <Comment>
+            <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+            <Comment.Content>
+              <Comment.Author as='b'>{comment.author}</Comment.Author>
+              <Comment.Metadata> {formatDate(comment.createddate)} </Comment.Metadata>
+              <Comment.Text>{comment.content}</Comment.Text>
+            </Comment.Content>
+          </Comment>
+        ))
+      }
+    </Comment.Group>
+
+  )
 }
 
 const HouseComment = ({ comment, index }) => {
@@ -145,57 +146,57 @@ const HouseComment = ({ comment, index }) => {
 
   if (childComments.length !== 0) {
     return (
-        <Comment key={index}>
-          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">{comment.author}</Comment.Author>
-            <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
-            <Comment.Text>{comment.content}</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
-              <Comment.Action onClick={handleChildCommentCollapse}> {childCommentsCollapsed ? "Show Reply" + "(" + (childComments.length) + ")" : "Hide Reply" + "(" + (childComments.length) + ")"} </Comment.Action>
-              <Comment.Group collapsed={childCommentsCollapsed}>
-                <ChildComment childComments={childComments}></ChildComment>
-              </Comment.Group>
-              <Comment.Group collapsed={replyCollapsed}>
-                <Form reply onSubmit={handleChildComment}>
-                  <Form.TextArea onChange={fillText} />
-                  <Button
-                    content="Add Reply"
-                    labelPosition="left"
-                    icon="edit"
-                    primary
-                  />
-                </Form>
-              </Comment.Group>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+      <Comment key={index}>
+        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        <Comment.Content>
+          <Comment.Author as="a">{comment.author}</Comment.Author>
+          <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
+          <Comment.Text>{comment.content}</Comment.Text>
+          <Comment.Actions>
+            <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
+            <Comment.Action onClick={handleChildCommentCollapse}> {childCommentsCollapsed ? "Show Reply" + " (" + (childComments.length) + ") " : "Hide Reply" + "(" + (childComments.length) + ")"} </Comment.Action>
+            <Comment.Group collapsed={childCommentsCollapsed}>
+              <ChildComment childComments={childComments}></ChildComment>
+            </Comment.Group>
+            <Comment.Group collapsed={replyCollapsed}>
+              <Form reply onSubmit={handleChildComment}>
+                <Form.TextArea onChange={fillText} />
+                <Button
+                  content="Add Reply"
+                  labelPosition="left"
+                  icon="edit"
+                  primary
+                />
+              </Form>
+            </Comment.Group>
+          </Comment.Actions>
+        </Comment.Content>
+      </Comment>
     );
   } else {
     return (
-        <Comment key={index}>
-          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">{comment.author}</Comment.Author>
-            <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
-            <Comment.Text>{comment.content}</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
-              <Comment.Group collapsed={replyCollapsed}>
-                <Form reply onSubmit={handleChildComment}>
-                  <Form.TextArea onChange={fillText} />
-                  <Button
-                    content="Add Reply"
-                    labelPosition="left"
-                    icon="edit"
-                    primary
-                  />
-                </Form>
-              </Comment.Group>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+      <Comment key={index}>
+        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        <Comment.Content>
+          <Comment.Author as="a">{comment.author}</Comment.Author>
+          <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
+          <Comment.Text>{comment.content}</Comment.Text>
+          <Comment.Actions>
+            <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
+            <Comment.Group collapsed={replyCollapsed}>
+              <Form reply onSubmit={handleChildComment}>
+                <Form.TextArea onChange={fillText} />
+                <Button
+                  content="Add Reply"
+                  labelPosition="left"
+                  icon="edit"
+                  primary
+                />
+              </Form>
+            </Comment.Group>
+          </Comment.Actions>
+        </Comment.Content>
+      </Comment>
     );
   }
 };
