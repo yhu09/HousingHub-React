@@ -6,7 +6,7 @@ import * as Survey from "survey-react";
 import "survey-react/survey.css";
 import { APIBASE } from "../../../utility/api-base";
 
-const HouseReviewForm = ({ houseAddress, token }) => {
+const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews }) => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [rent, setRent] = useState(0);
@@ -18,8 +18,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
 
 
   async function handleSubmit(event) {
-    // let email = cookie.load("email");
-    let author = user.given_name + " " +user.family_name;
+    let author = user.given_name + " " + user.family_name;
 
     var requestOptions = {
       method: "POST",
@@ -149,7 +148,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
 
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function(result) {
+  survey.onComplete.add(function (result) {
     console.log(result.data);
     if (result.data.status_of_form_completion_boolean == true) {
       setStars(result.data.rating);
@@ -165,6 +164,7 @@ const HouseReviewForm = ({ houseAddress, token }) => {
   useEffect(() => {
     if (readyToSubmit) {
       handleSubmit();
+      window.location.reload(true);
     }
   }, [readyToSubmit]);
 

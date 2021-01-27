@@ -1,8 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import cookie from "react-cookies";
 import { APIBASE } from "../../utility/api-base";
 import { useAuth0 } from "@auth0/auth0-react";
+import { HouseContext } from "../../context";
+
+const calendar = {
+  "01": "January",
+  "02": "Feburary",
+  "03": "March",
+  "04": "April",
+  "05": "May",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December"
+};
+
+
+function formatDate(createddate) {
+  let dateArr = createddate.split("-", 2);
+  let year = dateArr[0];
+  let monthNum = dateArr[1];
+  var monthAlp = calendar[monthNum];
+  return (monthAlp + " " + year);
+}
 
 const HouseComments = ({ houseAddress, comments, token }) => {
   console.log(comments);
@@ -15,35 +40,7 @@ const HouseComments = ({ houseAddress, comments, token }) => {
   );
 };
 
-const Comments = ({ houseAddress, comments }) => {
-  const { user } = useAuth0();
-  const [inputComment, setInputComment] = useState("");
-
-  function fillText(event) {
-    setInputComment(event.target.value);
-  }
-
-  async function handleChildComment(event) {
-    event.preventDefault();
-
-    let email = cookie.load("email");
-    var requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        house: houseAddress,
-        author: email,
-        content: inputComment
-      })
-    };
-    await fetch(APIBASE + "comment", requestOptions)
-      .then(response => response.json())
-      .then(data => console.log(data));
-
-    console.log("Comment submitted");
-
-    window.location.reload(true);
-  }
+const Comments = ({ comments }) => {
 
   return (
     <div>
@@ -54,38 +51,153 @@ const Comments = ({ houseAddress, comments }) => {
   );
 };
 
-const HouseComment = ({ comment, index }) => {
-  const [collapsed, setCollapsed] = useState(true);
-  function handleCollapse() {
-    setCollapsed(!collapsed);
-  }
+const ChildComment = ({ childComments }) => {
 
   return (
-    <div>
+    <div>{childComments.map((comment, index) => (
       <Comment key={index}>
-        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        {console.log(comment)}
         <Comment.Content>
-          <Comment.Author as="a">{comment.author}</Comment.Author>
-          <Comment.Metadata>{comment.createddate}</Comment.Metadata>
-          <Comment.Text>{comment.content}</Comment.Text>
-          <Comment.Actions>
-            <Comment.Action onClick={handleCollapse}>Reply</Comment.Action>
-            <Comment.Group collapsed={collapsed}>
-              <Form reply size="mini">
-                <Form.TextArea />
-                <Button
-                  content="Add Reply"
-                  labelPosition="left"
-                  icon="edit"
-                  primary
-                />
-              </Form>
-            </Comment.Group>
-          </Comment.Actions>
+          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+          <Comment.Author >{comment.author}</Comment.Author>
+          <Comment.Metadata>
+            <span>{formatDate(comment.createddate)}</span>
+          </Comment.Metadata>
+          <Comment.Text>
+            <p>{comment.content}</p>
+          </Comment.Text>
         </Comment.Content>
-      </Comment>
-    </div>
-  );
+      </Comment>))}
+    </div>)
+}
+
+const HouseComment = ({ comment, index }) => {
+  const [replyCollapsed, setReplyCollapsed] = useState(true);
+  const [childCommentsCollapsed, setChildCommentsCollapsed] = useState(true);
+  const [inputChildComment, setInputChildComment] = useState("");
+  const [childComments, setChildComments] = useState([]);
+  const context = useContext(HouseContext);
+  const [childCommentsLoaded, setChildCommentsLoaded] = useState(false);
+  const { token } = context;
+  const { user } = useAuth0();
+
+  async function getChildComments() {
+    await fetch(
+      APIBASE + "childComment/parentid/?parentid=" + comment.commentid,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        setChildComments(data);
+      });
+  }
+
+  if (!childCommentsLoaded) {
+    getChildComments()
+    setChildCommentsLoaded(true);
+  }
+
+  function handleReplyCollapse() {
+    setReplyCollapsed(!replyCollapsed);
+  }
+
+  function handleChildCommentCollapse() {
+    setChildCommentsCollapsed(!childCommentsCollapsed);
+  }
+
+  function fillText(event) {
+    setInputChildComment(event.target.value);
+  }
+
+  async function handleChildComment(event) {
+    event.preventDefault();
+
+    let author = user.given_name + " " + user.family_name;
+    var requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        author: author,
+        content: inputChildComment,
+        parent: comment.commentid
+      })
+    };
+    console.log(requestOptions);
+    await fetch(APIBASE + "childComment", requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
+    console.log("Child Comment submitted");
+
+    // window.location.reload(true);
+  }
+
+  useEffect(() => {
+    console.log(childComments);
+  }, [childComments]);
+
+  if (childComments.length !== 0) {
+    return (
+        <Comment key={index}>
+          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+          <Comment.Content>
+            <Comment.Author as="a">{comment.author}</Comment.Author>
+            <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
+            <Comment.Text>{comment.content}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
+              <Comment.Action onClick={handleChildCommentCollapse}> {childCommentsCollapsed ? "Show Reply" + "(" + (childComments.length) + ")" : "Hide Reply" + "(" + (childComments.length) + ")"} </Comment.Action>
+              <Comment.Group collapsed={childCommentsCollapsed}>
+                <ChildComment childComments={childComments}></ChildComment>
+              </Comment.Group>
+              <Comment.Group collapsed={replyCollapsed}>
+                <Form reply onSubmit={handleChildComment}>
+                  <Form.TextArea onChange={fillText} />
+                  <Button
+                    content="Add Reply"
+                    labelPosition="left"
+                    icon="edit"
+                    primary
+                  />
+                </Form>
+              </Comment.Group>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+    );
+  } else {
+    return (
+        <Comment key={index}>
+          <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+          <Comment.Content>
+            <Comment.Author as="a">{comment.author}</Comment.Author>
+            <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
+            <Comment.Text>{comment.content}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action onClick={handleReplyCollapse}>Reply</Comment.Action>
+              <Comment.Group collapsed={replyCollapsed}>
+                <Form reply onSubmit={handleChildComment}>
+                  <Form.TextArea onChange={fillText} />
+                  <Button
+                    content="Add Reply"
+                    labelPosition="left"
+                    icon="edit"
+                    primary
+                  />
+                </Form>
+              </Comment.Group>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+    );
+  }
 };
 
 const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
@@ -109,6 +221,7 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
         content: inputComment
       })
     };
+
     if (inputComment != "") {
       console.log(inputComment);
       await fetch(APIBASE + "comment", requestOptions)
@@ -134,10 +247,10 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
 
         <Comments houseAddress={houseAddress} comments={comments}></Comments>
 
-        <Form reply onSubmit={handleParentComment}>
+        <Form reply size="mini" onSubmit={handleParentComment}>
           <Form.TextArea onChange={fillText} />
           <Button
-            content="Add Reply"
+            content="Add Comment"
             labelPosition="left"
             icon="edit"
             primary

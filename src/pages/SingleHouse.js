@@ -288,7 +288,7 @@ const SingleHouse = props => {
             <section>
               {" "}
               <HouseReviewList houseReviews={reviews} />
-              <HouseReviewForm houseAddress={houseAddress} token={token} />
+              <HouseReviewForm houseAddress={houseAddress} token={token} houseReviews={reviews} setHouseReviews={setReviews}/>
             </section>
           </section>
         </>
