@@ -40,7 +40,8 @@ const House = ({ house }) => {
 
     function calculateAverageRating() {
       let numberOfReviews = reviewratings ? reviewratings.length : 0;
-      setNumReviews(numberOfReviews);
+      let reviewNum = numberOfReviews ? numberOfReviews : "No reviews";
+      setNumReviews(reviewNum);
       if (numberOfReviews === 0) {
         setStars(0);
       } else {

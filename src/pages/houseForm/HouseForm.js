@@ -29,6 +29,8 @@ export const HouseForm = () => {
   const [files, setFiles] = useState([]);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [newHouse, setNewHouse] = useState(null);
+  const [connectedHouse, setConnectedHouse] = useState("");
+  const [description, setDescription] = useState("");
 
   var temporaryFilesStorage = {};
 
@@ -76,7 +78,11 @@ export const HouseForm = () => {
         porch: porch,
         bedrooms: bedrooms,
         bathrooms: bathrooms,
-        reviewRatings: []
+        reviewRatings: [],
+        description: description,
+        connectedHouse: connectedHouse,
+        latitude: 42.4085,
+        longitude: -71.1183
       })
     };
     console.log("request options: " + requestOptions.body);
@@ -133,6 +139,7 @@ export const HouseForm = () => {
                   {
                     type: "text",
                     name: "city",
+                    isRequired: true,
                     title: "City"
                   },
                   {
@@ -151,14 +158,7 @@ export const HouseForm = () => {
                     name: "zip_code",
                     title: "Zip Code",
                     isRequired: true,
-                    inputType: "number"
-                  },
-                  {
-                    type: "text",
-                    name: "email",
-                    title: "Email",
-                    isRequired: true,
-                    inputType: "email"
+                    inputType: "text"
                   },
                   {
                     type: "text",
@@ -204,13 +204,6 @@ export const HouseForm = () => {
                     title: "Landlord Email",
                     isRequired: true,
                     inputType: "email"
-                  },
-                  {
-                    type: "text",
-                    name: "landlord_number",
-                    title: "Landlord Number",
-                    isRequired: true,
-                    inputType: "number"
                   }
                 ],
                 title: "House Information",
@@ -294,6 +287,20 @@ export const HouseForm = () => {
                 choices: ["upper", "lower", "Entire House"]
               },
               {
+                type: "text",
+                name: "connectedHouse",
+                title: "Connected House (Street Address. Ex. 355 Boston Ave)",
+                isRequired: true,
+                inputType: "text"
+              },
+              {
+                type: "text",
+                name: "description",
+                title: "Description",
+                isRequired: false,
+                inputType: "text"
+              },
+              {
                 type: "file",
                 title: "Do you have photos?",
                 name: "Files",
@@ -316,7 +323,7 @@ export const HouseForm = () => {
   survey.onComplete.add(function(result) {
     console.log(result.data);
     setHouseAddress(result.data.house_address);
-    setLandlordEmail(result.data.email);
+    setLandlordEmail(result.data.landlord_email);
     setState(result.data.state);
     setCity(result.data.city);
     setZIP(result.data.zip_code);
@@ -329,6 +336,8 @@ export const HouseForm = () => {
     setBathrooms(result.data.bathrooms);
     setRent(result.data.rent);
     setUnitLevel(result.data.unit);
+    setConnectedHouse(result.data.connectedHouse);
+    setDescription(result.data.description);
 
     if (temporaryFilesStorage.Files != null) {
       console.log(temporaryFilesStorage.Files);

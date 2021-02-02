@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
+import { Form } from "semantic-ui-react";
 import ImageGallery from "react-image-gallery";
 import { HouseContext } from "../context";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
@@ -25,6 +26,7 @@ import {
 import { Button } from "react-bootstrap";
 import { APIBASE } from "../utility/api-base";
 import noimage from "../images/noimage.jpg";
+import SingleMapComponent from "../components/SingleMapComponent";
 
 const SingleHouse = props => {
   const context = useContext(HouseContext);
@@ -106,6 +108,7 @@ const SingleHouse = props => {
                 imageLinks.push({ original: source, thumbnail: source });
               }
             }
+            console.log(data[0]);
             setHouse(data[0]);
           });
         await fetch(
@@ -202,9 +205,14 @@ const SingleHouse = props => {
                     </p>
                     <h3>Contact Info</h3>
                     <p> Landlord Email: {house.landlordemail} </p>
-                    <p> Residents Emails: {house.currresidentsemail} </p>
                     <h3>Description</h3>
-                    <p></p>
+                    <p>{house.description}</p>
+                    <h3>Location</h3>
+                    <SingleMapComponent
+                      latitude={parseFloat(house.latitude)}
+                      longitude={parseFloat(house.longitude)}
+                      edit={false}
+                    />
                   </article>
                   <div>
                     <h3>Basic Info</h3>
@@ -236,7 +244,7 @@ const SingleHouse = props => {
                       <h6>
                         {" "}
                         <BsFillPeopleFill /> Connected with house:<br></br>
-                        {"355 Boston Ave"}
+                        {house.connecthouse}
                       </h6>
                       <h6>
                         {" "}
@@ -288,7 +296,12 @@ const SingleHouse = props => {
             <section>
               {" "}
               <HouseReviewList houseReviews={reviews} />
-              <HouseReviewForm houseAddress={houseAddress} token={token} houseReviews={reviews} setHouseReviews={setReviews}/>
+              <HouseReviewForm
+                houseAddress={houseAddress}
+                token={token}
+                houseReviews={reviews}
+                setHouseReviews={setReviews}
+              />
             </section>
           </section>
         </>
@@ -318,6 +331,10 @@ const SingleHouseEdit = ({
   const [porch, setPorch] = useState(house.porch);
   const [yard, setYard] = useState(house.yard);
   const [unit, setUnit] = useState(house.unit);
+  const [description, setDescription] = useState(house.description);
+  const [connectHouse, setConnectHouse] = useState(house.connecthouse);
+  const [latitude, setLatitude] = useState(house.latitude);
+  const [longitude, setLongitude] = useState(house.longitude);
 
   async function onUpdate() {
     const requestOptions = {
@@ -340,7 +357,11 @@ const SingleHouseEdit = ({
         parking: parking,
         porch: porch,
         bedrooms: bedrooms,
-        bathrooms: bathrooms
+        bathrooms: bathrooms,
+        description: description,
+        connectHouse: connectHouse,
+        latitude: latitude,
+        longitude: longitude
       })
     };
     try {
@@ -355,6 +376,10 @@ const SingleHouseEdit = ({
     } catch (e) {
       console.error(e);
     }
+  }
+
+  function fillTextArea(event) {
+    setDescription(event.target.value);
   }
 
   return (
@@ -377,7 +402,16 @@ const SingleHouseEdit = ({
               onChange={event => setLandlordEmail(event.target.value)}
             />
           </p>
-          <p> Residents Emails: {house.currresidentsemail} </p>
+          <h3>Description</h3>
+          <Form.TextArea value={description} onChange={fillTextArea} />
+          <h3>Location</h3>
+          <SingleMapComponent
+            latitude={parseFloat(house.latitude)}
+            longitude={parseFloat(house.longitude)}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
+            edit={true}
+          />
         </article>
         <div>
           <h3>Basic Info</h3>
@@ -420,6 +454,15 @@ const SingleHouseEdit = ({
                 size="10"
                 value={bathrooms}
                 onChange={event => setBathrooms(event.target.value)}
+              />
+            </h6>
+            <h6>
+              {" "}
+              <BsFillPeopleFill /> Connected with house:<br></br>
+              <input
+                type="text"
+                value={connectHouse}
+                onChange={event => setConnectHouse(event.target.value)}
               />
             </h6>
             <h6>

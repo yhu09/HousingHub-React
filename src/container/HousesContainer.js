@@ -30,7 +30,7 @@ function HousesContainer({ context }) {
               <MapHousesList houses={sortedHouses} />
             </div>
             <div className="houses-list-map">
-              <MapComponent />
+              <MapComponent houses={sortedHouses} />
             </div>
           </div>
         ) : (

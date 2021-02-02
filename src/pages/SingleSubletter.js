@@ -23,6 +23,7 @@ import { APIBASE } from "../utility/api-base";
 import noimage from "../images/noimage.jpg";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "react-modern-calendar-datepicker";
+import MapComponent from "../components/MapComponent";
 
 const SingleHouse = props => {
   const context = useContext(SubletContext);
@@ -199,6 +200,8 @@ const SingleHouse = props => {
                     </div>
                     <h3>Description</h3>
                     <p></p>
+                    <h3>Location</h3>
+                    <MapComponent />
                   </div>
                   <div>
                     <Button onClick={onEdit} className="room-info-button">
