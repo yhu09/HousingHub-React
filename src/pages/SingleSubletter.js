@@ -32,18 +32,12 @@ const SingleHouse = props => {
 
   const [slug, setSlug] = useState(props.match.params.slug);
   const [houseAddress, setHouseAddress] = useState(slug.split("-").join(" "));
-  const [reviews, setReviews] = useState([]);
-  const [comments, setComments] = useState([]);
   const [imageLinks, setImageLink] = useState([]);
   const [loadedData, setLoadedData] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [averageElectric, setAverageElectric] = useState(null);
-  const [averageGas, setAverageGas] = useState(null);
-  const [averageWater, setAverageWater] = useState(null);
   const [beginDate, setBeginDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [subletter, setSubletter] = useState();
-  const [averageStars, setAverageStars] = useState();
 
   const fetchToken = useCallback(async () => {
     if (!isTokenSet()) {
@@ -130,7 +124,7 @@ const SingleHouse = props => {
               <h1>{`${subletter.houseaddress}`}</h1>
             </div>
             <div className="house-attribute-container">
-              <span className="house-attribute">
+              {/* <span className="house-attribute">
                 {" "}
                 <BsFillStarFill /> {averageStars} {"("}
                 {reviews.length}
@@ -138,7 +132,7 @@ const SingleHouse = props => {
               </span>
               <span className="house-attribute" aria-hidden="true">
                 ·
-              </span>
+              </span> */}
               {/* <span className="house-attribute"> Close to Picantes </span> */}
             </div>
           </div>
