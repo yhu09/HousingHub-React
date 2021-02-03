@@ -30,7 +30,7 @@ function SublettersContainer({ context }) {
               <MapSublettersList subletters={sortedSubletters} />
             </div>
             <div className="houses-list-map">
-              <MapComponent />
+              <MapComponent subletters={sortedSubletters} />
             </div>
           </div>
         ) : (
@@ -59,7 +59,12 @@ function SublettersContainer({ context }) {
       // </>
     );
   } else {
-    return <h1>Please log in to access featured houses</h1>;
+    return (
+      <div className="no-result">
+        <br></br>
+        <h1>Please log in to view subletters listings</h1>
+      </div>
+    );
   }
 }
 

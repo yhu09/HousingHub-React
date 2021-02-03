@@ -3,7 +3,7 @@ import House from "./House";
 const MapHousesList = ({ houses }) => {
   if (houses.length === 0) {
     return (
-      <div>
+      <div className="no-result">
         <h3>No houses matched with search parameters</h3>
       </div>
     );

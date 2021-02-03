@@ -23,7 +23,7 @@ import { APIBASE } from "../utility/api-base";
 import noimage from "../images/noimage.jpg";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "react-modern-calendar-datepicker";
-import MapComponent from "../components/MapComponent";
+import SingleMapComponent from "../components/SingleMapComponent";
 
 const SingleHouse = props => {
   const context = useContext(SubletContext);
@@ -139,7 +139,7 @@ const SingleHouse = props => {
               <span className="house-attribute" aria-hidden="true">
                 ·
               </span>
-              <span className="house-attribute"> Close to Picantes </span>
+              {/* <span className="house-attribute"> Close to Picantes </span> */}
             </div>
           </div>
           <section className="single-room">
@@ -201,7 +201,11 @@ const SingleHouse = props => {
                     <h3>Description</h3>
                     <p></p>
                     <h3>Location</h3>
-                    <MapComponent />
+                    <SingleMapComponent
+                      latitude={parseFloat(subletter.latitude)}
+                      longitude={parseFloat(subletter.longitude)}
+                      edit={false}
+                    />
                   </div>
                   <div>
                     <Button onClick={onEdit} className="room-info-button">
@@ -226,6 +230,8 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
   const [gender, setGender] = useState(subletter.preferredgender);
   const [editBeginDate, setEditBeginDate] = useState(beginDate);
   const [editEndDate, setEditEndDate] = useState(endDate);
+  const [latitude, setLatitude] = useState(subletter.latitude);
+  const [longitude, setLongitude] = useState(subletter.longitude);
 
   async function onUpdate() {
     let formBeginDate =
@@ -250,7 +256,9 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
         bathrooms: bathrooms,
         beginDate: formBeginDate,
         endDate: formEndDate,
-        preferredGender: gender
+        preferredGender: gender,
+        latitude: latitude,
+        longitude: longitude
       })
     };
     try {
@@ -331,6 +339,13 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
                 onChange={event => setBathrooms(event.target.value)}
               />
             </h6>
+            <SingleMapComponent
+              latitude={parseFloat(subletter.latitude)}
+              longitude={parseFloat(subletter.longitude)}
+              setLatitude={setLatitude}
+              setLongitude={setLongitude}
+              edit={true}
+            />
           </div>
         </div>
         <div>

@@ -31,9 +31,11 @@ const Map = ({ houses }) => {
   );
 
   const context = useContext(HouseContext);
+  const { hoverThumbnail } = context;
 
   const onLoad = React.useCallback(async function callback(map) {
     console.log(houses);
+    console.log(hoverThumbnail);
     setMap(map);
 
     // await fetch(
@@ -68,22 +70,27 @@ const Map = ({ houses }) => {
           onLoad={onLoad}
           onUnmount={onUnmount}
         >
-          {houses.map((house, index) => (
-            <Marker
-              key={index}
-              position={{
-                lat: parseFloat(house.latitude),
-                lng: parseFloat(house.longitude)
-              }}
-              onClick={() => handleToggleOpen(index)} // marker ID is the key here.
-            >
-              {index === openInfoWindowMarkerId && (
-                <InfoWindow onCloseClick={() => handleToggleClose()}>
-                  <House house={houses[index]} />
-                </InfoWindow>
-              )}
-            </Marker>
-          ))}
+          {houses === null ? null : (
+            <>
+              {houses.map((house, index) => (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: parseFloat(house.latitude),
+                    lng: parseFloat(house.longitude)
+                  }}
+                  onClick={() => handleToggleOpen(index)} // marker ID is the key here.
+                >
+                  {index === openInfoWindowMarkerId && (
+                    <InfoWindow onCloseClick={() => handleToggleClose()}>
+                      <House house={houses[index]} />
+                    </InfoWindow>
+                  )}
+                </Marker>
+              ))}
+            </>
+          )}
+
           {/* Child components, such as markers, info windows, etc. */}
         </GoogleMap>
       </LoadScript>

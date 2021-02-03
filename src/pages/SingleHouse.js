@@ -171,7 +171,7 @@ const SingleHouse = props => {
               <span className="house-attribute" aria-hidden="true">
                 ·
               </span>
-              <span className="house-attribute"> Close to Picantes </span>
+              {/* <span className="house-attribute"> Close to Picantes </span> */}
             </div>
           </div>
           <section className="single-room">

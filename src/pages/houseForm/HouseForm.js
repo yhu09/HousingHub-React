@@ -407,11 +407,11 @@ export const HouseForm = () => {
     );
   } else {
     return (
-      <div>
+      <div className="no-entry">
         <br></br>
         <br></br>
         <br></br>
-        <h1>Please log in to access create house</h1>;
+        <h1>Please log in to make a house entry</h1>;
       </div>
     );
   }

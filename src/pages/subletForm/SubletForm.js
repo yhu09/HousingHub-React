@@ -28,6 +28,8 @@ export const SubletForm = () => {
   const [expireDate, setExpireDate] = useState("");
   const [preferredGender, setPreferredGender] = useState("");
   const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
 
   widgets.jqueryuidatepicker(Survey);
 
@@ -76,7 +78,9 @@ export const SubletForm = () => {
         expireDate: expireDate,
         tenant: user.given_name + " " + user.family_name,
         tenantEmail: user.name,
-        preferredGender: preferredGender
+        preferredGender: preferredGender,
+        latitude: latitude,
+        longitude: longitude
       })
     };
     console.log("request options: " + requestOptions.body);
@@ -148,7 +152,7 @@ export const SubletForm = () => {
                     name: "zip_code",
                     title: "Zip Code",
                     isRequired: false,
-                    inputType: "number"
+                    inputType: "text"
                   },
                   {
                     type: "text",
@@ -325,7 +329,7 @@ export const SubletForm = () => {
     );
   } else {
     return (
-      <div>
+      <div className="no-entry">
         <br></br>
         <br></br>
         <br></br>

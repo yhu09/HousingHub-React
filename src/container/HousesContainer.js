@@ -39,7 +39,12 @@ function HousesContainer({ context }) {
       </>
     );
   } else {
-    return <h1>Please log in to access featured houses</h1>;
+    return (
+      <div className="no-result">
+        <br></br>
+        <h1>Please log in to view house reviews</h1>
+      </div>
+    );
   }
 }
 

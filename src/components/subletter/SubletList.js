@@ -3,7 +3,8 @@ import Sublet from "./Sublet";
 const SubletList = ({ subletters }) => {
   if (subletters.length === 0) {
     return (
-      <div>
+      <div className="no-result">
+        <br></br>
         <h3>No subletters matched with search parameters</h3>
       </div>
     );

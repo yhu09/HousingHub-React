@@ -3,8 +3,9 @@ import Sublet from "./Sublet";
 const MapSublettersList = ({ subletters }) => {
   if (subletters.length === 0) {
     return (
-      <div>
-        <h3>No houses matched with search parameters</h3>
+      <div className="no-result">
+        <br></br>
+        <h3>No subletters matched with search parameters</h3>
       </div>
     );
   }

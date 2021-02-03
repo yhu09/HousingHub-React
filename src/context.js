@@ -19,7 +19,8 @@ class HouseProvider extends Component {
     minSize: 0,
     maxSize: 0,
     laundry: false,
-    porch: false
+    porch: false,
+    hoverThumbnail: null
     // breakfast: false,
     // pets: false
   };
@@ -132,6 +133,11 @@ class HouseProvider extends Component {
     );
   };
 
+  handleHover = house => {
+    // this.setState({ hoverThumbnail: house });
+    console.log(house);
+  };
+
   filterRooms = () => {
     let {
       houses,
@@ -179,6 +185,7 @@ class HouseProvider extends Component {
           ...this.state,
           getHouse: this.getHouse,
           handleChange: this.handleChange,
+          handleHover: this.handleHover,
           handleSearchInput: this.handleSearchInput,
           setHouses: this.setHouses,
           isTokenSet: this.isTokenSet,
