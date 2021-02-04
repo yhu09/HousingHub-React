@@ -9,6 +9,7 @@ import {
 } from "@react-google-maps/api";
 import { HouseContext } from "../context";
 import House from "./house/House";
+import Sublet from "./subletter/Sublet";
 
 require("dotenv").config();
 
@@ -24,18 +25,13 @@ const center = {
 
 const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
 
-const Map = ({ houses }) => {
+const Map = ({ houses, subletters }) => {
   const [map, setMap] = React.useState(null);
   const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = React.useState(
     ""
   );
 
-  const context = useContext(HouseContext);
-  const { hoverThumbnail } = context;
-
   const onLoad = React.useCallback(async function callback(map) {
-    console.log(houses);
-    console.log(hoverThumbnail);
     setMap(map);
 
     // await fetch(
@@ -70,7 +66,7 @@ const Map = ({ houses }) => {
           onLoad={onLoad}
           onUnmount={onUnmount}
         >
-          {houses === null ? null : (
+          {houses === null || houses === undefined ? null : (
             <>
               {houses.map((house, index) => (
                 <Marker
@@ -82,8 +78,32 @@ const Map = ({ houses }) => {
                   onClick={() => handleToggleOpen(index)} // marker ID is the key here.
                 >
                   {index === openInfoWindowMarkerId && (
-                    <InfoWindow onCloseClick={() => handleToggleClose()}>
+                    <InfoWindow
+                      onCloseClick={() => handleToggleClose()}
+                      options={{ maxWidth: 350 }}
+                    >
                       <House house={houses[index]} />
+                    </InfoWindow>
+                  )}
+                </Marker>
+              ))}
+            </>
+          )}
+
+          {subletters === null || subletters === undefined ? null : (
+            <>
+              {subletters.map((subletter, index) => (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: parseFloat(subletter.latitude),
+                    lng: parseFloat(subletter.longitude)
+                  }}
+                  onClick={() => handleToggleOpen(index)} // marker ID is the key here.
+                >
+                  {index === openInfoWindowMarkerId && (
+                    <InfoWindow onCloseClick={() => handleToggleClose()}>
+                      <Sublet sublet={subletters[index]} />
                     </InfoWindow>
                   )}
                 </Marker>
