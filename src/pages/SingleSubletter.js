@@ -73,8 +73,9 @@ const SingleHouse = props => {
         )
           .then(response => response.json())
           .then(async data => {
+            let author = data[0].tenant;
             let pictures = await listFilesInFolder(
-              "sublet/" + props.match.params.slug
+              "sublet/" + author + "/" + props.match.params.slug + "/"
             );
             let imageContents = pictures.Contents;
             if (imageContents.length === 0) {
@@ -151,7 +152,8 @@ const SingleHouse = props => {
                 showNav={true}
               />
             </div>
-            <UploadImages houseAddress={houseAddress} type={"subletter"} />
+            {(user.name === subletter.tenantemail) ? <UploadImages houseAddress={houseAddress} type={"subletter"} /> : <></>}
+            {/* <UploadImages houseAddress={houseAddress} type={"subletter"} /> */}
             {edit ? (
               <SingleSubletterEdit
                 subletter={subletter}
@@ -160,62 +162,62 @@ const SingleHouse = props => {
                 endDate={endDate}
               />
             ) : (
-              <>
-                {" "}
-                <div className="single-room-info">
-                  <article className="desc">
-                    <h3>Full Address</h3>
-                    <p>
-                      {" "}
-                      {subletter.houseaddress}, {subletter.city},{" "}
-                      {subletter.statename} {subletter.zip}{" "}
-                    </p>
-                    <h3>Contact Info</h3>
-                    <p> Tenant Name: {subletter.tenant} </p>
-                    <p> Tenant Email: {subletter.tenantemail} </p>
-                    <h3>Sublet Dates</h3>
+                <>
+                  {" "}
+                  <div className="single-room-info">
+                    <article className="desc">
+                      <h3>Full Address</h3>
+                      <p>
+                        {" "}
+                        {subletter.houseaddress}, {subletter.city},{" "}
+                        {subletter.statename} {subletter.zip}{" "}
+                      </p>
+                      <h3>Contact Info</h3>
+                      <p> Tenant Name: {subletter.tenant} </p>
+                      <p> Tenant Email: {subletter.tenantemail} </p>
+                      <h3>Sublet Dates</h3>
                     From: <Calendar value={beginDate} />
                     To: <Calendar value={endDate} />
-                  </article>
-                  <div>
-                    <h3>Basic House Info</h3>
-                    <div className="info">
-                      <h6>
-                        {" "}
-                        <GiHouse /> Rent: ${subletter.rent}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <FaRestroom /> Preferred Gender:{" "}
-                        {subletter.preferredgender}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <BiBed /> Bedrooms: {subletter.bedrooms}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <BiBath /> Bathrooms: {subletter.bathrooms}
-                      </h6>
+                    </article>
+                    <div>
+                      <h3>Basic House Info</h3>
+                      <div className="info">
+                        <h6>
+                          {" "}
+                          <GiHouse /> Rent: ${subletter.rent}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <FaRestroom /> Preferred Gender:{" "}
+                          {subletter.preferredgender}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <BiBed /> Bedrooms: {subletter.bedrooms}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <BiBath /> Bathrooms: {subletter.bathrooms}
+                        </h6>
+                      </div>
+                      <h3>Description</h3>
+                      <p></p>
+                      <h3>Location</h3>
+                      <SingleMapComponent
+                        latitude={parseFloat(subletter.latitude)}
+                        longitude={parseFloat(subletter.longitude)}
+                        edit={false}
+                      />
                     </div>
-                    <h3>Description</h3>
-                    <p></p>
-                    <h3>Location</h3>
-                    <SingleMapComponent
-                      latitude={parseFloat(subletter.latitude)}
-                      longitude={parseFloat(subletter.longitude)}
-                      edit={false}
-                    />
+                    <div>
+                      {(user.name === subletter.tenantemail) ? <Button onClick={onEdit} className="room-info-button">
+                        Edit Subletter Info
+                    </Button> : <></>}
+                    </div>
+                    <br></br>
                   </div>
-                  <div>
-                    <Button onClick={onEdit} className="room-info-button">
-                      Edit Subletter Info
-                    </Button>{" "}
-                  </div>
-                  <br></br>
-                </div>
-              </>
-            )}
+                </>
+              )}
           </section>
         </>
       ) : null}
@@ -264,8 +266,8 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
     try {
       await fetch(
         APIBASE +
-          "subletters/houseAddress/?houseAddress=" +
-          subletter.houseaddress,
+        "subletters/houseAddress/?houseAddress=" +
+        subletter.houseaddress,
         requestOptions
       )
         .then(response => response.json())

@@ -5,12 +5,16 @@ import PropTypes from "prop-types";
 import { listFilesInFolder, imageLinkURL } from "../../utility/s3-upload";
 import ImageGallery from "react-image-gallery";
 import noimage from "../../images/noimage.jpg";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 const Sublet = ({ sublet }) => {
   const [imageLinks, setImageLink] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [beginDate, setBeginDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const { user } = useAuth0();
+
 
   const calendar = {
     "01": "January",
@@ -40,7 +44,8 @@ const Sublet = ({ sublet }) => {
   useEffect(() => {
     async function loadPictures() {
       if (!loaded) {
-        let pictures = await listFilesInFolder("sublet/" + slug);
+        let author = sublet.tenant;
+        let pictures = await listFilesInFolder("sublet/" + author + "/" + slug);
         let imageContents = pictures.Contents;
         if (imageContents.length === 0) {
           imageLinks.push({ original: noimage, thumbnail: noimage });

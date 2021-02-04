@@ -52,7 +52,8 @@ export const SubletForm = () => {
 
   async function handleSubmit() {
     let slug = houseAddress.split(" ").join("-");
-    let path = "sublet/" + slug + "/";
+    let author = user.given_name + " " + user.family_name;
+    let path = "sublet/" + author + "/" + slug + "/";
 
     for (var file of files) {
       uploadFile(path, file);
@@ -79,8 +80,8 @@ export const SubletForm = () => {
         tenant: user.given_name + " " + user.family_name,
         tenantEmail: user.name,
         preferredGender: preferredGender,
-        latitude: latitude,
-        longitude: longitude
+        latitude: "-71.11",
+        longitude: "42.40"
       })
     };
     console.log("request options: " + requestOptions.body);

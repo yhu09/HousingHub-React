@@ -37,26 +37,6 @@ function SublettersContainer({ context }) {
           <SubletList subletters={sortedSubletters} />
         )}
       </>
-
-      // <>
-      //   <HousesFilter
-      //     houses={houses}
-      //     viewMap={viewMap}
-      //     setViewMap={setViewMap}
-      //   />
-      //   {viewMap ? (
-      //     <div className="houses-map-container">
-      //       <div className="houses-list-list">
-      //         <MapHousesList houses={sortedHouses} />
-      //       </div>
-      //       <div className="houses-list-map">
-      //         <MapComponent />
-      //       </div>
-      //     </div>
-      //   ) : (
-      //     <HousesList houses={sortedHouses} />
-      //   )}
-      // </>
     );
   } else {
     return (
