@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import ImageGallery from "react-image-gallery";
+import { Form } from "semantic-ui-react";
 import { SubletContext } from "../subletContext";
 import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
 import HouseReviewList from "../components/house/houseReview/HouseReviewList";
@@ -25,7 +26,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "react-modern-calendar-datepicker";
 import SingleMapComponent from "../components/SingleMapComponent";
 
-const SingleHouse = props => {
+const SingleSubletter = props => {
   const context = useContext(SubletContext);
   const { token, isTokenSet, setToken, getHouse } = context;
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
@@ -92,6 +93,7 @@ const SingleHouse = props => {
             let endDay = parseInt(enddate[2].replace(/^0+/, ""));
             setBeginDate({ day: beginDay, month: beginMonth, year: beginYear });
             setEndDate({ day: endDay, month: endMonth, year: endYear });
+            console.log(data[0]);
             setSubletter(data[0]);
           });
         setLoadedData(true);
@@ -146,7 +148,11 @@ const SingleHouse = props => {
                 showNav={true}
               />
             </div>
-            {(user.name === subletter.tenantemail) ? <UploadImages houseAddress={houseAddress} type={"subletter"} /> : <></>}
+            {user.name === subletter.tenantemail ? (
+              <UploadImages houseAddress={houseAddress} type={"subletter"} />
+            ) : (
+              <></>
+            )}
             {/* <UploadImages houseAddress={houseAddress} type={"subletter"} /> */}
             {edit ? (
               <SingleSubletterEdit
@@ -156,62 +162,66 @@ const SingleHouse = props => {
                 endDate={endDate}
               />
             ) : (
-                <>
-                  {" "}
-                  <div className="single-room-info">
-                    <article className="desc">
-                      <h3>Full Address</h3>
-                      <p>
-                        {" "}
-                        {subletter.houseaddress}, {subletter.city},{" "}
-                        {subletter.statename} {subletter.zip}{" "}
-                      </p>
-                      <h3>Contact Info</h3>
-                      <p> Tenant Name: {subletter.tenant} </p>
-                      <p> Tenant Email: {subletter.tenantemail} </p>
-                      <h3>Sublet Dates</h3>
+              <>
+                {" "}
+                <div className="single-room-info">
+                  <article className="desc">
+                    <h3>Full Address</h3>
+                    <p>
+                      {" "}
+                      {subletter.houseaddress}, {subletter.city},{" "}
+                      {subletter.statename} {subletter.zip}{" "}
+                    </p>
+                    <h3>Contact Info</h3>
+                    <p> Tenant Name: {subletter.tenant} </p>
+                    <p> Tenant Email: {subletter.tenantemail} </p>
+                    <h3>Sublet Dates</h3>
                     From: <Calendar value={beginDate} />
                     To: <Calendar value={endDate} />
-                    </article>
-                    <div>
-                      <h3>Basic House Info</h3>
-                      <div className="info">
-                        <h6>
-                          {" "}
-                          <GiHouse /> Rent: ${subletter.rent}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <FaRestroom /> Preferred Gender:{" "}
-                          {subletter.preferredgender}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBed /> Bedrooms: {subletter.bedrooms}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBath /> Bathrooms: {subletter.bathrooms}
-                        </h6>
-                      </div>
-                      <h3>Description</h3>
-                      <p></p>
-                      <h3>Location</h3>
-                      <SingleMapComponent
-                        latitude={parseFloat(subletter.latitude)}
-                        longitude={parseFloat(subletter.longitude)}
-                        edit={false}
-                      />
+                  </article>
+                  <div>
+                    <h3>Basic House Info</h3>
+                    <div className="info">
+                      <h6>
+                        {" "}
+                        <GiHouse /> Rent: ${subletter.rent}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <FaRestroom /> Preferred Gender:{" "}
+                        {subletter.preferredgender}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBed /> Bedrooms: {subletter.bedrooms}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBath /> Bathrooms: {subletter.bathrooms}
+                      </h6>
                     </div>
-                    <div>
-                      {(user.name === subletter.tenantemail) ? <Button onClick={onEdit} className="room-info-button">
-                        Edit Subletter Info
-                    </Button> : <></>}
-                    </div>
-                    <br></br>
+                    <h3>Description</h3>
+                    <p>{subletter.description}</p>
+                    <h3>Location</h3>
+                    <SingleMapComponent
+                      latitude={parseFloat(subletter.latitude)}
+                      longitude={parseFloat(subletter.longitude)}
+                      edit={false}
+                    />
                   </div>
-                </>
-              )}
+                  <div>
+                    {user.name === subletter.tenantemail ? (
+                      <Button onClick={onEdit} className="room-info-button">
+                        Edit Subletter Info
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <br></br>
+                </div>
+              </>
+            )}
           </section>
         </>
       ) : null}
@@ -228,6 +238,7 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
   const [editEndDate, setEditEndDate] = useState(endDate);
   const [latitude, setLatitude] = useState(subletter.latitude);
   const [longitude, setLongitude] = useState(subletter.longitude);
+  const [description, setDescription] = useState(subletter.description);
 
   async function onUpdate() {
     let formBeginDate =
@@ -254,14 +265,15 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
         endDate: formEndDate,
         preferredGender: gender,
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        description: description
       })
     };
     try {
       await fetch(
         APIBASE +
-        "subletters/houseAddress/?houseAddress=" +
-        subletter.houseaddress,
+          "subletters/houseAddress/?houseAddress=" +
+          subletter.houseaddress,
         requestOptions
       )
         .then(response => response.json())
@@ -275,6 +287,10 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
 
   function handleGenderChange(e) {
     setGender(e.target.value);
+  }
+
+  function fillTextArea(event) {
+    setDescription(event.target.value);
   }
 
   return (
@@ -335,14 +351,17 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
                 onChange={event => setBathrooms(event.target.value)}
               />
             </h6>
-            <SingleMapComponent
-              latitude={parseFloat(subletter.latitude)}
-              longitude={parseFloat(subletter.longitude)}
-              setLatitude={setLatitude}
-              setLongitude={setLongitude}
-              edit={true}
-            />
           </div>
+          <h3>Description</h3>
+          <Form.TextArea value={description} onChange={fillTextArea} />
+          <h3>Location</h3>
+          <SingleMapComponent
+            latitude={parseFloat(subletter.latitude)}
+            longitude={parseFloat(subletter.longitude)}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
+            edit={true}
+          />
         </div>
         <div>
           <button block bsSize="large" type="submit">
@@ -355,4 +374,4 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
   );
 };
 
-export default SingleHouse;
+export default SingleSubletter;

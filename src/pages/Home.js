@@ -63,7 +63,7 @@ export const Home = () => {
         </Banner>
       </Hero>
       <Services />
-      <FeaturedHouses />
+      {/* <FeaturedHouses /> */}
     </>
   );
 };

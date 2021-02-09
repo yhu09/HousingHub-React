@@ -204,6 +204,7 @@ const SingleHouse = props => {
                       {house.zip}{" "}
                     </p>
                     <h3>Contact Info</h3>
+                    <p> Landlord Name: {house.landlordname} </p>
                     <p> Landlord Email: {house.landlordemail} </p>
                     <h3>Description</h3>
                     <p>{house.description}</p>

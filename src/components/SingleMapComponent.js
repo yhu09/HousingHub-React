@@ -28,9 +28,9 @@ const SingleMap = ({
 
   const context = useContext(HouseContext);
 
-  const center = { lat: latitude, lng: longitude };
-
   const onLoad = React.useCallback(async function callback(map) {
+    console.log(latitude);
+    console.log(longitude);
     setMap(map);
   }, []);
 

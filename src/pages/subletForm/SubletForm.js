@@ -10,6 +10,11 @@ import { SubletContext } from "../../subletContext";
 import "jquery-ui-dist/jquery-ui.css";
 import * as widgets from "surveyjs-widgets";
 
+const defaultCoord = {
+  lat: 42.4085,
+  lng: -71.1183
+};
+
 export const SubletForm = () => {
   const context = useContext(SubletContext);
   const { token, isTokenSet, setToken } = context;
@@ -28,8 +33,11 @@ export const SubletForm = () => {
   const [expireDate, setExpireDate] = useState("");
   const [preferredGender, setPreferredGender] = useState("");
   const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const [description, setDescription] = useState();
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
+
+  const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
 
   widgets.jqueryuidatepicker(Survey);
 
@@ -50,7 +58,34 @@ export const SubletForm = () => {
     }
   }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
+  async function getCoordinates() {
+    let coord = await fetch(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        houseAddress +
+        "," +
+        city +
+        "," +
+        state +
+        "&key=" +
+        APIKey
+    )
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "OK") {
+          let coord = data.results[0].geometry.location;
+          return [coord.lat, coord.lng];
+        } else {
+          return [defaultCoord.lat, defaultCoord.lng];
+        }
+      });
+    return coord;
+  }
+
   async function handleSubmit() {
+    let coord = await getCoordinates();
+    let latitude = coord[0];
+    let longitude = coord[1];
+
     let slug = houseAddress.split(" ").join("-");
     let author = user.given_name + " " + user.family_name;
     let path = "sublet/" + author + "/" + slug + "/";
@@ -80,8 +115,9 @@ export const SubletForm = () => {
         tenant: user.given_name + " " + user.family_name,
         tenantEmail: user.name,
         preferredGender: preferredGender,
-        latitude: "-71.11",
-        longitude: "42.40"
+        description: description,
+        latitude: latitude,
+        longitude: longitude
       })
     };
     console.log("request options: " + requestOptions.body);
@@ -124,24 +160,25 @@ export const SubletForm = () => {
               {
                 type: "panel",
                 name: "house_information",
-                isRequired: false,
+                isRequired: true,
                 elements: [
                   {
                     type: "text",
                     name: "house_address",
-                    isRequired: false,
+                    isRequired: true,
                     title: "House address"
                   },
                   {
                     type: "text",
                     name: "city",
-                    title: "City"
+                    title: "City",
+                    isRequired: true
                   },
                   {
                     type: "dropdown",
                     name: "state",
                     title: "State",
-                    isRequired: false,
+                    isRequired: true,
                     choicesByUrl: {
                       url:
                         "https://gist.githubusercontent.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_titlecase.json",
@@ -152,14 +189,14 @@ export const SubletForm = () => {
                     type: "text",
                     name: "zip_code",
                     title: "Zip Code",
-                    isRequired: false,
+                    isRequired: true,
                     inputType: "text"
                   },
                   {
                     type: "text",
                     name: "rent",
                     title: "Rent",
-                    isRequired: false,
+                    isRequired: true,
                     inputType: "number"
                   },
                   {
@@ -168,7 +205,7 @@ export const SubletForm = () => {
                     inputType: "date",
                     title: "Sublet available from",
                     dateFormat: "mm/dd/yy",
-                    isRequired: false
+                    isRequired: true
                   },
                   {
                     name: "end_date",
@@ -176,7 +213,7 @@ export const SubletForm = () => {
                     inputType: "date",
                     title: "Sublet available to",
                     dateFormat: "mm/dd/yy",
-                    isRequired: false
+                    isRequired: true
                   }
                 ],
                 title: "House Information",
@@ -200,22 +237,22 @@ export const SubletForm = () => {
               {
                 type: "text",
                 name: "bedrooms",
-                title: "Number of Bedroom",
-                isRequired: false,
+                title: "Number of Bedrooms",
+                isRequired: true,
                 inputType: "number"
               },
               {
                 type: "text",
                 name: "bathrooms",
                 title: "Number of Bathrooms",
-                isRequired: false,
+                isRequired: true,
                 inputType: "number"
               },
               {
                 type: "dropdown",
                 name: "preferred_gender",
-                title: "Preferred Gender",
-                isRequired: false,
+                title: "Preferred gender of subtenant",
+                isRequired: true,
                 colCount: 0,
                 choices: ["female", "male", "no preference"]
               },
@@ -223,9 +260,16 @@ export const SubletForm = () => {
                 name: "expire_date",
                 type: "datepicker",
                 inputType: "date",
-                title: "Sublet info expires on",
+                title: "This posting will automatically delete on",
                 dateFormat: "mm/dd/yy",
-                isRequired: false
+                isRequired: true
+              },
+              {
+                type: "text",
+                name: "description",
+                title: "Description",
+                isRequired: false,
+                inputType: "text"
               },
               {
                 type: "file",
@@ -260,6 +304,7 @@ export const SubletForm = () => {
     setEndDate(result.data.end_date);
     setExpireDate(result.data.expire_date);
     setPreferredGender(result.data.preferred_gender);
+    setDescription(result.data.description);
     console.log(result.data.begin_date);
 
     if (temporaryFilesStorage.Files != null) {

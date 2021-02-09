@@ -7,12 +7,18 @@ import { APIBASE } from "../../utility/api-base";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HouseContext } from "../../context";
 
+const defaultCoord = {
+  lat: 42.4085,
+  lng: -71.1183
+};
+
 export const HouseForm = () => {
   const context = useContext(HouseContext);
   const { token, isTokenSet, setToken, getHouse } = context;
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const [landlordEmail, setLandlordEmail] = useState("");
+  const [landlordName, setLandlordName] = useState("");
   const [houseAddress, setHouseAddress] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
@@ -32,6 +38,8 @@ export const HouseForm = () => {
   const [connectedHouse, setConnectedHouse] = useState("");
   const [description, setDescription] = useState("");
 
+  const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
+
   var temporaryFilesStorage = {};
 
   const fetchToken = useCallback(async () => {
@@ -49,7 +57,34 @@ export const HouseForm = () => {
     }
   }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
+  async function getCoordinates() {
+    let coord = await fetch(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        houseAddress +
+        "," +
+        city +
+        "," +
+        state +
+        "&key=" +
+        APIKey
+    )
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "OK") {
+          let coord = data.results[0].geometry.location;
+          return [coord.lat, coord.lng];
+        } else {
+          return [defaultCoord.lat, defaultCoord.lng];
+        }
+      });
+    return coord;
+  }
+
   async function handleSubmit() {
+    let coord = await getCoordinates();
+    let latitude = coord[0];
+    let longitude = coord[1];
+
     let slug = houseAddress.split(" ").join("-");
     let path = slug + "/";
 
@@ -65,6 +100,7 @@ export const HouseForm = () => {
       },
       body: JSON.stringify({
         landlordEmail: landlordEmail,
+        landlordName: landlordName,
         houseAddress: houseAddress,
         stateName: state,
         city: city,
@@ -81,8 +117,8 @@ export const HouseForm = () => {
         reviewRatings: [],
         description: description,
         connectedHouse: connectedHouse,
-        latitude: 42.4085,
-        longitude: -71.1183
+        latitude: latitude,
+        longitude: longitude
       })
     };
     console.log("request options: " + requestOptions.body);
@@ -267,7 +303,7 @@ export const HouseForm = () => {
               {
                 type: "text",
                 name: "bedrooms",
-                title: "Number of Bedroom",
+                title: "Number of Bedrooms",
                 isRequired: true,
                 inputType: "number"
               },
@@ -290,7 +326,7 @@ export const HouseForm = () => {
                 type: "text",
                 name: "connectedHouse",
                 title: "Connected House (Street Address. Ex. 355 Boston Ave)",
-                isRequired: true,
+                isRequired: false,
                 inputType: "text"
               },
               {
@@ -323,6 +359,7 @@ export const HouseForm = () => {
   survey.onComplete.add(function(result) {
     console.log(result.data);
     setHouseAddress(result.data.house_address);
+    setLandlordName(result.data.landlord_name);
     setLandlordEmail(result.data.landlord_email);
     setState(result.data.state);
     setCity(result.data.city);
