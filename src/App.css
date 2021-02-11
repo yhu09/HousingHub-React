@@ -5,9 +5,13 @@
   height: 200px;
 }
 
+.single-house-images {
+  padding-top: 100px;
+}
+
 .single-house-images .image-gallery-slide img {
-  width: 600px;
   height: 500px;
+  max-width: 40%;
 }
 
 .no-result {

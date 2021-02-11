@@ -45,7 +45,7 @@ export default class Navbar extends Component {
               <Link to="/houseform">Create House</Link>
             </li>
             <li>
-              <Link to="/subletform">Sublet lease</Link>
+              <Link to="/subletform">Sublet Room</Link>
             </li>
           </ul>
           {/* <div className="nav-links">

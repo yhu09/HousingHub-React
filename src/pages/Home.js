@@ -56,9 +56,12 @@ export const Home = () => {
   return (
     <>
       <Hero hero="defaultHero">
-        <Banner title="Nice House!" subtitle="It will cost you $10 a month">
+        <Banner
+          title="Tufts Housing Hub"
+          subtitle="Find houses near campus reviewed by previous Tufts students"
+        >
           <Link to="/houses" className="btn-primary">
-            Checkout our reviews
+            Checkout the houses
           </Link>
         </Banner>
       </Hero>

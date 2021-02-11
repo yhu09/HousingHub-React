@@ -140,7 +140,7 @@ export const HouseForm = () => {
   Survey.StylesManager.applyTheme("winterstone");
 
   let json = {
-    title: "Create a House",
+    title: "Make a house entry",
     pages: [
       {
         name: "page1",
@@ -199,7 +199,7 @@ export const HouseForm = () => {
                   {
                     type: "text",
                     name: "rent",
-                    title: "Rent",
+                    title: "Rent per person",
                     isRequired: true,
                     inputType: "number"
                   }

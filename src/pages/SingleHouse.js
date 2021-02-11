@@ -220,7 +220,7 @@ const SingleHouse = props => {
                     <div className="info">
                       <h6>
                         {" "}
-                        <GiHouse /> Rent: ${house.rent}
+                        <GiHouse /> Rent per person: ${house.rent}
                       </h6>
                       <h6>
                         {" "}
@@ -418,7 +418,7 @@ const SingleHouseEdit = ({
           <h3>Basic Info</h3>
           <div className="info">
             <h6>
-              rent:{" "}
+              <GiHouse /> Rent per person: $
               <input
                 type="text"
                 value={rent}
@@ -546,9 +546,9 @@ const SingleHouseEdit = ({
           </div>
         </div>
         <div>
-          <button block bsSize="large" type="submit">
+          <Button block bsSize="large" type="submit">
             Update House Info
-          </button>{" "}
+          </Button>{" "}
         </div>
         <br></br>
       </div>

@@ -45,7 +45,7 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
 
   return (
     <section className="filter-container">
-      <Title title="search rooms"></Title>
+      <Title title="search houses"></Title>
       <div className="filter-form">
         <SearchBar
           value={searchValue}

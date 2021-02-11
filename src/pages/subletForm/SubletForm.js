@@ -34,8 +34,6 @@ export const SubletForm = () => {
   const [preferredGender, setPreferredGender] = useState("");
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [description, setDescription] = useState();
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
 
   const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
 
@@ -147,7 +145,7 @@ export const SubletForm = () => {
             type: "image",
             name: "first_page_image",
             imageLink:
-              "https://pinehallbrick.com/wp-content/uploads/2020/05/lb_tufts_gso2.jpg",
+              "https://zumpermedia.s3.amazonaws.com/blog/wp-content/uploads/2019/02/26112330/chic-bedroom.jpg",
             imageFit: "none",
             imageHeight: 726,
             imageWidth: 500,
@@ -237,7 +235,7 @@ export const SubletForm = () => {
               {
                 type: "text",
                 name: "bedrooms",
-                title: "Number of Bedrooms",
+                title: "Number of Other Tenants",
                 isRequired: true,
                 inputType: "number"
               },

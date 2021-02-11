@@ -38,6 +38,7 @@ const SingleSubletter = props => {
   const [edit, setEdit] = useState(false);
   const [beginDate, setBeginDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [expDate, setExpDate] = useState(null);
   const [subletter, setSubletter] = useState();
 
   const fetchToken = useCallback(async () => {
@@ -83,16 +84,22 @@ const SingleSubletter = props => {
             }
             let begindate = data[0].begindate.split("T")[0];
             let enddate = data[0].enddate.split("T")[0];
+            let expdate = data[0].expiredate.split("T")[0];
             begindate = begindate.split("-");
             enddate = enddate.split("-");
+            expdate = expdate.split("-");
             let beginYear = parseInt(begindate[0]);
             let beginMonth = parseInt(begindate[1].replace(/^0+/, ""));
             let beginDay = parseInt(begindate[2].replace(/^0+/, ""));
             let endYear = parseInt(enddate[0]);
             let endMonth = parseInt(enddate[1].replace(/^0+/, ""));
             let endDay = parseInt(enddate[2].replace(/^0+/, ""));
+            let expYear = parseInt(expdate[0]);
+            let expMonth = parseInt(expdate[1].replace(/^0+/, ""));
+            let expDay = parseInt(expdate[2].replace(/^0+/, ""));
             setBeginDate({ day: beginDay, month: beginMonth, year: beginYear });
             setEndDate({ day: endDay, month: endMonth, year: endYear });
+            setExpDate({ day: expDay, month: expMonth, year: expYear });
             console.log(data[0]);
             setSubletter(data[0]);
           });
@@ -149,10 +156,14 @@ const SingleSubletter = props => {
               />
             </div>
             {user.name === subletter.tenantemail ? (
-              <UploadImages houseAddress={houseAddress} type={"subletter"} author={user.given_name + " " + user.family_name} />
+              <UploadImages
+                houseAddress={houseAddress}
+                type={"subletter"}
+                author={user.given_name + " " + user.family_name}
+              />
             ) : (
-                <></>
-              )}
+              <></>
+            )}
             {/* <UploadImages houseAddress={houseAddress} type={"subletter"} /> */}
             {edit ? (
               <SingleSubletterEdit
@@ -160,68 +171,71 @@ const SingleSubletter = props => {
                 token={token}
                 beginDate={beginDate}
                 endDate={endDate}
+                expDate={expDate}
               />
             ) : (
-                <>
-                  {" "}
-                  <div className="single-room-info">
-                    <article className="desc">
-                      <h3>Full Address</h3>
-                      <p>
-                        {" "}
-                        {subletter.houseaddress}, {subletter.city},{" "}
-                        {subletter.statename} {subletter.zip}{" "}
-                      </p>
-                      <h3>Contact Info</h3>
-                      <p> Tenant Name: {subletter.tenant} </p>
-                      <p> Tenant Email: {subletter.tenantemail} </p>
-                      <h3>Sublet Dates</h3>
+              <>
+                {" "}
+                <div className="single-room-info">
+                  <article className="desc">
+                    <h3>Full Address</h3>
+                    <p>
+                      {" "}
+                      {subletter.houseaddress}, {subletter.city},{" "}
+                      {subletter.statename} {subletter.zip}{" "}
+                    </p>
+                    <h3>Contact Info</h3>
+                    <p> Tenant Name: {subletter.tenant} </p>
+                    <p> Tenant Email: {subletter.tenantemail} </p>
+                    <h3>Sublet Dates</h3>
                     From: <Calendar value={beginDate} />
                     To: <Calendar value={endDate} />
-                    </article>
-                    <div>
-                      <h3>Basic House Info</h3>
-                      <div className="info">
-                        <h6>
-                          {" "}
-                          <GiHouse /> Rent: ${subletter.rent}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <FaRestroom /> Preferred Gender:{" "}
-                          {subletter.preferredgender}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBed /> Bedrooms: {subletter.bedrooms}
-                        </h6>
-                        <h6>
-                          {" "}
-                          <BiBath /> Bathrooms: {subletter.bathrooms}
-                        </h6>
-                      </div>
-                      <h3>Description</h3>
-                      <p>{subletter.description}</p>
-                      <h3>Location</h3>
-                      <SingleMapComponent
-                        latitude={parseFloat(subletter.latitude)}
-                        longitude={parseFloat(subletter.longitude)}
-                        edit={false}
-                      />
+                  </article>
+                  <div>
+                    <h3>Basic House Info</h3>
+                    <div className="info">
+                      <h6>
+                        {" "}
+                        <GiHouse /> Rent: ${subletter.rent}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <FaRestroom /> Preferred Gender:{" "}
+                        {subletter.preferredgender}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBed /> Bedrooms: {subletter.bedrooms}
+                      </h6>
+                      <h6>
+                        {" "}
+                        <BiBath /> Bathrooms: {subletter.bathrooms}
+                      </h6>
                     </div>
-                    <div>
-                      {user.name === subletter.tenantemail ? (
-                        <Button onClick={onEdit} className="room-info-button">
-                          Edit Subletter Info
-                        </Button>
-                      ) : (
-                          <></>
-                        )}
-                    </div>
-                    <br></br>
+                    <h3>Description</h3>
+                    <p>{subletter.description}</p>
+                    <h3>Location</h3>
+                    <SingleMapComponent
+                      latitude={parseFloat(subletter.latitude)}
+                      longitude={parseFloat(subletter.longitude)}
+                      edit={false}
+                    />
+                    <h3>Posting Expires On</h3>
+                    <Calendar value={expDate} />
                   </div>
-                </>
-              )}
+                  <div>
+                    {user.name === subletter.tenantemail ? (
+                      <Button onClick={onEdit} className="room-info-button">
+                        Edit Subletter Info
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <br></br>
+                </div>
+              </>
+            )}
           </section>
         </>
       ) : null}
@@ -229,25 +243,41 @@ const SingleSubletter = props => {
   );
 };
 
-
-
-
-const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
+const SingleSubletterEdit = ({
+  subletter,
+  token,
+  beginDate,
+  endDate,
+  expDate
+}) => {
   const [rent, setRent] = useState(subletter.rent);
   const [bedrooms, setBedrooms] = useState(subletter.bedrooms);
   const [bathrooms, setBathrooms] = useState(subletter.bathrooms);
   const [gender, setGender] = useState(subletter.preferredgender);
   const [editBeginDate, setEditBeginDate] = useState(beginDate);
   const [editEndDate, setEditEndDate] = useState(endDate);
+  const [editExpDate, setEditExpDate] = useState(expDate);
   const [latitude, setLatitude] = useState(subletter.latitude);
   const [longitude, setLongitude] = useState(subletter.longitude);
   const [description, setDescription] = useState(subletter.description);
 
   useEffect(() => {
     let formBeginDate =
-      '"' + editBeginDate.month + "/" + editBeginDate.day + "/" + editBeginDate.year + '"';
+      '"' +
+      editBeginDate.month +
+      "/" +
+      editBeginDate.day +
+      "/" +
+      editBeginDate.year +
+      '"';
     let formEndDate =
-      '"' + editEndDate.month + "/" + editEndDate.day + "/" + editEndDate.year + '"';
+      '"' +
+      editEndDate.month +
+      "/" +
+      editEndDate.day +
+      "/" +
+      editEndDate.year +
+      '"';
     console.log(formBeginDate);
     console.log(formEndDate);
   }, [editBeginDate, editEndDate]);
@@ -257,8 +287,8 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
       editBeginDate.month + "/" + editBeginDate.day + "/" + editBeginDate.year;
     let formEndDate =
       editEndDate.month + "/" + editEndDate.day + "/" + editEndDate.year;
-    console.log(formBeginDate);
-    console.log(formEndDate);
+    let formExpDate =
+      editExpDate.month + "/" + editExpDate.day + "/" + editExpDate.year;
     const requestOptions = {
       method: "PUT",
       headers: {
@@ -275,6 +305,7 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
         bathrooms: bathrooms,
         beginDate: formBeginDate,
         endDate: formEndDate,
+        expDate: formExpDate,
         preferredGender: gender,
         latitude: latitude,
         longitude: longitude,
@@ -285,8 +316,8 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
     try {
       await fetch(
         APIBASE +
-        "subletters/houseAddress/?houseAddress=" +
-        subletter.houseaddress,
+          "subletters/houseAddress/?houseAddress=" +
+          subletter.houseaddress,
         requestOptions
       )
         .then(response => response.json())
@@ -375,10 +406,12 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
             setLongitude={setLongitude}
             edit={true}
           />
+          <h3>Posting Expires On</h3>
+          <Calendar value={editExpDate} onChange={setEditExpDate} />
         </div>
         <div>
           <Button block bsSize="large" type="submit">
-            Update House Info
+            Update Sublet Info
           </Button>{" "}
         </div>
         <br></br>

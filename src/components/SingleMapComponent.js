@@ -8,11 +8,6 @@ const containerStyle = {
   height: "50vh"
 };
 
-const center = {
-  lat: 42.4085,
-  lng: -71.1183
-};
-
 const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
 
 const SingleMap = ({
@@ -51,7 +46,7 @@ const SingleMap = ({
         <LoadScript googleMapsApiKey={APIKey}>
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={{ lat: latitude, lng: longitude }}
             zoom={15}
             onLoad={onLoad}
             onUnmount={onUnmount}
@@ -65,7 +60,7 @@ const SingleMap = ({
         <LoadScript googleMapsApiKey={APIKey}>
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
+            center={{ lat: latitude, lng: longitude }}
             zoom={15}
             onLoad={onLoad}
             onUnmount={onUnmount}
