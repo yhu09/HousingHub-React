@@ -102,7 +102,10 @@ const Map = ({ houses, subletters }) => {
                   onClick={() => handleToggleOpen(index)} // marker ID is the key here.
                 >
                   {index === openInfoWindowMarkerId && (
-                    <InfoWindow onCloseClick={() => handleToggleClose()}>
+                    <InfoWindow
+                      onCloseClick={() => handleToggleClose()}
+                      options={{ maxWidth: 350 }}
+                    >
                       <Sublet sublet={subletters[index]} />
                     </InfoWindow>
                   )}
