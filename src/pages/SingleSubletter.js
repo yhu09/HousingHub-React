@@ -149,10 +149,10 @@ const SingleSubletter = props => {
               />
             </div>
             {user.name === subletter.tenantemail ? (
-              <UploadImages houseAddress={houseAddress} type={"subletter"} />
+              <UploadImages houseAddress={houseAddress} type={"subletter"} author={user.given_name + " " + user.family_name} />
             ) : (
-              <></>
-            )}
+                <></>
+              )}
             {/* <UploadImages houseAddress={houseAddress} type={"subletter"} /> */}
             {edit ? (
               <SingleSubletterEdit
@@ -162,72 +162,75 @@ const SingleSubletter = props => {
                 endDate={endDate}
               />
             ) : (
-              <>
-                {" "}
-                <div className="single-room-info">
-                  <article className="desc">
-                    <h3>Full Address</h3>
-                    <p>
-                      {" "}
-                      {subletter.houseaddress}, {subletter.city},{" "}
-                      {subletter.statename} {subletter.zip}{" "}
-                    </p>
-                    <h3>Contact Info</h3>
-                    <p> Tenant Name: {subletter.tenant} </p>
-                    <p> Tenant Email: {subletter.tenantemail} </p>
-                    <h3>Sublet Dates</h3>
+                <>
+                  {" "}
+                  <div className="single-room-info">
+                    <article className="desc">
+                      <h3>Full Address</h3>
+                      <p>
+                        {" "}
+                        {subletter.houseaddress}, {subletter.city},{" "}
+                        {subletter.statename} {subletter.zip}{" "}
+                      </p>
+                      <h3>Contact Info</h3>
+                      <p> Tenant Name: {subletter.tenant} </p>
+                      <p> Tenant Email: {subletter.tenantemail} </p>
+                      <h3>Sublet Dates</h3>
                     From: <Calendar value={beginDate} />
                     To: <Calendar value={endDate} />
-                  </article>
-                  <div>
-                    <h3>Basic House Info</h3>
-                    <div className="info">
-                      <h6>
-                        {" "}
-                        <GiHouse /> Rent: ${subletter.rent}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <FaRestroom /> Preferred Gender:{" "}
-                        {subletter.preferredgender}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <BiBed /> Bedrooms: {subletter.bedrooms}
-                      </h6>
-                      <h6>
-                        {" "}
-                        <BiBath /> Bathrooms: {subletter.bathrooms}
-                      </h6>
+                    </article>
+                    <div>
+                      <h3>Basic House Info</h3>
+                      <div className="info">
+                        <h6>
+                          {" "}
+                          <GiHouse /> Rent: ${subletter.rent}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <FaRestroom /> Preferred Gender:{" "}
+                          {subletter.preferredgender}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <BiBed /> Bedrooms: {subletter.bedrooms}
+                        </h6>
+                        <h6>
+                          {" "}
+                          <BiBath /> Bathrooms: {subletter.bathrooms}
+                        </h6>
+                      </div>
+                      <h3>Description</h3>
+                      <p>{subletter.description}</p>
+                      <h3>Location</h3>
+                      <SingleMapComponent
+                        latitude={parseFloat(subletter.latitude)}
+                        longitude={parseFloat(subletter.longitude)}
+                        edit={false}
+                      />
                     </div>
-                    <h3>Description</h3>
-                    <p>{subletter.description}</p>
-                    <h3>Location</h3>
-                    <SingleMapComponent
-                      latitude={parseFloat(subletter.latitude)}
-                      longitude={parseFloat(subletter.longitude)}
-                      edit={false}
-                    />
+                    <div>
+                      {user.name === subletter.tenantemail ? (
+                        <Button onClick={onEdit} className="room-info-button">
+                          Edit Subletter Info
+                        </Button>
+                      ) : (
+                          <></>
+                        )}
+                    </div>
+                    <br></br>
                   </div>
-                  <div>
-                    {user.name === subletter.tenantemail ? (
-                      <Button onClick={onEdit} className="room-info-button">
-                        Edit Subletter Info
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                  <br></br>
-                </div>
-              </>
-            )}
+                </>
+              )}
           </section>
         </>
       ) : null}
     </div>
   );
 };
+
+
+
 
 const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
   const [rent, setRent] = useState(subletter.rent);
@@ -239,6 +242,15 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
   const [latitude, setLatitude] = useState(subletter.latitude);
   const [longitude, setLongitude] = useState(subletter.longitude);
   const [description, setDescription] = useState(subletter.description);
+
+  useEffect(() => {
+    let formBeginDate =
+      '"' + editBeginDate.month + "/" + editBeginDate.day + "/" + editBeginDate.year + '"';
+    let formEndDate =
+      '"' + editEndDate.month + "/" + editEndDate.day + "/" + editEndDate.year + '"';
+    console.log(formBeginDate);
+    console.log(formEndDate);
+  }, [editBeginDate, editEndDate]);
 
   async function onUpdate() {
     let formBeginDate =
@@ -269,11 +281,12 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
         description: description
       })
     };
+    console.log(requestOptions);
     try {
       await fetch(
         APIBASE +
-          "subletters/houseAddress/?houseAddress=" +
-          subletter.houseaddress,
+        "subletters/houseAddress/?houseAddress=" +
+        subletter.houseaddress,
         requestOptions
       )
         .then(response => response.json())
@@ -364,9 +377,9 @@ const SingleSubletterEdit = ({ subletter, token, beginDate, endDate }) => {
           />
         </div>
         <div>
-          <button block bsSize="large" type="submit">
+          <Button block bsSize="large" type="submit">
             Update House Info
-          </button>{" "}
+          </Button>{" "}
         </div>
         <br></br>
       </div>

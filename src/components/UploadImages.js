@@ -3,7 +3,7 @@ import ImageUploader from "react-images-upload";
 import { uploadFile } from "../utility/s3-upload";
 import Loading from "../components/commonHeaders/Loading";
 
-const UploadImages = ({ houseAddress, type }) => {
+const UploadImages = ({ houseAddress, type, author }) => {
   const [pictures, setPictures] = useState(null);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -33,7 +33,7 @@ const UploadImages = ({ houseAddress, type }) => {
     let path = slug + "/";
 
     if (type === "subletter") {
-      path = "sublet/" + path;
+      path = "sublet/" + author + "/" + slug + "/";
     }
 
     var photoKeys = [];
@@ -60,7 +60,7 @@ const UploadImages = ({ houseAddress, type }) => {
             withPreview={true}
             buttonText="Add more images"
             onChange={onDrop}
-            imgExtension={[".webp", ".jpg", ".gif", ".png"]}
+            imgExtension={[".webp", ".jpg", ".gif", ".png", "jpeg"]}
             maxFileSize={5242880}
           />
           {readyToSubmit ? (

@@ -320,7 +320,7 @@ export const HouseForm = () => {
                 title: "Unit level",
                 isRequired: true,
                 colCount: 0,
-                choices: ["upper", "lower", "Entire House"]
+                choices: ["upper", "lower", "entire House"]
               },
               {
                 type: "text",

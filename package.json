@@ -37,7 +37,7 @@
   },
   "scripts": {
     "start": "SET REACT_APP_STAGE=local&&react-scripts start",
-    "start-mac": "set REACT_APP_STAGE=local&&react-scripts start",
+    "start-mac": "export REACT_APP_STAGE=local&&react-scripts start",
     "build-windows-prod": "SET REACT_APP_STAGE=production&&npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test",
