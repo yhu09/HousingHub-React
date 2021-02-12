@@ -56,6 +56,29 @@ export const SubletForm = () => {
     }
   }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
+  async function checkPrevPost () {
+    console.log(user.email);
+    var requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    };
+    await fetch(APIBASE + "subletters/email/?email=" + user.email, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.length > 0) {
+          console.log("NO POSTING ALLOWED");
+          alert("Sorry, you already have a subletting post active!")
+          //REDIRECT
+        } else {
+          console.log("POSTING ALLOWED");
+        }
+      });
+  }
+
   async function getCoordinates() {
     let coord = await fetch(
       "https://maps.googleapis.com/maps/api/geocode/json?address=" +
@@ -317,10 +340,13 @@ export const SubletForm = () => {
 
   useEffect(() => {
     fetchToken();
+    if (user != undefined && token != "") {
+      checkPrevPost();
+    }
     if (readyToSubmit) {
       handleSubmit();
     }
-  }, [fetchToken, readyToSubmit]);
+  }, [token, fetchToken, readyToSubmit]);
 
   survey.onUploadFiles.add(function(survey, options) {
     // Add files to the temporary storage
