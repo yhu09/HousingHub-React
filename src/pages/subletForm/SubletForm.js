@@ -71,8 +71,8 @@ export const SubletForm = () => {
         console.log(data);
         if (data.length > 0) {
           console.log("NO POSTING ALLOWED");
-          alert("Sorry, you already have a subletting post active!")
-          //REDIRECT
+          alert("You have a subletting post active!")
+          window.location.replace("http://localhost:3000");
         } else {
           console.log("POSTING ALLOWED");
         }

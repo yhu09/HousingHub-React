@@ -156,7 +156,7 @@ h6 {
 }
 .nav-links {
   height: 0;
-  overflow: hidden;
+  overflow: auto;
   transition: var(--mainTransition);
   list-style-type: none;
 }

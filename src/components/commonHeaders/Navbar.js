@@ -47,6 +47,10 @@ export default class Navbar extends Component {
             <li>
               <Link to="/subletform">Sublet Room</Link>
             </li>
+            <li>
+              <LoginButton />
+              <LogoutButton />
+            </li>
           </ul>
           {/* <div className="nav-links">
             <li float="right">
@@ -54,12 +58,12 @@ export default class Navbar extends Component {
               <LogoutButton />
             </li>
           </div> */}
-          <div className="nav-links">
+          {/*<div className="nav-links">
             <li>
               <LoginButton />
               <LogoutButton />
             </li>
-          </div>
+          </div>*/}
         </div>
       </nav>
     );
