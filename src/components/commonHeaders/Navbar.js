@@ -48,22 +48,10 @@ export default class Navbar extends Component {
               <Link to="/subletform">Sublet Room</Link>
             </li>
             <li>
-              <LoginButton />
+              <LoginButton style={{margin: 20}} text="Log in" />
               <LogoutButton />
             </li>
           </ul>
-          {/* <div className="nav-links">
-            <li float="right">
-              <LoginButton />
-              <LogoutButton />
-            </li>
-          </div> */}
-          {/*<div className="nav-links">
-            <li>
-              <LoginButton />
-              <LogoutButton />
-            </li>
-          </div>*/}
         </div>
       </nav>
     );
