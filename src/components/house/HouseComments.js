@@ -137,7 +137,7 @@ const HouseComment = ({ comment, index }) => {
 
     console.log("Child Comment submitted");
 
-    // window.location.reload(true);
+    window.location.reload(true);
   }
 
   useEffect(() => {
