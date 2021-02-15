@@ -4,6 +4,9 @@ import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import LoginButton from "../auth0/LoginButton";
 import LogoutButton from "../auth0/LogoutButton";
+import Popup from "reactjs-popup";
+import { Button } from "react-bootstrap";
+import Account from "../commonHeaders/Account";
 
 export default class Navbar extends Component {
   state = {
@@ -50,6 +53,15 @@ export default class Navbar extends Component {
             <li>
               <LoginButton />
               <LogoutButton />
+            </li>
+            <li>
+              <Popup
+                trigger={<Button> Account </Button>}
+                position="bottom center"
+                on="hover"
+              >
+                <Account />
+              </Popup>
             </li>
           </ul>
           {/* <div className="nav-links">

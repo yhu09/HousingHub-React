@@ -1,5 +1,34 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
+.account-box {
+  background: white;
+  min-height: 500px;
+  min-width: 300px;
+  max-width: 300px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 35% 65%;
+}
+
+.account-info {
+  text-align: left;
+  padding-top: 5%;
+  padding-left: 5%;
+  font-size: 12px;
+  letter-spacing: var(--mainSpacing);
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+.account-subletter {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
 .image-gallery-slide img {
   width: 100px;
   height: 200px;
