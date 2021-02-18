@@ -7,27 +7,28 @@ export default class Services extends Component {
     state = {
         services: [{
             icon: <FaTired />,
-            title: "Excruciating process",
-            info: "Stressful Process Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqu"
+            title: "No more headaches!",
+            info: "Tufts Housing Hub makes it easy to connect students who are looking for a lease with students who are looking to pass theirs down."
         },
         {
             icon: <FaComment />,
-            title: "No Community",
-            info: "talk with other students Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+            title: "Community of students",
+            info: "Designed by Tufts students, for Tufts students! Users can ask questions about apartments, read reviews, and connect with current tenants to learn more."
         }, {
             icon: <FaEyeSlash />,
-            title: "Hidden fees and small traps ",
-            info: "'laundry machine takes quaters' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-        }, {
-            icon: <FaTemperatureHigh />,
-            title: "Furnace breaks",
-            info: "condition of your furnace Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        }]
+            title: "No more going in blind!",
+            info: "Current tenants can write reviews of their apartment so that potential new tenants or sublettors know everything they need to know about their new home."
+        // }, {
+        //     icon: <FaTemperatureHigh />,
+        //     title: "Furnace breaks",
+        //     info: "condition of your furnace Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        // }]
+      }]
     }
     render() {
         return (
             <section className="services">
-                <Title title="Why?" />
+                <Title title="Why Tufts Housing Hub?" />
                 <div className="services-center">
                     {this.state.services.map((item, index) => {
                         return (<article key={index} className="service">

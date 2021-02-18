@@ -61,7 +61,7 @@ export const Home = () => {
           subtitle="Find houses near campus reviewed by previous Tufts students"
         >
           <Link to="/houses" className="btn-primary">
-            Checkout the houses
+            Check out the houses!
           </Link>
         </Banner>
       </Hero>
