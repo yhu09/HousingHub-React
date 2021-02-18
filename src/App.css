@@ -169,8 +169,8 @@ h6 {
   z-index: 15;
 }
 .nav-header {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
 }
 .nav-btn {
   background: transparent;
@@ -214,17 +214,22 @@ h6 {
   .nav-center {
     max-width: 1170px;
     margin: 0 auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: 10% 60% 30%;
+    /* display: flex; */
   }
   .nav-links {
     height: auto;
     display: flex;
-    margin-left: 4rem;
+    margin-left: 5rem;
   }
   .nav-links a {
     margin: 0 1rem;
     padding: 0.5rem 0;
   }
+}
+.nav-log-in {
+  margin-left: 25%;
 }
 
 /* end of navbar */
