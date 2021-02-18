@@ -54,10 +54,13 @@ const Account = ({ title }) => {
     }
   }, [token, fetchToken]);
 
-  console.log(user);
-  console.log(user.user_metadata);
-  console.log(APIBASE + "subletters/email/?email=" + user.email);
+  if (user != undefined) {
+    console.log(user);
+    console.log(user.user_metadata);
+    console.log(APIBASE + "subletters/email/?email=" + user.email);
+  }
 
+  // if the user is not logged in, hovering over Account box causes error
   return (
     <div className="account-box">
       <div className="account-info">
