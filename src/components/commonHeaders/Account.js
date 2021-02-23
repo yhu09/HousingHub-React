@@ -70,7 +70,7 @@ const Account = () => {
           <div className="account-subletter">
             <h6 style={{ textAlign: "center" }}>Active Subletter Post</h6>
             {subletter == null ? (
-              <p> No posts </p>
+              <p style={{ textAlign: "center" }}> No posts </p>
             ) : (
               <Sublet sublet={subletter}></Sublet>
             )}

@@ -102,7 +102,7 @@ const Sublet = ({ sublet }) => {
           </Link>
         </div>
         <div className="sublet-info-info">
-          Bedrooms: {bedrooms} <br></br>
+          Other tenants: {bedrooms} <br></br>
           Bathrooms: {bathrooms} <br></br>
           Preferred Gender: {preferredgender}
         </div>

@@ -28,7 +28,7 @@ import SingleMapComponent from "../components/SingleMapComponent";
 
 const SingleSubletter = props => {
   const context = useContext(SubletContext);
-  const { token, isTokenSet, setToken, getHouse } = context;
+  const { token, isTokenSet, setToken } = context;
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
   const [slug, setSlug] = useState(props.match.params.slug);
