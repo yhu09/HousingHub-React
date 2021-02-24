@@ -2,7 +2,7 @@
 
 .account-box {
   background: white;
-  min-height: 500px;
+  min-height: 600px;
   min-width: 300px;
   max-width: 300px;
   width: 100%;
@@ -229,7 +229,7 @@ h6 {
   }
 }
 .nav-log-in {
-  margin-left: 20%;
+  margin-left: 50%;
 }
 
 /* end of navbar */

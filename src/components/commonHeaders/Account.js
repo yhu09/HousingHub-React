@@ -3,6 +3,7 @@ import { APIBASE } from "../../utility/api-base";
 import { HouseContext } from "../../context";
 import { useAuth0 } from "@auth0/auth0-react";
 import Sublet from "../subletter/Sublet";
+import LogoutButton from "../auth0/LogoutButton";
 
 const Account = () => {
   const context = useContext(HouseContext);
@@ -66,6 +67,7 @@ const Account = () => {
             <p>Email: {user.name}</p>
             <p>Gender: </p>
             <p>Year: </p>
+            <LogoutButton />
           </div>
           <div className="account-subletter">
             <h6 style={{ textAlign: "center" }}>Active Subletter Post</h6>

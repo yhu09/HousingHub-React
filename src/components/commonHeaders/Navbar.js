@@ -56,7 +56,6 @@ const Navbar = () => {
         </div>
         <div className="nav-log-in">
           <LoginButton style={{ margin: 20 }} text="Log in" />
-          <LogoutButton />
           {isAuthenticated ? (
             <Popup
               trigger={<Button> Account </Button>}
