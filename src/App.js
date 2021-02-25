@@ -7,6 +7,7 @@ import { Error } from "./pages/Error";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/commonHeaders/Navbar";
 import { Subletter } from "./pages/Subletter";
+import { Landlords } from "./pages/Landlords";
 import { SubletForm } from "./pages/subletForm/SubletForm";
 import { HouseForm } from "./pages/houseForm/HouseForm";
 import SingleHouse from "./pages/SingleHouse";
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/houseform/" component={HouseForm} />
           <Route exact path="/subletform/" component={SubletForm} />
           <Route exact path="/houses/" component={Houses} />
+          <Route exact path="/landlords/" component={Landlords} />
           <Route exact path="/houses/:slug" component={SingleHouse} />
           <Route exact path="/sublet" component={Subletter} />
           <Route exact path="/sublet/:slug" component={SingleSubletter} />

@@ -7,6 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 import { HouseProvider } from "./context";
 import { SubletProvider } from "./subletContext";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { LandlordProvider } from "./landlordContext";
 require("dotenv").config();
 
 const audience =
@@ -24,13 +25,15 @@ ReactDOM.render(
     audience={audience}
     scope={process.env.REACT_APP_Scope}
   >
-    <SubletProvider>
-      <HouseProvider>
-        <Router>
-          <App />
-        </Router>
-      </HouseProvider>
-    </SubletProvider>
+    <LandlordProvider>
+      <SubletProvider>
+        <HouseProvider>
+          <Router>
+            <App />
+          </Router>
+        </HouseProvider>
+      </SubletProvider>
+    </LandlordProvider>
   </Auth0Provider>,
   document.getElementById("root")
 );
