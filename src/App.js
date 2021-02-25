@@ -13,6 +13,7 @@ import { HouseForm } from "./pages/houseForm/HouseForm";
 import { LandlordForm } from "./pages/landlordForm/LandlordForm";
 import SingleHouse from "./pages/SingleHouse";
 import SingleSubletter from "./pages/SingleSubletter";
+import SingleLandlord from "./pages/SingleLandlord";
 import "semantic-ui-css/semantic.min.css";
 import VerifyEmail from "./pages/VerifyEmail";
 
@@ -29,11 +30,12 @@ function App() {
           <Route exact path="/subletform/" component={SubletForm} />
           <Route exact path="/landlordform/" component={LandlordForm} />
           <Route exact path="/houses/" component={Houses} />
-          <Route exact path="/landlords/" component={Landlords} />
           <Route exact path="/houses/:slug" component={SingleHouse} />
           <Route exact path="/sublet" component={Subletter} />
           <Route exact path="/sublet/:slug" component={SingleSubletter} />
           <Route exact path="/verification" component={VerifyEmail} />
+          <Route exact path="/landlords/" component={Landlords} />
+          <Route exact path="/landlords/:slug" component={SingleLandlord} />
           <Route component={Error} />
         </Switch>
       </BrowserRouter>

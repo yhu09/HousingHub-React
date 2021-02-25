@@ -16,8 +16,10 @@ const Landlord = ({ landlord }) => {
     landlordname,
     landlordemail,
     landlordnumber,
+    description,
     reviewratings
   } = landlord;
+  const slug = landlordname.replace(" ", "-");
   useEffect(() => {
     function calculateAverageRating() {
       let numberOfReviews = reviewratings ? reviewratings.length : 0;
@@ -56,6 +58,20 @@ const Landlord = ({ landlord }) => {
               ({numReviews})
             </div>
           ) : null}
+          <div className="landlord-credential">
+            <p>Email: {landlordemail}</p>
+            <p>Number: {landlordnumber}</p>
+          </div>
+        </div>
+        <div className="landlord-description">
+          <h6>Description:</h6>
+          {description == undefined ? (<p>No description at this moment</p>) : (<p>{description.substring(0, 30)}...</p>)}
+          <div style={{ paddingLeft: "5px" }}>
+          <Link to={`/landlords/${slug}`} className="btn-primary">
+            {" "}
+            Link{" "}
+          </Link>
+          </div>
         </div>
       </div>
     </div>

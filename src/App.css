@@ -672,7 +672,7 @@ h6 {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  width: 60%;
+  width: 40%;
   /* margin: 100px auto; */
   background: white;
   border-radius: 10px;
@@ -681,7 +681,7 @@ h6 {
 
 .landlord-box-info {
   display: grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 50% 50%;
 }
 
 .landlord-info-name {
@@ -697,7 +697,27 @@ h6 {
 
 .landlord-info-rating {
   padding-top: 3%;
+  /* padding-left: 2%; */
+}
+
+.landlord-credential {
+  padding-top: 5%;
   padding-left: 2%;
+  font-size: 10px;
+}
+
+.landlord-description {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.landlord-description h6 {
+  letter-spacing: var(--mainSpacing);
+  margin-bottom: 0.5em;
+  font-size: 15px;
+}
+.landlord-description p {
+  font-size: 12px;
+  padding-left: 3%;
 }
 
 .landlordlist {
