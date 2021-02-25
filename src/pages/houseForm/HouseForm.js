@@ -238,7 +238,7 @@ export const HouseForm = () => {
                     type: "text",
                     name: "landlord_email",
                     title: "Landlord Email",
-                    isRequired: true,
+                    isRequired: false,
                     inputType: "email"
                   }
                 ],

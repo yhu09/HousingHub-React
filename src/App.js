@@ -10,6 +10,7 @@ import { Subletter } from "./pages/Subletter";
 import { Landlords } from "./pages/Landlords";
 import { SubletForm } from "./pages/subletForm/SubletForm";
 import { HouseForm } from "./pages/houseForm/HouseForm";
+import { LandlordForm } from "./pages/landlordForm/LandlordForm";
 import SingleHouse from "./pages/SingleHouse";
 import SingleSubletter from "./pages/SingleSubletter";
 import "semantic-ui-css/semantic.min.css";
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/houseform/" component={HouseForm} />
           <Route exact path="/subletform/" component={SubletForm} />
+          <Route exact path="/landlordform/" component={LandlordForm} />
           <Route exact path="/houses/" component={Houses} />
           <Route exact path="/landlords/" component={Landlords} />
           <Route exact path="/houses/:slug" component={SingleHouse} />

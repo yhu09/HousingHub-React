@@ -4,12 +4,12 @@ import Banner from "../components/commonHeaders/Banner";
 import { Link } from "react-router-dom";
 import LandlordsContainer from "../container/LandlordsContainer";
 import { useAuth0 } from "@auth0/auth0-react";
-import { HouseContext } from "../context";
+import { LandlordContext } from "../landlordContext";
 import { APIBASE } from "../utility/api-base";
 
 export const Landlords = () => {
-  const context = useContext(HouseContext);
-  const { token, isTokenSet, setToken } = context;
+  const context = useContext(LandlordContext);
+  const { token, isTokenSet, setToken, setLandlords } = context;
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const fetchToken = useCallback(async () => {
@@ -29,17 +29,20 @@ export const Landlords = () => {
 
   const fetchHouses = useCallback(async () => {
     try {
-      await fetch(APIBASE + "houses", {
+      await fetch(APIBASE + "landlords", {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
         .then(response => response.json())
-        .then(data => {});
+        .then(data => {
+          console.log(data);
+          setLandlords(data);
+        });
     } catch (e) {
       console.error(e);
     }
-  }, [token]);
+  }, [setLandlords, token]);
 
   useEffect(() => {
     fetchToken();

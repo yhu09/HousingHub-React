@@ -14,10 +14,10 @@ const LandlordsList = ({ landlords }) => {
     );
   }
   return (
-    <section className="roomslist">
-      <div className="roomslist-center">
+    <section className="landlordlist">
+      <div className="landlordlists-center">
         {landlords.map((item, index) => {
-          return <Landlord key={index} house={item} />;
+          return <Landlord key={index} landlord={item} />;
         })}
       </div>
     </section>

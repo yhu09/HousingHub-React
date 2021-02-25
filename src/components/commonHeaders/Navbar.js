@@ -3,7 +3,6 @@ import logo from "../../images/newLogo.svg";
 import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import LoginButton from "../auth0/LoginButton";
-import LogoutButton from "../auth0/LogoutButton";
 import Popup from "reactjs-popup";
 import { Button } from "react-bootstrap";
 import Account from "../commonHeaders/Account";
@@ -54,6 +53,9 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/subletform">Sublet Room</Link>
+            </li>
+            <li>
+              <Link to="/landlordform">Enter Landlord</Link>
             </li>
           </ul>
         </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
-import { HouseContext } from "../../context";
+import { LandlordContext } from "../../landlordContext";
 import Title from "../commonHeaders/Title";
 import SearchBar from "material-ui-search-bar";
 
 const LandlordsFilter = ({ landlords }) => {
-  const context = useContext(HouseContext);
+  const context = useContext(LandlordContext);
   const { handleSearchInput } = context;
   const [searchValue, setSearchValue] = useState("");
 
