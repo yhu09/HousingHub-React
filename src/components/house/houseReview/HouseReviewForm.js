@@ -6,7 +6,12 @@ import * as Survey from "survey-react";
 import "survey-react/survey.css";
 import { APIBASE } from "../../../utility/api-base";
 
-const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews }) => {
+const HouseReviewForm = ({
+  houseAddress,
+  token,
+  houseReviews,
+  setHouseReviews
+}) => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [rent, setRent] = useState(0);
@@ -16,6 +21,9 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const { user } = useAuth0();
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   async function handleSubmit(event) {
     let author = user.given_name + " " + user.family_name;
@@ -63,6 +71,7 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
 
     console.log("House Review Form submitted");
     setReadyToSubmit(false);
+    await sleep(2000);
   }
 
   Survey.StylesManager.applyTheme("winterstone");
@@ -148,7 +157,7 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
 
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function (result) {
+  survey.onComplete.add(function(result) {
     console.log(result.data);
     if (result.data.status_of_form_completion_boolean == true) {
       setStars(result.data.rating);
