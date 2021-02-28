@@ -474,6 +474,15 @@ h6 {
   display: table-cell;
 }
 
+.landlord-info {
+  width: 80vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 10rem auto;
+  /* border-bottom: solid #77c7f5; */
+  padding-bottom: 10px;
+}
+
 .sublet-info-address {
   text-align: left;
   width: 100%;

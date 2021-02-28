@@ -71,7 +71,7 @@ const HouseReviewForm = ({
 
     console.log("House Review Form submitted");
     setReadyToSubmit(false);
-    await sleep(2000);
+    await sleep(4000);
   }
 
   Survey.StylesManager.applyTheme("winterstone");

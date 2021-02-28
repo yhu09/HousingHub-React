@@ -1,21 +1,21 @@
 import React, { Component, useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import "./HouseReviewForm.css";
+import "./LandlordReviewForm.css";
 import cookie from "react-cookies";
 import * as Survey from "survey-react";
 import "survey-react/survey.css";
 import { APIBASE } from "../../../utility/api-base";
 
-const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews }) => {
+const LandlordReviewForm = ({
+  landlordName,
+  token,
+  landlordReviews,
+  setLandlordReviews
+}) => {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
-  const [rent, setRent] = useState(0);
-  const [elecBill, setElecBill] = useState(0);
-  const [gasBill, setGasBill] = useState(0);
-  const [waterBill, setWaterBill] = useState(0);
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const { user } = useAuth0();
-
 
   async function handleSubmit(event) {
     let author = user.given_name + " " + user.family_name;
@@ -27,18 +27,14 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        house: houseAddress,
+        landlord: landlordName,
         stars: stars,
         review: review,
-        rent: rent,
-        elecBill: elecBill,
-        gasBill: gasBill,
-        waterBill: waterBill,
         author: author
       })
     };
     console.log(requestOptions);
-    await fetch(APIBASE + "houseReview", requestOptions)
+    await fetch(APIBASE + "landlordReview", requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
 
@@ -55,7 +51,7 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
     console.log(author);
     console.log(requestOptions);
     await fetch(
-      APIBASE + "houses/addReviewRating?houseAddress=" + houseAddress,
+      APIBASE + "landlord/addReviewRating?landlordName=" + landlordName,
       requestOptions
     )
       .then(response => response.json())
@@ -86,7 +82,7 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
             type: "panel",
             name: "review-panel",
             visibleIf: "{status_of_form_completion_boolean} = true",
-            title: "House Review:",
+            title: "Landlord Review:",
             hasOther: true,
             elements: [
               {
@@ -94,37 +90,37 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
                 name: "rating",
                 isRequired: true,
                 ratingTheme: "fontawesome-stars",
-                title: "Overall experience living in the House",
+                title: "Overall experience with the landlord",
                 choices: ["1", "2", "3", "4", "5"]
               },
-              {
-                type: "text",
-                name: "rent",
-                isRequired: true,
-                title: "Rent per month",
-                inputType: "number"
-              },
-              {
-                type: "text",
-                name: "electric",
-                isRequired: true,
-                title: "Electricity per month",
-                inputType: "number"
-              },
-              {
-                type: "text",
-                name: "gas",
-                isRequired: true,
-                title: "Gas per month",
-                inputType: "number"
-              },
-              {
-                type: "text",
-                name: "water",
-                isRequired: true,
-                title: "Water per month",
-                inputType: "number"
-              },
+              // {
+              //   type: "text",
+              //   name: "rent",
+              //   isRequired: true,
+              //   title: "Rent per month",
+              //   inputType: "number"
+              // },
+              // {
+              //   type: "text",
+              //   name: "electric",
+              //   isRequired: true,
+              //   title: "Electricity per month",
+              //   inputType: "number"
+              // },
+              // {
+              //   type: "text",
+              //   name: "gas",
+              //   isRequired: true,
+              //   title: "Gas per month",
+              //   inputType: "number"
+              // },
+              // {
+              //   type: "text",
+              //   name: "water",
+              //   isRequired: true,
+              //   title: "Water per month",
+              //   inputType: "number"
+              // },
               {
                 type: "comment",
                 name: "review",
@@ -148,14 +144,10 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
 
   var survey = new Survey.Model(json);
 
-  survey.onComplete.add(function (result) {
+  survey.onComplete.add(function(result) {
     console.log(result.data);
-    if (result.data.status_of_form_completion_boolean == true) {
+    if (result.data.status_of_form_completion_boolean === true) {
       setStars(result.data.rating);
-      setGasBill(result.data.gas);
-      setWaterBill(result.data.water);
-      setRent(result.data.rent);
-      setElecBill(result.data.electric);
       setReview(result.data.review);
       setReadyToSubmit(true);
     }
@@ -179,4 +171,4 @@ const HouseReviewForm = ({ houseAddress, token, houseReviews, setHouseReviews })
   );
 };
 
-export default HouseReviewForm;
+export default LandlordReviewForm;

@@ -4,12 +4,12 @@ import { GiHouse, GiWaterDrop, GiElectric } from "react-icons/gi";
 import { BiGasPump } from "react-icons/bi";
 import { Rating } from "semantic-ui-react";
 
-const HouseReviewList = ({ houseReviews }) => {
-  console.log(houseReviews);
-  if (houseReviews === null) {
+const HouseReviewList = ({ landlordReviews }) => {
+  console.log(landlordReviews);
+  if (landlordReviews === null) {
     return <div></div>;
   }
-  if (houseReviews.length === 0) {
+  if (landlordReviews.length === 0) {
     return <div></div>;
   }
   return (
@@ -18,8 +18,10 @@ const HouseReviewList = ({ houseReviews }) => {
         <h3>Review</h3>
       </div>
       <div className="reviewlist-center">
-        {houseReviews.map(item => {
-          return <HouseReview key={item.housereviewid} houseReview={item} />;
+        {landlordReviews.map(item => {
+          return (
+            <LandlordReview key={item.housereviewid} landlordReview={item} />
+          );
         })}
       </div>
     </>
@@ -41,18 +43,9 @@ const calendar = {
   "12": "December"
 };
 
-const HouseReview = ({ houseReview }) => {
+const LandlordReview = ({ landlordReview }) => {
   const [date, setDate] = useState("");
-  const {
-    stars,
-    rent,
-    elecbill,
-    gasbill,
-    waterbill,
-    review,
-    author,
-    createddate
-  } = houseReview;
+  const { stars, rent, review, author, createddate } = landlordReview;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function formatDate() {
@@ -64,13 +57,13 @@ const HouseReview = ({ houseReview }) => {
   }
 
   useEffect(() => {
-    formatDate();
+    // formatDate();
   }, [formatDate]);
 
   return (
     <div className="review-box">
       <div className="review-stat">
-        <h6>
+        {/* <h6>
           {" "}
           <GiHouse /> Rent: ${rent}
         </h6>
@@ -85,7 +78,7 @@ const HouseReview = ({ houseReview }) => {
         <h6>
           {" "}
           <GiWaterDrop /> Water: ${waterbill}
-        </h6>
+        </h6> */}
         <Rating icon="star" defaultRating={stars} maxRating={5} disabled />
       </div>
       <div className="review-credentials">
@@ -102,13 +95,10 @@ const HouseReview = ({ houseReview }) => {
   );
 };
 
-HouseReview.propTypes = {
-  houseReview: PropTypes.shape({
+LandlordReview.propTypes = {
+  landlordReview: PropTypes.shape({
     stars: PropTypes.number.isRequired,
     rent: PropTypes.number.isRequired,
-    elecbill: PropTypes.number.isRequired,
-    gasbill: PropTypes.number.isRequired,
-    waterbill: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired
   })
 };

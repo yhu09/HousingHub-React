@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Form } from "semantic-ui-react";
-import ImageGallery from "react-image-gallery";
 import { LandlordContext } from "../landlordContext";
-import HouseReviewForm from "../components/house/houseReview/HouseReviewForm";
-import HouseReviewList from "../components/house/houseReview/HouseReviewList";
-import HouseComments from "../components/house/HouseComments";
+import LandlordReviewForm from "../components/landlord/landlordReview/LandlordReviewForm";
+import LandlordReviewList from "../components/landlord/landlordReview/LandlordReviewList";
 import { useAuth0 } from "@auth0/auth0-react";
 import { BiBed, BiBath, BiGasPump } from "react-icons/bi";
 import { MdLocalLaundryService, MdLocalParking } from "react-icons/md";
@@ -23,7 +21,6 @@ import {
 } from "react-icons/gi";
 import { Button } from "react-bootstrap";
 import { APIBASE } from "../utility/api-base";
-import noimage from "../images/noimage.jpg";
 import SingleMapComponent from "../components/SingleMapComponent";
 
 const SingleLandlord = props => {
@@ -34,8 +31,6 @@ const SingleLandlord = props => {
   const [slug, setSlug] = useState(props.match.params.slug);
   const [landlordName, setLandlordName] = useState(slug.split("-").join(" "));
   const [reviews, setReviews] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [imageLinks, setImageLink] = useState([]);
   const [loadedData, setLoadedData] = useState(false);
   const [edit, setEdit] = useState(false);
   const [landlord, setLandlord] = useState();
@@ -57,35 +52,33 @@ const SingleLandlord = props => {
   }, [isTokenSet, setToken, isAuthenticated, getAccessTokenSilently]);
 
   const getLandlordInfo = useCallback(async () => {
-    // function averageUtilities(reviewsData) {
-    //   var sumElectric = 0;
-    //   var sumGas = 0;
-    //   var sumWater = 0;
-    //   var sumStars = 0;
-    //   var reviewCount = reviewsData.length;
-    //   for (var review of reviewsData) {
-    //     sumElectric += review.elecbill;
-    //     sumGas += review.gasbill;
-    //     sumWater += review.waterbill;
-    //     sumStars += review.stars;
-    //   }
-    //   if (reviewCount !== 0) {
-    //     setAverageElectric(sumElectric / reviewCount);
-    //     setAverageGas(sumGas / reviewCount);
-    //     setAverageWater(sumWater / reviewCount);
-    //     setAverageStars(sumStars / reviewCount);
-    //   } else {
-    //     setAverageElectric("No reviews");
-    //     setAverageGas("No reviews");
-    //     setAverageWater("No reviews");
-    //     setAverageStars("No reviews");
-    //   }
-    // }
+    function averageStars(reviewsData) {
+      var sumStars = 0;
+      var reviewCount = reviewsData.length;
+      for (var review of reviewsData) {
+        sumStars += review.stars;
+      }
+      if (reviewCount !== 0) {
+        setAverageStars(sumStars / reviewCount);
+      } else {
+        setAverageStars("No reviews");
+      }
+    }
 
     if (isTokenSet()) {
       try {
+        await fetch(APIBASE + "landlords/landlordName/?name=" + landlordName, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+          .then(response => response.json())
+          .then(async data => {
+            console.log(data[0]);
+            setLandlord(data[0]);
+          });
         await fetch(
-          APIBASE + "landlords/landlordName/?name=" + landlordName,
+          APIBASE + "landlordReview/landlordName/?name=" + landlordName,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -93,36 +86,11 @@ const SingleLandlord = props => {
           }
         )
           .then(response => response.json())
-          .then(async data => {
-            console.log(data[0]);
-            setLandlord(data[0]);
+          .then(data => {
+            setReviews(data);
+            averageStars(data);
           });
-        // await fetch(
-        //   APIBASE + "landlordReview/landlordName/?name=" + landlordName,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`
-        //     }
-        //   }
-        // )
-        //   .then(response => response.json())
-        //   .then(data => {
-        //     setReviews(data);
-        //     averageUtilities(data);
-        //   });
 
-        // await fetch(
-        //   APIBASE + "comments/houseAddress/?houseAddress=" + houseAddress,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`
-        //     }
-        //   }
-        // )
-        //   .then(response => response.json())
-        //   .then(data => {
-        //     setComments(data);
-        //   });
         setLoadedData(true);
       } catch (e) {
         console.error(e);
@@ -142,7 +110,7 @@ const SingleLandlord = props => {
   return (
     <div>
       {loadedData ? (
-      <>
+        <>
           <div className="house-title">
             <div className="house-address">
               <h1>{`${landlord.landlordname}`}</h1>
@@ -157,31 +125,54 @@ const SingleLandlord = props => {
               <span className="house-attribute" aria-hidden="true">
                 ·
               </span>
-              {/* <span className="house-attribute"> Close to Picantes </span> */}
             </div>
           </div>
-      </>) : null}
+          <div className="landlord-info">
+            <article className="desc">
+              <h3>Contact Info</h3>
+              <p> Landlord Name: {landlord.landlordname} </p>
+              <p> Landlord Email: {landlord.landlordemail} </p>
+              <p> Landlord Number: {landlord.landlordnumber} </p>
+              <h3>Description</h3>
+              <p>{landlord.description}</p>
+            </article>
+          </div>
+          <section className="services-center">
+            <section>
+              {" "}
+              <LandlordReviewList landlordReviews={reviews} />
+              <LandlordReviewForm
+                landlordName={landlordName}
+                token={token}
+                landlordReviews={reviews}
+                setLandlordReviews={setReviews}
+              />
+            </section>
+          </section>
+        </>
+      ) : null}
     </div>
+
     // <div>
     //   {loadedData ? (
     //     <>
-          // <div className="house-title">
-          //   <div className="house-address">
-          //     <h1>{`${house.houseaddress}`}</h1>
-          //   </div>
-          //   <div className="house-attribute-container">
-          //     <span className="house-attribute">
-          //       {" "}
-          //       <BsFillStarFill /> {averageStars} {"("}
-          //       {reviews.length}
-          //       {")"}
-          //     </span>
-          //     <span className="house-attribute" aria-hidden="true">
-          //       ·
-          //     </span>
-          //     {/* <span className="house-attribute"> Close to Picantes </span> */}
-          //   </div>
-          // </div>
+    // <div className="house-title">
+    //   <div className="house-address">
+    //     <h1>{`${house.houseaddress}`}</h1>
+    //   </div>
+    //   <div className="house-attribute-container">
+    //     <span className="house-attribute">
+    //       {" "}
+    //       <BsFillStarFill /> {averageStars} {"("}
+    //       {reviews.length}
+    //       {")"}
+    //     </span>
+    //     <span className="house-attribute" aria-hidden="true">
+    //       ·
+    //     </span>
+    //     {/* <span className="house-attribute"> Close to Picantes </span> */}
+    //   </div>
+    // </div>
     //       <section className="single-room">
     //         <div className="single-house-images">
     //           <ImageGallery
