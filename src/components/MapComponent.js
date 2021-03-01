@@ -13,11 +13,6 @@ import Sublet from "./subletter/Sublet";
 
 require("dotenv").config();
 
-const containerStyle = {
-  width: "100%",
-  height: "100vh"
-};
-
 const center = {
   lat: 42.4085,
   lng: -71.1183
@@ -25,13 +20,27 @@ const center = {
 
 const APIKey = process.env.REACT_APP_GoogleMapsAPIKey;
 
-const Map = ({ houses, subletters }) => {
+const Map = ({ houses, subletters, landlord }) => {
   const [map, setMap] = React.useState(null);
+  const [containerStyle, setContainerStyle] = React.useState({
+    width: "100%",
+    height: "100vh"
+  });
   const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = React.useState(
     ""
   );
 
+  function containerSize() {
+    if (landlord) {
+      setContainerStyle({
+        width: "100%",
+        height: "50vh"
+      });
+    }
+  }
+
   const onLoad = React.useCallback(async function callback(map) {
+    containerSize();
     setMap(map);
 
     // await fetch(

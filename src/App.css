@@ -477,10 +477,21 @@ h6 {
 .landlord-info {
   width: 80vw;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   margin: 10rem auto;
   /* border-bottom: solid #77c7f5; */
   padding-bottom: 10px;
+}
+
+.landlord-map {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  text-transform: capitalize;
+  letter-spacing: var(--mainSpacing);
+}
+
+.landlord-edit-button {
+  margin-top: 3rem;
 }
 
 .sublet-info-address {

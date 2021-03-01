@@ -22,6 +22,7 @@ import {
 import { Button } from "react-bootstrap";
 import { APIBASE } from "../utility/api-base";
 import SingleMapComponent from "../components/SingleMapComponent";
+import MapComponent from "../components/MapComponent";
 
 const SingleLandlord = props => {
   const context = useContext(LandlordContext);
@@ -31,6 +32,7 @@ const SingleLandlord = props => {
   const [slug, setSlug] = useState(props.match.params.slug);
   const [landlordName, setLandlordName] = useState(slug.split("-").join(" "));
   const [reviews, setReviews] = useState([]);
+  const [houses, setHouses] = useState([]);
   const [loadedData, setLoadedData] = useState(false);
   const [edit, setEdit] = useState(false);
   const [landlord, setLandlord] = useState();
@@ -77,6 +79,18 @@ const SingleLandlord = props => {
             console.log(data[0]);
             setLandlord(data[0]);
           });
+
+        await fetch(APIBASE + "houses/landlord/?landlord=" + landlordName, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+          .then(response => response.json())
+          .then(async data => {
+            console.log(data);
+            setHouses(data);
+          });
+
         await fetch(
           APIBASE + "landlordReview/landlordName/?name=" + landlordName,
           {
@@ -111,230 +125,80 @@ const SingleLandlord = props => {
     <div>
       {loadedData ? (
         <>
-          <div className="house-title">
-            <div className="house-address">
-              <h1>{`${landlord.landlordname}`}</h1>
-            </div>
-            <div className="house-attribute-container">
-              <span className="house-attribute">
-                {" "}
-                <BsFillStarFill /> {averageStars} {"("}
-                {reviews.length}
-                {")"}
-              </span>
-              <span className="house-attribute" aria-hidden="true">
-                ·
-              </span>
-            </div>
-          </div>
-          <div className="landlord-info">
-            <article className="desc">
-              <h3>Contact Info</h3>
-              <p> Landlord Name: {landlord.landlordname} </p>
-              <p> Landlord Email: {landlord.landlordemail} </p>
-              <p> Landlord Number: {landlord.landlordnumber} </p>
-              <h3>Description</h3>
-              <p>{landlord.description}</p>
-            </article>
-          </div>
-          <section className="services-center">
-            <section>
-              {" "}
-              <LandlordReviewList landlordReviews={reviews} />
-              <LandlordReviewForm
-                landlordName={landlordName}
-                token={token}
-                landlordReviews={reviews}
-                setLandlordReviews={setReviews}
-              />
-            </section>
-          </section>
+          {edit ? (
+            <SingleLandlordEdit
+              landlord={landlord}
+              token={token}
+              averageStars={averageStars}
+              reviewLength={reviews.length}
+            />
+          ) : (
+            <>
+              <div className="house-title">
+                <div className="house-address">
+                  <h1>{`${landlord.landlordname}`}</h1>
+                </div>
+                <div className="house-attribute-container">
+                  <span className="house-attribute">
+                    {" "}
+                    <BsFillStarFill /> {averageStars} {"("}
+                    {reviews.length}
+                    {")"}
+                  </span>
+                  <span className="house-attribute" aria-hidden="true">
+                    ·
+                  </span>
+                </div>
+              </div>
+              <div className="landlord-info">
+                <article className="desc">
+                  <h3>Contact Info</h3>
+                  <p> Landlord Name: {landlord.landlordname} </p>
+                  <p> Landlord Email: {landlord.landlordemail} </p>
+                  <p> Landlord Number: {landlord.landlordnumber} </p>
+                  <h3>Description</h3>
+                  <p>{landlord.description}</p>
+                </article>
+                <div className="landlord-map">
+                  <h3>Houses owned by landlord</h3>
+                  <MapComponent houses={houses} landlord={true} />
+                </div>
+                <div className="landlord-edit-button">
+                  <Button onClick={onEdit} className="room-info-button">
+                    Edit House Info
+                  </Button>{" "}
+                </div>
+                <br></br>
+              </div>
+            </>
+          )}
         </>
       ) : null}
+      <section className="services-center">
+        <section>
+          {" "}
+          <LandlordReviewList landlordReviews={reviews} />
+          <LandlordReviewForm
+            landlordName={landlordName}
+            token={token}
+            landlordReviews={reviews}
+            setLandlordReviews={setReviews}
+          />
+        </section>
+      </section>
     </div>
-
-    // <div>
-    //   {loadedData ? (
-    //     <>
-    // <div className="house-title">
-    //   <div className="house-address">
-    //     <h1>{`${house.houseaddress}`}</h1>
-    //   </div>
-    //   <div className="house-attribute-container">
-    //     <span className="house-attribute">
-    //       {" "}
-    //       <BsFillStarFill /> {averageStars} {"("}
-    //       {reviews.length}
-    //       {")"}
-    //     </span>
-    //     <span className="house-attribute" aria-hidden="true">
-    //       ·
-    //     </span>
-    //     {/* <span className="house-attribute"> Close to Picantes </span> */}
-    //   </div>
-    // </div>
-    //       <section className="single-room">
-    //         <div className="single-house-images">
-    //           <ImageGallery
-    //             items={imageLinks}
-    //             showFullscreenButton={true}
-    //             showPlayButton={false}
-    //             showNav={true}
-    //           />
-    //         </div>
-    //         <UploadImages houseAddress={houseAddress} type={"house"} />
-    //         {edit ? (
-    //           <SingleHouseEdit
-    //             house={house}
-    //             token={token}
-    //             averageElectric={averageElectric}
-    //             averageGas={averageGas}
-    //             averageWater={averageWater}
-    //           />
-    //         ) : (
-    //           <>
-    //             {" "}
-    //             <div className="single-room-info">
-    //               <article className="desc">
-    //                 <h3>Full Address</h3>
-    //                 <p>
-    //                   {" "}
-    //                   {house.houseaddress}, {house.city}, {house.statename}{" "}
-    //                   {house.zip}{" "}
-    //                 </p>
-    //                 <h3>Contact Info</h3>
-    //                 <p> Landlord Name: {house.landlordname} </p>
-    //                 <p> Landlord Email: {house.landlordemail} </p>
-    //                 <h3>Description</h3>
-    //                 <p>{house.description}</p>
-    //                 <h3>Location</h3>
-    //                 <SingleMapComponent
-    //                   latitude={parseFloat(house.latitude)}
-    //                   longitude={parseFloat(house.longitude)}
-    //                   edit={false}
-    //                 />
-    //               </article>
-    //               <div>
-    //                 <h3>Basic Info</h3>
-    //                 <div className="info">
-    //                   <h6>
-    //                     {" "}
-    //                     <GiHouse /> Rent per person: ${house.rent}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <GiElectric /> Electric: ${averageElectric}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <BiGasPump /> Gas: ${averageGas}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <GiWaterDrop /> Water: ${averageWater}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <BiBed /> Bedrooms: {house.bedrooms}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <BiBath /> Bathrooms: {house.bathrooms}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <BsFillPeopleFill /> Connected with house:<br></br>
-    //                     {house.connecthouse}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <GiStairs /> Basement:{" "}
-    //                     {house.basement ? <FaCheck /> : <FaTimes />}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <MdLocalLaundryService /> Laundry:{" "}
-    //                     {house.laundry ? <FaCheck /> : <FaTimes />}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <MdLocalParking /> Parking:{" "}
-    //                     {house.parking ? <FaCheck /> : <FaTimes />}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <FaUmbrellaBeach /> Porch:{" "}
-    //                     {house.porch ? <FaCheck /> : <FaTimes />}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <GiGrass /> Yard:{" "}
-    //                     {house.yard ? <FaCheck /> : <FaTimes />}
-    //                   </h6>
-    //                   <h6>
-    //                     {" "}
-    //                     <BsArrowsExpand /> Floor: {house.unit}
-    //                   </h6>
-    //                 </div>
-    //               </div>
-    //               <div>
-    //                 <Button onClick={onEdit} className="room-info-button">
-    //                   Edit House Info
-    //                 </Button>{" "}
-    //               </div>
-    //               <br></br>
-    //             </div>
-    //           </>
-    //         )}
-    //       </section>
-    //       <section className="services-center">
-    //         <HouseComments
-    //           houseAddress={houseAddress}
-    //           comments={comments}
-    //           token={token}
-    //         />
-    //         <section>
-    //           {" "}
-    //           <HouseReviewList houseReviews={reviews} />
-    //           <HouseReviewForm
-    //             houseAddress={houseAddress}
-    //             token={token}
-    //             houseReviews={reviews}
-    //             setHouseReviews={setReviews}
-    //           />
-    //         </section>
-    //       </section>
-    //     </>
-    //   ) : null}
-    // </div>
   );
 };
 
 const SingleLandlordEdit = ({
-  house,
+  landlord,
   token,
-  averageElectric,
-  averageGas,
-  averageWater
+  averageStars,
+  reviewLength
 }) => {
-  const [landlordEmail, setLandlordEmail] = useState(house.landlordemail);
-  const [houseAddress, setHouseAddress] = useState(house.houseaddress);
-  const [city, setCity] = useState(house.city);
-  const [stateName, setStateName] = useState(house.statename);
-  const [zip, setZip] = useState(house.zip);
-  const [rent, setRent] = useState(house.rent);
-  const [bedrooms, setBedrooms] = useState(house.bedrooms);
-  const [bathrooms, setBathrooms] = useState(house.bathrooms);
-  const [basement, setBasement] = useState(house.basement);
-  const [laundry, setLaundry] = useState(house.laundry);
-  const [parking, setParking] = useState(house.parking);
-  const [porch, setPorch] = useState(house.porch);
-  const [yard, setYard] = useState(house.yard);
-  const [unit, setUnit] = useState(house.unit);
-  const [description, setDescription] = useState(house.description);
-  const [connectHouse, setConnectHouse] = useState(house.connecthouse);
-  const [latitude, setLatitude] = useState(house.latitude);
-  const [longitude, setLongitude] = useState(house.longitude);
+  const [landlordEmail, setLandlordEmail] = useState(landlord.landlordemail);
+  const [landlordNumber, setLandlordNumber] = useState(landlord.landlordnumber);
+  const [description, setDescription] = useState(landlord.description);
 
   async function onUpdate() {
     const requestOptions = {
@@ -344,31 +208,14 @@ const SingleLandlordEdit = ({
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
+        landlordName: landlord.landlordname,
         landlordEmail: landlordEmail,
-        houseAddress: null,
-        stateName: null,
-        city: null,
-        ZIP: null,
-        rent: rent,
-        unit: unit,
-        laundry: laundry,
-        basement: basement,
-        yard: yard,
-        parking: parking,
-        porch: porch,
-        bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        description: description,
-        connectHouse: connectHouse,
-        latitude: latitude,
-        longitude: longitude
+        landlordNumber: landlordNumber,
+        description: description
       })
     };
     try {
-      await fetch(
-        APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress,
-        requestOptions
-      )
+      await fetch(APIBASE + "landlords/landlordName/", requestOptions)
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -385,172 +232,55 @@ const SingleLandlordEdit = ({
   return (
     <form onSubmit={onUpdate}>
       {" "}
-      <div className="single-room-info">
-        <article className="desc">
-          <h3>Full Address</h3>
-          <p>
-            {" "}
-            {house.houseaddress}, {house.city}, {house.statename} {house.zip}{" "}
-          </p>
-          <h3>Contact Info</h3>
-          <p>
-            {" "}
-            Landlord Email:
-            <input
-              type="text"
-              value={landlordEmail}
-              onChange={event => setLandlordEmail(event.target.value)}
-            />
-          </p>
-          <h3>Description</h3>
-          <Form.TextArea value={description} onChange={fillTextArea} />
-          <h3>Location</h3>
-          <SingleMapComponent
-            latitude={parseFloat(house.latitude)}
-            longitude={parseFloat(house.longitude)}
-            setLatitude={setLatitude}
-            setLongitude={setLongitude}
-            edit={true}
-          />
-        </article>
-        <div>
-          <h3>Basic Info</h3>
-          <div className="info">
-            <h6>
-              <GiHouse /> Rent per person: $
-              <input
-                type="text"
-                value={rent}
-                onChange={event => setRent(event.target.value)}
-              />
-            </h6>
-            <h6>
+      <>
+        <div className="house-title">
+          <div className="house-address">
+            <h1>{`${landlord.landlordname}`}</h1>
+          </div>
+          <div className="house-attribute-container">
+            <span className="house-attribute">
               {" "}
-              <GiElectric /> Electric: ${averageElectric}
-            </h6>
-            <h6>
-              {" "}
-              <BiGasPump /> Gas: ${averageGas}
-            </h6>
-            <h6>
-              {" "}
-              <GiWaterDrop /> Water: ${averageWater}
-            </h6>
-            <h6>
-              {" "}
-              <BiBed /> Bedrooms:{" "}
-              <input
-                type="text"
-                size="10"
-                value={bedrooms}
-                onChange={event => setBedrooms(event.target.value)}
-              />
-            </h6>
-            <h6>
-              {" "}
-              <BiBath /> Bathrooms:{" "}
-              <input
-                type="text"
-                size="10"
-                value={bathrooms}
-                onChange={event => setBathrooms(event.target.value)}
-              />
-            </h6>
-            <h6>
-              {" "}
-              <BsFillPeopleFill /> Connected with house:<br></br>
-              <input
-                type="text"
-                value={connectHouse}
-                onChange={event => setConnectHouse(event.target.value)}
-              />
-            </h6>
-            <h6>
-              {" "}
-              <GiStairs /> Basement:{" "}
-              <input
-                type="checkbox"
-                value="Basement"
-                checked={basement}
-                onClick={event => setBasement(!basement)}
-              />{" "}
-              {basement ? <FaCheck /> : <FaTimes />}
-            </h6>
-            <h6>
-              {" "}
-              <MdLocalLaundryService /> Laundry:{" "}
-              <input
-                type="checkbox"
-                value="laundry"
-                checked={laundry}
-                onClick={event => setLaundry(!laundry)}
-              />{" "}
-              {laundry ? <FaCheck /> : <FaTimes />}
-            </h6>
-            <h6>
-              {" "}
-              <MdLocalParking /> Parking:{" "}
-              <input
-                type="checkbox"
-                value="parking"
-                checked={parking}
-                onClick={event => setParking(!parking)}
-              />{" "}
-              {parking ? <FaCheck /> : <FaTimes />}
-            </h6>
-            <h6>
-              {" "}
-              <FaUmbrellaBeach /> Porch:{" "}
-              <input
-                type="checkbox"
-                value="porch"
-                checked={porch}
-                onClick={event => setPorch(!porch)}
-              />{" "}
-              {porch ? <FaCheck /> : <FaTimes />}
-            </h6>
-            <h6>
-              {" "}
-              <GiGrass /> Yard:{" "}
-              <input
-                type="checkbox"
-                value="yard"
-                checked={yard}
-                onClick={event => setYard(!yard)}
-              />{" "}
-              {yard ? <FaCheck /> : <FaTimes />}
-            </h6>
-            <h6>
-              {" "}
-              <BsArrowsExpand /> Floor:{" "}
-              <label>
-                <input
-                  type="radio"
-                  value="floor-upper"
-                  checked={unit === "upper"}
-                  onClick={event => setUnit("upper")}
-                />
-                Upper
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="floor-lower"
-                  checked={unit === "lower"}
-                  onClick={event => setUnit("lower")}
-                />
-                Lower
-              </label>
-            </h6>
+              <BsFillStarFill /> {averageStars} {"("}
+              {reviewLength}
+              {")"}
+            </span>
+            <span className="house-attribute" aria-hidden="true">
+              ·
+            </span>
           </div>
         </div>
-        <div>
-          <Button block bsSize="large" type="submit">
-            Update House Info
-          </Button>{" "}
+        <div className="landlord-info">
+          <article className="desc">
+            <h3>Contact Info</h3>
+            <p> Landlord Name: {landlord.landlordname} </p>
+            <p>
+              {" "}
+              Landlord Email:{" "}
+              <input
+                type="text"
+                value={landlordEmail}
+                onChange={event => setLandlordEmail(event.target.value)}
+              />
+            </p>
+            <p>
+              {" "}
+              Landlord Number:{" "}
+              <input
+                type="text"
+                value={landlordNumber}
+                onChange={event => setLandlordNumber(event.target.value)}
+              />{" "}
+            </p>
+            <h3>Description</h3>
+            <Form.TextArea value={description} onChange={fillTextArea} />
+          </article>
+          <div className="landlord-edit-button">
+            <Button block bsSize="large" type="submit">
+              Update House Info
+            </Button>{" "}
+          </div>
         </div>
-        <br></br>
-      </div>
+      </>
     </form>
   );
 };
