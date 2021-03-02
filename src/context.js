@@ -137,7 +137,7 @@ class HouseProvider extends Component {
 
   handleHover = house => {
     // this.setState({ hoverThumbnail: house });
-    console.log(house);
+    // console.log(house);
   };
 
   filterRooms = () => {
@@ -161,7 +161,7 @@ class HouseProvider extends Component {
     maxSize = parseInt(maxSize);
 
     temphouses = temphouses.filter(house => house.rent <= rent);
-  //  temphouses = temphouses.filter(house => house.stars >= stars);
+    //  temphouses = temphouses.filter(house => house.stars >= stars);
     //filter by cap
     if (bedrooms !== 1) {
       temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);

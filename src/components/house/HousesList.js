@@ -7,7 +7,6 @@ const HousesList = ({ houses }) => {
   const { handleHover } = context;
 
   function handleMouseHover(house) {
-    console.log(house);
     handleHover(house);
   }
 
@@ -18,21 +17,22 @@ const HousesList = ({ houses }) => {
         <h3>No houses matched with search parameters</h3>
       </div>
     );
+  } else {
+    return (
+      <section className="roomslist">
+        <div className="roomslist-center">
+          {houses.map((item, index) => {
+            return (
+              <House
+                key={index}
+                onMouseEnter={handleMouseHover(item)}
+                house={item}
+              />
+            );
+          })}
+        </div>
+      </section>
+    );
   }
-  return (
-    <section className="roomslist">
-      <div className="roomslist-center">
-        {houses.map((item, index) => {
-          return (
-            <House
-              key={index}
-              onMouseEnter={handleMouseHover(item)}
-              house={item}
-            />
-          );
-        })}
-      </div>
-    </section>
-  );
 };
 export default HousesList;

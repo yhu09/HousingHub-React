@@ -8,8 +8,11 @@ import StarRatings from "react-star-ratings";
 import noimage from "../../images/noimage.jpg";
 
 const House = ({ house }) => {
-  const [imageLinks, setImageLink] = useState([]);
+  const [imageLinks, setImageLinks] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [houseAddressState, setHouseAddressState] = useState(
+    house.houseaddress
+  );
   const [numReviews, setNumReviews] = useState(0);
   const [stars, setStars] = useState();
 
@@ -23,27 +26,26 @@ const House = ({ house }) => {
   } = house;
   useEffect(() => {
     async function loadPictures() {
-      if (!loaded) {
+      if (!loaded || houseAddressState !== houseaddress) {
         let pictures = await listFilesInFolder(slug);
         let imageContents = pictures.Contents;
         if (imageContents.length === 0) {
-          imageLinks.push({ original: noimage, thumbnail: noimage });
+          setImageLinks([{ original: noimage, thumbnail: noimage }]);
         } else {
+          let imageListFormat = [];
           for (let imageContent of imageContents) {
             let source = imageLinkURL(imageContent.Key);
-            imageLinks.push({ original: source, thumbnail: source });
+            imageListFormat.push({ original: source, thumbnail: source });
           }
+          setImageLinks(imageListFormat);
         }
         setLoaded(true);
       }
     }
 
     function calculateAverageRating() {
-      console.log(reviewratings);
       let numberOfReviews = reviewratings ? reviewratings.length : 0;
-      console.log(numberOfReviews);
       let reviewNum = numberOfReviews ? numberOfReviews : "No reviews";
-      console.log(reviewNum);
       setNumReviews(reviewNum);
       if (numberOfReviews === 0) {
         setStars(0);
@@ -59,8 +61,9 @@ const House = ({ house }) => {
 
     loadPictures();
     calculateAverageRating();
+    setHouseAddressState(houseaddress);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [house]);
 
   return (
     <div className="box">
