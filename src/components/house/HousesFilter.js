@@ -12,8 +12,14 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
     handleChange,
     handleSearchInput,
     bedrooms,
+    bathrooms,
+    stars,
+    reviewratings,
     rent,
     laundry,
+    basement,
+    yard,
+    parking,
     porch,
     minRent,
     maxRent,
@@ -103,6 +109,19 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
             ></input>
           </div>
         </div>
+        {/*}<div className="form-group">
+          <label htmlFor="stars">{stars} stars</label>
+          <input
+            type="range"
+            name="stars"
+            id="stars"
+            value={stars}
+            min="0"
+            max="5"
+            onChange={handleChange}
+            className="form-control"
+          ></input>
+        </div>*/}
         <div className="form-group">
           <div className="single-extra">
             <input
@@ -123,6 +142,26 @@ const HousesFilter = ({ houses, viewMap, setViewMap }) => {
               onChange={handleChange}
             />
             <label htmlFor="porch">porch</label>
+          </div>
+          <div className="single-extra">
+            <input
+              type="checkbox"
+              name="parking"
+              id="parking"
+              checked={parking}
+              onChange={handleChange}
+            />
+            <label htmlFor="parking">parking</label>
+          </div>
+          <div className="single-extra">
+            <input
+              type="checkbox"
+              name="yard"
+              id="yard"
+              checked={yard}
+              onChange={handleChange}
+            />
+            <label htmlFor="yard">yard</label>
           </div>
         </div>
         <ToggleButton

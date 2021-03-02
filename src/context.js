@@ -20,6 +20,8 @@ class HouseProvider extends Component {
     maxSize: 0,
     laundry: false,
     porch: false,
+    parking: false,
+    yard: false,
     hoverThumbnail: null
     // breakfast: false,
     // pets: false
@@ -146,7 +148,10 @@ class HouseProvider extends Component {
       minSize,
       maxSize,
       laundry,
-      porch
+      porch,
+      parking,
+      yard,
+      stars
     } = this.state;
 
     let temphouses = [...houses];
@@ -156,6 +161,7 @@ class HouseProvider extends Component {
     maxSize = parseInt(maxSize);
 
     temphouses = temphouses.filter(house => house.rent <= rent);
+  //  temphouses = temphouses.filter(house => house.stars >= stars);
     //filter by cap
     if (bedrooms !== 1) {
       temphouses = temphouses.filter(house => house.bedrooms >= bedrooms);
@@ -171,6 +177,14 @@ class HouseProvider extends Component {
 
     if (porch) {
       temphouses = temphouses.filter(house => house.porch === true);
+    }
+
+    if (parking) {
+      temphouses = temphouses.filter(house => house.parking === true);
+    }
+
+    if (yard) {
+      temphouses = temphouses.filter(house => house.yard === true);
     }
 
     this.setState({
