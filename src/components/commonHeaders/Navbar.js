@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../../images/newLogo.svg";
+import logo from "../../images/logo2.svg";
 import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import LoginButton from "../auth0/LoginButton";
@@ -43,7 +43,7 @@ const Navbar = () => {
               <Link to="/houses">Houses</Link>
             </li>
             <li>
-              <Link to="/sublet">Subletters</Link>
+              <Link to="/sublet">Sublet</Link>
             </li>
             <li>
               <Link to="/landlords">Landlords</Link>
