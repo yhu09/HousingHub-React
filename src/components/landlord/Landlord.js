@@ -12,6 +12,7 @@ const Landlord = ({ landlord }) => {
   const [numReviews, setNumReviews] = useState(0);
   const [stars, setStars] = useState();
 
+  console.log(landlord);
   const {
     landlordname,
     landlordemail,

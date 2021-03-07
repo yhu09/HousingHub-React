@@ -57,7 +57,7 @@ const LandlordReview = ({ landlordReview }) => {
   }
 
   useEffect(() => {
-    // formatDate();
+    formatDate();
   }, [formatDate]);
 
   return (

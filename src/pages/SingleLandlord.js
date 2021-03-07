@@ -170,11 +170,7 @@ const SingleLandlord = props => {
                 </div>
                 <br></br>
               </div>
-            </>
-          )}
-        </>
-      ) : null}
-      <section className="services-center">
+              <section className="services-center">
         <section>
           {" "}
           <LandlordReviewList landlordReviews={reviews} />
@@ -186,6 +182,10 @@ const SingleLandlord = props => {
           />
         </section>
       </section>
+            </>
+          )}
+        </>
+      ) : null}
     </div>
   );
 };
