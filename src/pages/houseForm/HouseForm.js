@@ -71,10 +71,14 @@ export const HouseForm = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === "OK") {
+          console.log("GOOD");
           let coord = data.results[0].geometry.location;
           return [coord.lat, coord.lng];
         } else {
-          return [defaultCoord.lat, defaultCoord.lng];
+          console.log("WRONG");
+          alert("The address you have entered is invalid");
+          window.location.replace("http://localhost:3000/houseform");
+          //return [defaultCoord.lat, defaultCoord.lng];
         }
       });
     return coord;
