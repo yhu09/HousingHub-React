@@ -68,15 +68,6 @@ class SubletProvider extends Component {
   };
 
   handleChange = event => {
-    // const target = event.target;
-    // const value = target.type === "checkbox" ? target.checked : target.value;
-    // const name = event.target.name;
-    // this.setState(
-    //   {
-    //     [name]: value
-    //   },
-    //   this.filterRooms
-    // );
     console.log(event.target.value);
     this.setState({ gender: event.target.value }, this.filterRooms);
   };

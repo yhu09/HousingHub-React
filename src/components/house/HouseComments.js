@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
-import cookie from "react-cookies";
 import { APIBASE } from "../../utility/api-base";
 import { useAuth0 } from "@auth0/auth0-react";
 import { HouseContext } from "../../context";
@@ -30,7 +29,6 @@ function formatDate(createddate) {
 }
 
 const HouseComments = ({ houseAddress, comments, token }) => {
-  console.log(comments);
   return (
     <HouseCommentsStructure
       houseAddress={houseAddress}
@@ -41,7 +39,6 @@ const HouseComments = ({ houseAddress, comments, token }) => {
 };
 
 const Comments = ({ comments }) => {
-
   return (
     <Comment>
       {comments.map((comment, index) => (
@@ -58,7 +55,7 @@ const ChildComment = ({ childComments }) => {
       {
         childComments.map((comment, index) => (
           <Comment>
-            <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+            <Comment.Avatar src={comment.userpicture} />
             <Comment.Content>
               <Comment.Author as='b'>{comment.author}</Comment.Author>
               <Comment.Metadata> {formatDate(comment.createddate)} </Comment.Metadata>
@@ -117,7 +114,8 @@ const HouseComment = ({ comment, index }) => {
   async function handleChildComment(event) {
     event.preventDefault();
 
-    let author = user.given_name + " " + user.family_name;
+    let author = user.given_name + " " + user.family_name
+    let userPicture = user.picture
     var requestOptions = {
       method: "POST",
       headers: {
@@ -127,7 +125,8 @@ const HouseComment = ({ comment, index }) => {
       body: JSON.stringify({
         author: author,
         content: inputChildComment,
-        parent: comment.commentid
+        parent: comment.commentid,
+        userPicture: userPicture
       })
     };
     console.log(requestOptions);
@@ -147,7 +146,7 @@ const HouseComment = ({ comment, index }) => {
   if (childComments.length !== 0) {
     return (
       <Comment key={index}>
-        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        <Comment.Avatar src = {comment.userpicture}/>
         <Comment.Content>
           <Comment.Author as="a">{comment.author}</Comment.Author>
           <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
@@ -174,9 +173,10 @@ const HouseComment = ({ comment, index }) => {
       </Comment>
     );
   } else {
+    console.log(comment)
     return (
       <Comment key={index}>
-        <Comment.Avatar src="https://react.semantic-ui.com/images/avatar/small/joe.jpg" />
+        <Comment.Avatar src={comment.userpicture} />
         <Comment.Content>
           <Comment.Author as="a">{comment.author}</Comment.Author>
           <Comment.Metadata>{formatDate(comment.createddate)}</Comment.Metadata>
@@ -209,7 +209,7 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
     event.preventDefault();
 
     let author = user.given_name + " " + user.family_name;
-
+    let userPicture = user.picture; 
     var requestOptions = {
       method: "POST",
       headers: {
@@ -219,10 +219,11 @@ const HouseCommentsStructure = ({ houseAddress, comments, token }) => {
       body: JSON.stringify({
         house: houseAddress,
         author: author,
-        content: inputComment
+        content: inputComment,
+        userPicture: userPicture
       })
     };
-
+    console.log(requestOptions);
     if (inputComment != "") {
       console.log(inputComment);
       await fetch(APIBASE + "comment", requestOptions)
