@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import logo from "../../images/newLogo.svg";
+import logo from "../../images/logo2.svg";
 import { FaAlignRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import LoginButton from "../auth0/LoginButton";
+import LogoutButton from "../auth0/LogoutButton";
 import Popup from "reactjs-popup";
 import { Button } from "react-bootstrap";
 import Account from "../commonHeaders/Account";
@@ -13,9 +14,9 @@ const Navbar = () => {
   // state = {
   //   isOpen: false
   // };
-  // handleToggle = () => {
-  //   this.setState({ isOpen: !this.state.isOpen });
-  // };
+  handleToggle = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuth0();
 
@@ -43,10 +44,7 @@ const Navbar = () => {
               <Link to="/houses">Houses</Link>
             </li>
             <li>
-              <Link to="/sublet">Subletters</Link>
-            </li>
-            <li>
-              <Link to="/landlords">Landlords</Link>
+              <Link to="/sublet">Sublet</Link>
             </li>
             <li>
               <Link to="/houseform">Create House</Link>
@@ -54,13 +52,11 @@ const Navbar = () => {
             <li>
               <Link to="/subletform">Sublet Room</Link>
             </li>
-            <li>
-              <Link to="/landlordform">Enter Landlord</Link>
-            </li>
           </ul>
         </div>
         <div className="nav-log-in">
           <LoginButton style={{ margin: 20 }} text="Log in" />
+          {/* <LogoutButton /> */}
           {isAuthenticated ? (
             <Popup
               trigger={<Button> Account </Button>}

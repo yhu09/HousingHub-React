@@ -150,8 +150,8 @@ export const SubletForm = () => {
     console.log("House form submitted");
     setReadyToSubmit(false);
     // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
-    // var url = "http://localhost:3000/houses/" + slug;
-    // window.location.replace(url);
+    var url = "http://localhost:3000/sublet/" + slug;
+    window.location.replace(url);
   }
 
   Survey.StylesManager.applyTheme("default");

@@ -13,7 +13,6 @@ const Sublet = ({ sublet }) => {
   const [loaded, setLoaded] = useState(false);
   const [beginDate, setBeginDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const { user } = useAuth0();
 
 
   const calendar = {
@@ -73,7 +72,6 @@ const Sublet = ({ sublet }) => {
     setBeginDate(begin);
     setEndDate(end);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -96,13 +94,14 @@ const Sublet = ({ sublet }) => {
       <div className="sublet-info">
         <div className="sublet-info-address">{houseaddress}</div>
         <div className="sublet-info-button">
-          <Link to={`/sublet/${slug}`} className="btn-primary">
+        {/* /${sublet.tenant.split(" ").join("-")} */}
+          <Link to={`/sublet/${slug}` + "/" + sublet.tenant.split(" ").join("-")} className="btn-primary">
             {" "}
             Link{" "}
           </Link>
         </div>
         <div className="sublet-info-info">
-          Other tenants: {bedrooms} <br></br>
+          Bedrooms: {bedrooms} <br></br>
           Bathrooms: {bathrooms} <br></br>
           Preferred Gender: {preferredgender}
         </div>

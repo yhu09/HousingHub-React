@@ -71,10 +71,14 @@ export const HouseForm = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === "OK") {
+          console.log("GOOD");
           let coord = data.results[0].geometry.location;
           return [coord.lat, coord.lng];
         } else {
-          return [defaultCoord.lat, defaultCoord.lng];
+          console.log("WRONG");
+          alert("The address you have entered is invalid");
+          window.location.replace("http://localhost:3000/houseform");
+          //return [defaultCoord.lat, defaultCoord.lng];
         }
       });
     return coord;
@@ -123,13 +127,40 @@ export const HouseForm = () => {
     };
     console.log("request options: " + requestOptions.body);
 
-    await fetch(APIBASE + "houses", requestOptions)
+    var requestGet = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    };
+    
+    await fetch(APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress, requestGet)
       .then(response => response.json())
       .then(data => {
-        if (data.status === "success") {
-          setNewHouse(true);
+        console.log(data);
+        if (data.length > 0) {
+          console.log("NO POSTING ALLOWED");
+          alert("This house is already in the database!")
+          window.location.replace("http://localhost:3000");
+        } else {
+          console.log("POSTING ALLOWED");
         }
       });
+
+
+    try {
+      await fetch(APIBASE + "houses", requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            setNewHouse(true);
+          }
+        });
+    }
+    catch(err) {
+      console.log("ERROR")
+    }
     console.log("House form submitted");
     setReadyToSubmit(false);
     // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
