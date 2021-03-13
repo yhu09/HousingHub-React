@@ -135,35 +135,42 @@ export const HouseForm = () => {
       }
     };
     
-    await fetch(APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress, requestGet)
+    var duplicateHouse = false;
+    try {
+      await fetch(APIBASE + "houses/houseAddress/?houseAddress=" + houseAddress, requestGet)
       .then(response => response.json())
       .then(data => {
         console.log(data);
         if (data.length > 0) {
+          duplicateHouse = true;
           console.log("NO POSTING ALLOWED");
-          alert("This house is already in the database!")
-          window.location.replace("http://localhost:3000");
+          alert("This house is already in the database! Taking you to the posting.")
         } else {
+          duplicateHouse = false;
           console.log("POSTING ALLOWED");
         }
       });
-
-
-    try {
-      await fetch(APIBASE + "houses", requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success") {
-            setNewHouse(true);
-          }
-        });
+    } catch(err) {
+      console.log("Error");
     }
-    catch(err) {
-      console.log("ERROR")
+
+    if (!duplicateHouse) {
+      try {
+        await fetch(APIBASE + "houses", requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "success") {
+              setNewHouse(true);
+            }
+          });
+      }
+      catch(err) {
+        console.log("ERROR")
+      }
+      console.log("House form submitted");
+      setReadyToSubmit(false);
+      // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
     }
-    console.log("House form submitted");
-    setReadyToSubmit(false);
-    // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
     var url = "http://localhost:3000/houses/" + slug;
     window.location.replace(url);
   }
