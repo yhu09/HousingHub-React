@@ -109,9 +109,9 @@ const Account = () => {
             <p>
               Name: {user.given_name} {user.family_name}
             </p>
-            <p>Email: {user.name}</p>
-            <p>Gender: </p>
-            <p>Year: </p>
+            <p>Email: {user.email}</p>
+            <p>Gender: {user.name}</p>
+            <p>Year: {user.nickname}</p>
             <LogoutButton />
           </div>
           <div className="account-subletter">
