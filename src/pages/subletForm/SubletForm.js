@@ -72,7 +72,7 @@ export const SubletForm = () => {
         if (data.length > 0) {
           console.log("NO POSTING ALLOWED");
           alert("You have a subletting post active!")
-          window.location.replace("http://localhost:3000");
+          window.location.replace("https://www.tuftshousinghub.com");
         } else {
           console.log("POSTING ALLOWED");
         }
@@ -150,7 +150,7 @@ export const SubletForm = () => {
     console.log("House form submitted");
     setReadyToSubmit(false);
     // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
-    var url = "http://localhost:3000/sublet/" + slug;
+    var url = "https://www.tuftshousinghub.com/sublet/" + slug;
     window.location.replace(url);
   }
 

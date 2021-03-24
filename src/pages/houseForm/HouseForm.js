@@ -77,7 +77,7 @@ export const HouseForm = () => {
         } else {
           console.log("WRONG");
           alert("The address you have entered is invalid");
-          window.location.replace("http://localhost:3000/houseform");
+          window.location.replace("https://www.tuftshousinghub.com/houseform");
           //return [defaultCoord.lat, defaultCoord.lng];
         }
       });
@@ -171,7 +171,7 @@ export const HouseForm = () => {
       setReadyToSubmit(false);
       // var url = "https://master.d2foc06eaqufr.amplifyapp.com/houses/" + slug;
     }
-    var url = "http://localhost:3000/houses/" + slug;
+    var url = "https://www.tuftshousinghub.com/" + slug;
     window.location.replace(url);
   }
 
