@@ -47,10 +47,16 @@ const Navbar = () => {
               <Link to="/sublet">Sublet</Link>
             </li>
             <li>
+              <Link to="/landlords">Landlord</Link>
+            </li>
+            <li>
               <Link to="/houseform">Create House</Link>
             </li>
             <li>
               <Link to="/subletform">Sublet Room</Link>
+            </li>
+            <li>
+              <Link to="/landlordform">Landlord Form</Link>
             </li>
           </ul>
         </div>
