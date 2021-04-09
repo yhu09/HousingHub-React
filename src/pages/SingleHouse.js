@@ -318,6 +318,7 @@ const SingleHouseEdit = ({
   averageGas,
   averageWater
 }) => {
+  const [landlordName, setLandlordName] = useState(house.landlordName);
   const [landlordEmail, setLandlordEmail] = useState(house.landlordemail);
   const [houseAddress, setHouseAddress] = useState(house.houseaddress);
   const [city, setCity] = useState(house.city);
@@ -345,6 +346,7 @@ const SingleHouseEdit = ({
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
+        landlordName: landlordName,
         landlordEmail: landlordEmail,
         houseAddress: null,
         stateName: null,
@@ -394,6 +396,15 @@ const SingleHouseEdit = ({
             {house.houseaddress}, {house.city}, {house.statename} {house.zip}{" "}
           </p>
           <h3>Contact Info</h3>
+          <p>
+            {" "}
+            Landlord Name:
+            <input
+              type="text"
+              value={landlordName}
+              onChange={event => setLandlordName(event.target.value)}
+            />
+          </p>
           <p>
             {" "}
             Landlord Email:
