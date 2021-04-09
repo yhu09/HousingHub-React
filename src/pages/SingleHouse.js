@@ -318,7 +318,7 @@ const SingleHouseEdit = ({
   averageGas,
   averageWater
 }) => {
-  const [landlordName, setLandlordName] = useState(house.landlordName);
+  const [landlordName, setLandlordName] = useState(house.landlordname);
   const [landlordEmail, setLandlordEmail] = useState(house.landlordemail);
   const [houseAddress, setHouseAddress] = useState(house.houseaddress);
   const [city, setCity] = useState(house.city);
